@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: microbank-eureka-server
+---
+server:
+  port: 8761
+---
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false

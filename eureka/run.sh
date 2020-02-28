@@ -1,0 +1,1 @@
+docker run -d -p "8761:8761" --name "microbank-eureka" --network "microbank-network" microbank-eureka
