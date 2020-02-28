@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>com.microbank.service</groupId>
 	<artifactId>registration</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
-	<description>Demo project for Spring Boot</description>
+	<version>0.0.1</version>
+	<name>microbank-registration-service</name>
+	<description>DA registration micro service for a microservice banking application.</description>
 
 	<properties>
 		<java.version>1.8</java.version>
