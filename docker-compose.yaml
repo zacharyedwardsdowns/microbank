@@ -2,6 +2,10 @@
 
 version: "3"
 services:
+  microbank-angular-server:
+    image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/angular:latest
+    ports:
+      - "4200:80"
   microbank-eureka-server:
     image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/eureka:latest
     ports:
