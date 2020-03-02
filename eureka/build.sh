@@ -1,1 +1,1 @@
-docker build -t microbank-eureka:latest .
+docker build -t registry.gitlab.com/zacharyedwardsdowns/micro-bank/eureka:latest .

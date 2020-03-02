@@ -1,1 +1,1 @@
-docker build -t microbank-zuul:latest .
+docker build -t registry.gitlab.com/zacharyedwardsdowns/micro-bank/zuul:latest .

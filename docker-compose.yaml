@@ -1,17 +1,19 @@
+# Use docker-compose up to run all MicroBank services.
+
 version: "3"
 services:
   microbank-eureka-server:
-    image: microbank-eureka:latest
+    image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/eureka:latest
     ports:
       - "8761:8761"
   microbank-zuul-gateway:
-    image: microbank-zuul:latest
+    image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/zuul:latest
     ports:
       - "8765:8765"
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://microbank-eureka-server:8761/eureka
   microbank-registration:
-    image: microbank-registration:latest
+    image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/registration:latest
     ports:
       - "9010:9010"
     environment:

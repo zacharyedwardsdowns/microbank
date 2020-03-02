@@ -1,0 +1,1 @@
+docker run -d -p "4200:80" --name "microbank-angular" registry.gitlab.com/zacharyedwardsdowns/micro-bank/angular

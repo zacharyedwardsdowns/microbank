@@ -14,6 +14,6 @@ RUN mvn package
 FROM alpine:3.7
 ARG workingDirectory
 WORKDIR ${workingDirectory}
-RUN apk add --no-cache openjdk8
+RUN apk add --no-cache openjdk8-jre
 COPY --from=build ${workingDirectory}/target/*.jar ${workingDirectory}
 CMD java -jar ./eureka*.jar

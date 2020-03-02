@@ -1,1 +1,1 @@
-docker run -d -p "9010:9010" --name "microbank-registration" --network "microbank-network" microbank-registration
+docker run -d -p "9010:9010" --name "microbank-registration" --network "microbank-network" registry.gitlab.com/zacharyedwardsdowns/micro-bank/registration

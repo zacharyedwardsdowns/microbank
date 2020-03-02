@@ -1,12 +1,9 @@
 spring:
   application:
-    name: microbank-zuul-gateway
+    name: microbank-registration-service
 ---
 server:
-  port: 8765
----
-zuul:
-  retryable: true
+  port: 9010
 ---
 eureka:
   client:

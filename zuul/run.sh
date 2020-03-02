@@ -1,0 +1,1 @@
+docker run -d -p "8765:8765" --name "microbank-zuul" --network "microbank-network" registry.gitlab.com/zacharyedwardsdowns/micro-bank/zuul
