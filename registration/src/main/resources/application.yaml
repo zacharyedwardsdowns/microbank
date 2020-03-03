@@ -1,6 +1,15 @@
 spring:
   application:
     name: microbank-registration-service
+  jpa:
+    databasePlatform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddlAuto: create
+  datasource:
+    url: jdbc:h2:file:~/data/microbank/database
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
 ---
 server:
   port: 9010
