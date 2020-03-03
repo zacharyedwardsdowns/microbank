@@ -30,8 +30,12 @@ Executes 'mvn clean package' for all services:<br>`./packageall.sh`
 
 Executes 'mvn clean' for all services:<br>`./cleanall.sh`
 
-Executes 'docker build' for all services:<br>`./buildall.sh`
+Executes 'docker build' for all services:<br>`./docker/buildall.sh`
 
-Executes 'docker run' for all services:<br>`./runall.sh`
+Executes 'docker run' for all services:<br>`./docker/runall.sh`
 
-Executes 'docker stop' and 'docker rm' for all services:<br>`./stopall.sh`
+Executes 'docker stop' and 'docker rm' for all services:<br>`./docker/stopall.sh`
+
+Executes 'docker push' for all services:<br>`./docker/pushall.sh`
+
+Formats all java files using prettier-java:<br>`./prettier-java.sh`
