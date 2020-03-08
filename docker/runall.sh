@@ -36,8 +36,8 @@ echo "Starting zuul..."
 cd ../zuul; ./run.sh
 
 echo ""
-echo "Starting registration..."
-cd ../registration; ./run.sh
+echo "Starting customer..."
+cd ../customer; ./run.sh
 
 echo ""
 echo "All containers started."

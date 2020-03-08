@@ -2,7 +2,7 @@
 
 version: "3"
 services:
-  microbank-angular-server:
+  microbank-angular-frontend:
     image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/angular:latest
     ports:
       - "4200:80"
@@ -16,8 +16,8 @@ services:
       - "8765:8765"
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://microbank-eureka-server:8761/eureka
-  microbank-registration:
-    image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/registration:latest
+  microbank-customer-service:
+    image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/customer:latest
     ports:
       - "9010:9010"
     environment:

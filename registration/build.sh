@@ -1,1 +1,0 @@
-docker build -t registry.gitlab.com/zacharyedwardsdowns/micro-bank/registration:latest .

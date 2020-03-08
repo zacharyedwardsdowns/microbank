@@ -1,0 +1,1 @@
+docker run -d -p "9010:9010" --name "microbank-customer" --network "microbank-network" registry.gitlab.com/zacharyedwardsdowns/micro-bank/customer
