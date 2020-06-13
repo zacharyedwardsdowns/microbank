@@ -1,5 +1,5 @@
-# Clean all maven target folders for all MicroBank services.
-
+# Clean build directories for all MicroBank services.
+cd "$(dirname "$0")"
 cd angular; rm -r dist
 cd ../eureka; gradle clean
 cd ../zuul; gradle clean

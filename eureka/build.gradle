@@ -34,11 +34,6 @@ springBoot {
 	mainClassName = 'com.microbank.eureka.EurekaServer'
 }
 
-
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
-}
-
-test {
-	useJUnitPlatform()
 }

@@ -19,6 +19,6 @@ services:
   microbank-customer-service:
     image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/customer:latest
     ports:
-      - "9010:9010"
+      - "6010:6010"
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://microbank-eureka-server:8761/eureka

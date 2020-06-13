@@ -1,4 +1,5 @@
 # Run docker files for all MicroBank services.
+cd "$(dirname "$0")"
 
 # Check if a network exists, if not create one.
 networkSubnet="172.35.6.0/16"
@@ -24,12 +25,12 @@ fi
 
 
 # Begin running services.
-echo "Starting angular..."
-cd angular; ./run.sh
-
-echo ""
 echo "Starting eureka..."
 cd ../eureka; ./run.sh "$eurekaIp"
+
+echo ""
+echo "Starting angular..."
+cd ../angular; ./run.sh
 
 echo ""
 echo "Starting zuul..."

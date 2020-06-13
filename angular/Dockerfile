@@ -1,7 +1,7 @@
 # A global argument containing the working directory for the service.
 ARG workingDirectory=/microbank/angular
 
-# The maven build stage of the service.
+# The build stage of the service.
 FROM node:alpine as build
 ARG workingDirectory
 WORKDIR ${workingDirectory}

@@ -7,6 +7,9 @@ server:
 ---
 zuul:
   retryable: true
+  routes:
+    customer:
+      service-id: microbank-customer-service
 ---
 eureka:
   client:
