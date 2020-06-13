@@ -1,46 +1,59 @@
 package com.microbank.customer.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonProperty;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * A model to represent and transfer user data.
  */
-@Table
 @Getter
 @Setter
-@Entity
 @ToString
 @EqualsAndHashCode
+@NoArgsConstructor
 @AllArgsConstructor
+@Document(collection = "Customer")
 public class Customer {
-  @Id
-  @Column(name = "username")
-  private final String username;
+  @BsonId
+  @JsonIgnore
+  private ObjectId id;
 
-  @Column(name = "password", nullable = false)
+  @JsonProperty("Username")
+  @BsonProperty("Username")
+  private String username;
+
+  @JsonProperty("Password")
+  @BsonProperty("Password")
   private String password;
 
-  @Column(name = "logged_in", nullable = false)
+  @JsonProperty("LoggedIn")
+  @BsonProperty("LoggedIn")
   private boolean loggedIn = false;
 
-  @Column(name = "address", nullable = false)
+  @JsonProperty("Address")
+  @BsonProperty("Address")
   private String address;
 
-  @Column(name = "date_of_birth", nullable = false)
+  @JsonProperty("DateOfBirth")
+  @BsonProperty("DateOfBirth")
   private Date dateOfBirth;
 
-  @Column(name = "social_security_number", nullable = false)
+  @JsonProperty("SocialSecurityNumber")
+  @BsonProperty("SocialSecurityNumber")
   private String socialSecurityNumber;
 
-  @Column(name = "joined_on", nullable = false)
-  private final Date joinedOn;
+  @JsonProperty("JoinedOn")
+  @BsonProperty("JoinedOn")
+  private Date joinedOn;
 }

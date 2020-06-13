@@ -13,4 +13,11 @@ public class InvalidSocialSecurityNumberException extends Exception {
   public InvalidSocialSecurityNumberException(final String message) {
     super(message);
   }
+
+  public InvalidSocialSecurityNumberException(
+    final String message,
+    final Throwable throwable
+  ) {
+    super(message, throwable);
+  }
 }

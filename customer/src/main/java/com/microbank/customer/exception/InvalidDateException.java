@@ -13,4 +13,8 @@ public class InvalidDateException extends Exception {
   public InvalidDateException(final String message) {
     super(message);
   }
+
+  public InvalidDateException(final String message, final Throwable throwable) {
+    super(message, throwable);
+  }
 }

@@ -13,4 +13,11 @@ public class InvalidPasswordException extends Exception {
   public InvalidPasswordException(final String message) {
     super(message);
   }
+
+  public InvalidPasswordException(
+    final String message,
+    final Throwable throwable
+  ) {
+    super(message, throwable);
+  }
 }

@@ -13,4 +13,11 @@ public class InvalidAddressException extends Exception {
   public InvalidAddressException(final String message) {
     super(message);
   }
+
+  public InvalidAddressException(
+    final String message,
+    final Throwable throwable
+  ) {
+    super(message, throwable);
+  }
 }

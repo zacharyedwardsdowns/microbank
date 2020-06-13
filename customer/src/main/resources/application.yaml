@@ -1,15 +1,12 @@
 spring:
   application:
     name: microbank-customer-service
-  jpa:
-    databasePlatform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddlAuto: create-drop
-  datasource:
-    url: jdbc:h2:file:~/data/microbank/customer-database
-    username: sa
-    password: 
-    driver-class-name: org.h2.Driver
+  data:
+    mongodb:
+      database: microbank
+server:
+  servlet:
+    context-path: /microbank
 ---
 server:
   port: 9010

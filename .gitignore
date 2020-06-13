@@ -2,6 +2,7 @@ HELP.md
 target/
 !**/src/main/**
 !**/src/test/**
+bin
 
 ### STS ###
 .apt_generated
@@ -29,7 +30,11 @@ build/
 ### VS Code ###
 .vscode/
 
-### Maven ###
-mvnw.cmd
-.mvn
-mvnw
+### Gradle ###
+.gradle
+
+# Ignore Gradle build output directory
+gradle
+gradlew
+gradlew.bat
+build

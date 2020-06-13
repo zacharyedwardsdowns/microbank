@@ -8,9 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Handles login, registration, and all data related to customers.
  */
 @SpringBootApplication
-public class CustomerMain {
+public class Application {
 
   public static void main(String[] args) {
-    SpringApplication.run(CustomerMain.class, args);
+    SpringApplication.run(Application.class, args);
   }
 }

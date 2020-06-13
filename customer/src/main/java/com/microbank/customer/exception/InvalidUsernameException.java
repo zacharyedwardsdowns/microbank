@@ -13,4 +13,11 @@ public class InvalidUsernameException extends Exception {
   public InvalidUsernameException(final String message) {
     super(message);
   }
+
+  public InvalidUsernameException(
+    final String message,
+    final Throwable throwable
+  ) {
+    super(message, throwable);
+  }
 }
