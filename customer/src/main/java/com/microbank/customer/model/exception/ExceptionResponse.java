@@ -19,4 +19,5 @@ public class ExceptionResponse {
   private String error;
   private String message;
   private String path;
+  private ExceptionCause cause;
 }
