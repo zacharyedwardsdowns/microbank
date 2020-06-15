@@ -1,8 +1,6 @@
 package com.microbank.customer.exception;
 
-/**
- * Thrown when attempting to register with an invalid password.
- */
+/** Thrown when attempting to register with an invalid password. */
 public class InvalidPasswordException extends Exception {
   private static final long serialVersionUID = 1L;
 
@@ -14,10 +12,7 @@ public class InvalidPasswordException extends Exception {
     super(message);
   }
 
-  public InvalidPasswordException(
-    final String message,
-    final Throwable throwable
-  ) {
+  public InvalidPasswordException(final String message, final Throwable throwable) {
     super(message, throwable);
   }
 }

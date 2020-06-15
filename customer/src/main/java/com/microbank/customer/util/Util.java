@@ -2,14 +2,10 @@ package com.microbank.customer.util;
 
 import org.springframework.data.domain.ExampleMatcher;
 
-/**
- * A general utility class.
- */
+/** A general utility class. */
 public final class Util {
 
-  /**
-   * Prevents instantiation.
-   */
+  /** Prevents instantiation. */
   private Util() {}
 
   public static ExampleMatcher defaultMatcher() {

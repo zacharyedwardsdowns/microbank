@@ -9,8 +9,8 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 /**
- * A service to save and query customer data from the database. Is validated by
- * the ValidationService service.
+ * A service to save and query customer data from the database. Is validated by the
+ * ValidationService service.
  */
 @Service
 public class CustomerService {

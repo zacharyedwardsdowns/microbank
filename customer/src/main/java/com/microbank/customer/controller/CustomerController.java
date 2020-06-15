@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Provides endpoints for verifying login, registering users, and querying
- * customer data.
- */
+/** Provides endpoints for verifying login, registering users, and querying customer data. */
 @RestController
 public class CustomerController {
   private CustomerService customerService;
@@ -33,8 +30,7 @@ public class CustomerController {
    * @return The information of the newly registered customer.
    */
   @PostMapping("register")
-  public Customer register(@RequestBody Customer customer)
-    throws ExistingCustomerException {
+  public Customer register(@RequestBody Customer customer) throws ExistingCustomerException {
     return customerService.register(customer);
   }
 }

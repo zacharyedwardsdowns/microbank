@@ -1,8 +1,6 @@
 package com.microbank.customer.exception;
 
-/**
- * Thrown when a general exception occurs.
- */
+/** Thrown when a general exception occurs. */
 public class CustomerServiceException extends Exception {
   private static final long serialVersionUID = 1L;
 
@@ -14,10 +12,7 @@ public class CustomerServiceException extends Exception {
     super(message);
   }
 
-  public CustomerServiceException(
-    final String message,
-    final Throwable throwable
-  ) {
+  public CustomerServiceException(final String message, final Throwable throwable) {
     super(message, throwable);
   }
 }

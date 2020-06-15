@@ -1,8 +1,6 @@
 package com.microbank.customer.exception;
 
-/**
- * Thrown when attempting to register with an invalid date.
- */
+/** Thrown when attempting to register with an invalid date. */
 public class InvalidDateException extends Exception {
   private static final long serialVersionUID = 1L;
 

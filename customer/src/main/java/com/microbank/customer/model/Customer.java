@@ -14,9 +14,7 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-/**
- * A model to represent and transfer user data.
- */
+/** A model to represent and transfer user data. */
 @Getter
 @Setter
 @ToString
@@ -25,9 +23,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @Document(collection = "Customer")
 public class Customer {
-  @BsonId
-  @JsonIgnore
-  private ObjectId id;
+  @BsonId @JsonIgnore private ObjectId id;
 
   @JsonProperty("Username")
   @BsonProperty("Username")

@@ -15,19 +15,16 @@ import org.springframework.util.FileCopyUtils;
 @Configuration
 @EnableMongoRepositories(basePackages = "com.microbank.customer.repository")
 public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
-  private static final Logger LOG = LoggerFactory.getLogger(
-    MongoDbConfiguration.class
-  );
+  private static final Logger LOG = LoggerFactory.getLogger(MongoDbConfiguration.class);
 
   private final String host;
   private final String user;
   private final String db;
 
   MongoDbConfiguration(
-    @Value("${customer.mongodb.host}") String host,
-    @Value("${customer.mongodb.user}") String user,
-    @Value("${customer.mongodb.db}") String db
-  ) {
+      @Value("${customer.mongodb.host}") String host,
+      @Value("${customer.mongodb.user}") String user,
+      @Value("${customer.mongodb.db}") String db) {
     this.host = host;
     this.user = user;
     this.db = db;
@@ -37,16 +34,17 @@ public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
   public MongoClient mongoClient() {
     final String pass = getPassword();
 
-    final StringBuilder connectionString = new StringBuilder()
-      .append("mongodb+srv://")
-      .append(user)
-      .append(":")
-      .append(pass)
-      .append("@")
-      .append(host)
-      .append("/")
-      .append(db)
-      .append("?retryWrites=true&w=majority");
+    final StringBuilder connectionString =
+        new StringBuilder()
+            .append("mongodb+srv://")
+            .append(user)
+            .append(":")
+            .append(pass)
+            .append("@")
+            .append(host)
+            .append("/")
+            .append(db)
+            .append("?retryWrites=true&w=majority");
 
     return MongoClients.create(connectionString.toString());
   }
@@ -59,10 +57,7 @@ public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
   private String getPassword() {
     try {
       return FileCopyUtils.copyToString(
-        new InputStreamReader(
-          new ClassPathResource("mongodb-password").getInputStream()
-        )
-      );
+          new InputStreamReader(new ClassPathResource("mongodb-password").getInputStream()));
     } catch (final Exception e) {
       LOG.error("Failed to obtain the MongoDB Atlas password!", e);
       return "";
