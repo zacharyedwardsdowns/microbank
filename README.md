@@ -3,39 +3,37 @@ A microservice banking application.
 
 ---
 
-### Docker-Compose
+### Docker Compose
 The recommended way to run MicroBank.
 
 Run Application:<br>`docker-compose up`
 
-Kill Application:<br>`docker-compose down`
-
-Reset Containers:<br>`docker-compose rm`
+Stop Application:<br>`docker-compose down`
 
 ---
 
 ### Docker
-Setup is required to run MicroBank on Docker.
+Setup is required to run MicroBank on Docker without Docker Compose.
 
 Replace localhost with `172.35.6.72` in defaultZone of the application.yaml for all services that register with Eureka.
 
-Start the application using:<br>`./runall.sh`
+Start the application using:<br>`sh runall.sh`
 
 ---
 
 ### Scripts
 Scripts to automate development tasks.
 
-Executes 'mvn clean package' for all services:<br>`./packageall.sh`
+Executes 'gradle clean build' for all services:<br>`sh buildall.sh`
 
-Executes 'mvn clean' for all services:<br>`./cleanall.sh`
+Executes 'gradle clean' for all services:<br>`sh cleanall.sh`
 
-Executes 'docker build' for all services:<br>`./docker/buildall.sh`
+Executes 'docker build' for all services:<br>`sh docker/buildall.sh`
 
-Executes 'docker run' for all services:<br>`./docker/runall.sh`
+Executes 'docker run' for all services:<br>`sh docker/runall.sh`
 
-Executes 'docker stop' and 'docker rm' for all services:<br>`./docker/stopall.sh`
+Executes 'docker stop' and 'docker rm' for all services:<br>`sh docker/stopall.sh`
 
-Executes 'docker push' for all services:<br>`./docker/pushall.sh`
+Executes 'docker push' for all services:<br>`sh docker/pushall.sh`
 
-Formats all java files using prettier-java:<br>`./prettier-java.sh`
+Formats all java files using prettier-java:<br>`sh prettier-java.sh`
