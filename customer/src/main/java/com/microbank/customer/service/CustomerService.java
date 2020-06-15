@@ -38,7 +38,8 @@ public class CustomerService {
     Example<Customer> query = Example.of(customer, Util.defaultMatcher());
 
     if (this.customerRepository.exists(query)) {
-      throw new ExistingCustomerException();
+      throw new ExistingCustomerException(
+          "A customer already exists with the username " + customer.getUsername() + "!");
     } else {
       return this.customerRepository.insert(customer);
     }

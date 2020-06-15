@@ -36,4 +36,4 @@ Executes 'docker stop' and 'docker rm' for all services:<br>`sh docker/stopall.s
 
 Executes 'docker push' for all services:<br>`sh docker/pushall.sh`
 
-Formats all java files using prettier-java:<br>`sh prettier-java.sh`
+Formats all java files using google-java-format:<br>`sh format.sh`

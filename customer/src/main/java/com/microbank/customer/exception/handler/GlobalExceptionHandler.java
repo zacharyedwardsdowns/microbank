@@ -18,11 +18,12 @@ public class GlobalExceptionHandler {
       Exception e, HttpServletRequest request) {
     ExceptionResponse exceptionResponse = new ExceptionResponse();
     exceptionResponse.setTimestamp(now());
-    exceptionResponse.setStatus(HttpStatus.CONFLICT);
+    exceptionResponse.setStatus(HttpStatus.CONFLICT.value());
     exceptionResponse.setError("ExistingCustomerException");
     exceptionResponse.setMessage(e.getMessage());
     exceptionResponse.setPath(request.getRequestURI());
-    return new ResponseEntity<>(exceptionResponse, exceptionResponse.getStatus());
+    return new ResponseEntity<>(
+        exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
   }
 
   /**
