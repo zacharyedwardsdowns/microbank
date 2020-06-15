@@ -32,9 +32,10 @@ build/
 
 ### Gradle ###
 .gradle
-
-# Ignore Gradle build output directory
 gradle
 gradlew
 gradlew.bat
 build
+
+### Custom ###
+mongodb-password
