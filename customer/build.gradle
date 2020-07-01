@@ -1,5 +1,7 @@
 buildscript {
     ext {
+        lombokVersion = '1.18.12'
+        cucumberVersion = '6.1.2'
         springBootVersion = '2.2.5.RELEASE'
     }
 }
@@ -10,25 +12,36 @@ plugins {
     id 'com.github.sherter.google-java-format' version '0.9'
 }
 
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+
 googleJavaFormat {
   toolVersion = "1.7"
 }
 
-apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
+configurations {
+    intTestImplementation.extendsFrom implementation
+    intTestRuntimeOnly.extendsFrom runtimeOnly
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation "org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}"
+    implementation "org.projectlombok:lombok:${lombokVersion}"
+    implementation "io.cucumber:cucumber-java:${cucumberVersion}"
+    implementation "io.cucumber:cucumber-junit:${cucumberVersion}"
     implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}"
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:2.2.1.RELEASE'
-    implementation 'org.projectlombok:lombok:1.18.12'
-    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
     runtimeOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
+
+    testImplementation "io.cucumber:cucumber-junit:${cucumberVersion}"
     testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
 
@@ -47,4 +60,22 @@ tasks.withType(JavaCompile) {
 
 test {
 	useJUnitPlatform()
+}
+
+sourceSets {
+    intTest {
+        java {
+            srcDir 'src/integration/java'
+        }
+        resources {
+            srcDir 'src/integration/resources'
+        }
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+
+task intTest(type: Test) {
+    testClassesDirs = sourceSets.intTest.output.classesDirs
+    classpath = sourceSets.intTest.runtimeClasspath
 }
