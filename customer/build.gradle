@@ -8,15 +8,22 @@ buildscript {
 
 plugins {
     id 'java'
+    id 'jacoco'
 	id 'org.springframework.boot' version "${springBootVersion}"
     id 'com.github.sherter.google-java-format' version '0.9'
 }
 
 apply plugin: 'java'
+apply plugin: 'jacoco'
 apply plugin: 'org.springframework.boot'
 
 googleJavaFormat {
   toolVersion = "1.7"
+}
+
+jacoco {
+    toolVersion = "0.8.5"
+    reportsDir = file("$buildDir/jacoco")
 }
 
 configurations {
@@ -58,8 +65,44 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacoco/jacocoHtml")
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it,
+            exclude:    ['**/model/**',
+                        '**/exception/**',
+                        '**/repository/**',
+                        '**/*Application*'])
+        }))
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.8
+            }
+        }
+    }
+}
+
+check {
+    dependsOn jacocoTestCoverageVerification
+}
+
 test {
 	useJUnitPlatform()
+    jacoco {
+        excludes = ['*Application*']
+    }
+    finalizedBy jacocoTestReport
 }
 
 sourceSets {

@@ -1,4 +1,4 @@
-package com.microbank.customer.exception.handler;
+package com.microbank.customer.controller.handler;
 
 import com.microbank.customer.exception.ExistingCustomerException;
 import com.microbank.customer.model.exception.ExceptionCause;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class ControllerExceptionHandler {
 
   @ExceptionHandler(value = ExistingCustomerException.class)
   protected ResponseEntity<ExceptionResponse> existingCustomerException(
