@@ -61,7 +61,7 @@ dependencies {
 group = 'com.microbank'
 version = '0.1.0'
 description = 'microbank-customer-service'
-sourceCompatibility = '1.8'
+sourceCompatibility = '1.11'
 
 springBoot {
 	mainClassName = 'com.microbank.customer.Application'
