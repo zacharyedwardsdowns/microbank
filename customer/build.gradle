@@ -1,3 +1,6 @@
+import com.github.sherter.googlejavaformatgradleplugin.VerifyGoogleJavaFormat
+import com.github.sherter.googlejavaformatgradleplugin.GoogleJavaFormat
+
 buildscript {
     ext {
         lombokVersion = '1.18.12'
@@ -16,6 +19,7 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'com.github.sherter.google-java-format'
 
 googleJavaFormat {
   toolVersion = "1.7"
@@ -65,6 +69,20 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+task format(type: GoogleJavaFormat) {
+  source 'src/main'
+  source 'src/test'
+  source 'src/integration'
+  include '**/*.java'
+}
+
+task verifyFormatting(type: VerifyGoogleJavaFormat) {
+  source 'src/main'
+  source 'src/test'
+  source 'src/integration'
+  include '**/*.java'
+}
+
 jacocoTestReport {
     reports {
         xml.enabled false
@@ -77,7 +95,6 @@ jacocoTestReport {
             fileTree(dir: it,
             exclude:    ['**/model/**',
                         '**/exception/**',
-                        '**/repository/**',
                         '**/*Application*'])
         }))
     }
@@ -93,15 +110,16 @@ jacocoTestCoverageVerification {
     }
 }
 
+compileJava {
+    dependsOn format, verifyFormatting
+}
+
 check {
     dependsOn jacocoTestCoverageVerification
 }
 
 test {
 	useJUnitPlatform()
-    jacoco {
-        excludes = ['*Application*']
-    }
     finalizedBy jacocoTestReport
 }
 

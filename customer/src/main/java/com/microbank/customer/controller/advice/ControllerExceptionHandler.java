@@ -1,4 +1,4 @@
-package com.microbank.customer.controller.handler;
+package com.microbank.customer.controller.advice;
 
 import com.microbank.customer.exception.ExistingCustomerException;
 import com.microbank.customer.model.exception.ExceptionCause;
