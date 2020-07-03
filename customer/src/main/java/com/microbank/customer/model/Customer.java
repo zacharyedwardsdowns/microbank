@@ -2,7 +2,8 @@ package com.microbank.customer.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-/** A model to represent and transfer user data. */
+/** A model to represent and transfer customer data. */
 @Getter
 @Setter
 @ToString
@@ -33,17 +34,45 @@ public class Customer {
   @BsonProperty("Password")
   private String password;
 
-  @JsonProperty("LoggedIn")
-  @BsonProperty("LoggedIn")
-  private boolean loggedIn = false;
+  @JsonProperty("FirstName")
+  @BsonProperty("FirstName")
+  private String firstName;
+
+  @JsonProperty("MiddleName")
+  @BsonProperty("MiddleName")
+  private String middleName;
+
+  @JsonProperty("LastName")
+  @BsonProperty("LastName")
+  private String lastName;
+
+  @JsonProperty("Suffix")
+  @BsonProperty("Suffix")
+  private String suffix;
+
+  @JsonProperty("Gender")
+  @BsonProperty("Gender")
+  private String gender;
 
   @JsonProperty("Address")
   @BsonProperty("Address")
   private String address;
 
+  @JsonProperty("City")
+  @BsonProperty("City")
+  private String city;
+
+  @JsonProperty("State")
+  @BsonProperty("State")
+  private String state;
+
+  @JsonProperty("PostalCode")
+  @BsonProperty("PostalCode")
+  private String postalCode;
+
   @JsonProperty("DateOfBirth")
   @BsonProperty("DateOfBirth")
-  private Date dateOfBirth;
+  private LocalDate dateOfBirth;
 
   @JsonProperty("SocialSecurityNumber")
   @BsonProperty("SocialSecurityNumber")
@@ -51,5 +80,9 @@ public class Customer {
 
   @JsonProperty("JoinedOn")
   @BsonProperty("JoinedOn")
-  private Date joinedOn;
+  private LocalDateTime joinedOn;
+
+  @JsonProperty("LastUpdatedOn")
+  @BsonProperty("LastUpdatedOn")
+  private LocalDateTime lastUpdatedOn;
 }

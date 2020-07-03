@@ -1,11 +1,26 @@
 package com.microbank.customer.service;
 
-import org.junit.Assert;
+import com.microbank.customer.repository.CustomerRepository;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class CustomerServiceTest {
-  @Test
-  public void fakeTest() {
-    Assert.assertTrue(true);
+
+  private static CustomerRepository mockCustomerRepository;
+  private CustomerService customerService;
+
+  @BeforeClass
+  public static void setupClass() throws Exception {
+    mockCustomerRepository = Mockito.mock(CustomerRepository.class);
   }
+
+  @Before
+  public void testConstructor() throws Exception {
+    customerService = new CustomerService(mockCustomerRepository);
+  }
+
+  @Test
+  public void testRegister() throws Exception {}
 }

@@ -42,7 +42,9 @@ repositories {
 dependencies {
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
+    implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.mikesamuel:json-sanitizer:1.0'
     implementation "org.projectlombok:lombok:${lombokVersion}"
     implementation "io.cucumber:cucumber-java:${cucumberVersion}"
     implementation "io.cucumber:cucumber-junit:${cucumberVersion}"
@@ -69,11 +71,9 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-task format(type: GoogleJavaFormat) {
-  source 'src/main'
-  source 'src/test'
-  source 'src/integration'
-  include '**/*.java'
+// Fail if Javadoc warnings are present.
+tasks.withType(Javadoc) {
+	options.addStringOption('Xwerror', '-quiet')
 }
 
 task verifyFormatting(type: VerifyGoogleJavaFormat) {
@@ -81,6 +81,14 @@ task verifyFormatting(type: VerifyGoogleJavaFormat) {
   source 'src/test'
   source 'src/integration'
   include '**/*.java'
+}
+
+task format(type: GoogleJavaFormat) {
+  source 'src/main'
+  source 'src/test'
+  source 'src/integration'
+  include '**/*.java'
+  finalizedBy verifyFormatting
 }
 
 jacocoTestReport {
@@ -111,7 +119,7 @@ jacocoTestCoverageVerification {
 }
 
 compileJava {
-    dependsOn format, verifyFormatting
+    finalizedBy javadoc, format
 }
 
 check {

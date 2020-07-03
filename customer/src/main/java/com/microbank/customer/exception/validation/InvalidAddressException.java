@@ -1,7 +1,9 @@
-package com.microbank.customer.exception;
+package com.microbank.customer.exception.validation;
+
+import com.microbank.customer.exception.ValidationException;
 
 /** Thrown when attempting to register with an invalid address. */
-public class InvalidAddressException extends Exception {
+public class InvalidAddressException extends ValidationException {
   private static final long serialVersionUID = 1L;
 
   public InvalidAddressException() {

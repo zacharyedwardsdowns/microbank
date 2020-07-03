@@ -1,14 +1,19 @@
 package com.microbank.customer.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.microbank.customer.exception.ExistingCustomerException;
+import com.microbank.customer.exception.InvalidJsonException;
+import com.microbank.customer.exception.ValidationException;
 import com.microbank.customer.model.Customer;
+import com.microbank.customer.security.Sanitizer;
 import com.microbank.customer.service.CustomerService;
+import com.microbank.customer.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Provides endpoints for verifying login, registering users, and querying customer data. */
+/** Provides endpoints for verifying login, registering customers, and querying customer data. */
 @RestController
 public class CustomerController {
   private CustomerService customerService;
@@ -26,11 +31,23 @@ public class CustomerController {
   /**
    * Register a new customer in the database.
    *
-   * @param user The customer to register.
+   * @param customerJson The customer to register represented as a json string.
    * @return The information of the newly registered customer.
+   * @throws ValidationException Thrown if a validation error occurs.
+   * @throws InvalidJsonException Thrown upon failure to read the given json into Customer.
+   * @throws ExistingCustomerException Thrown if a customer already exists with the given username.
    */
   @PostMapping("register")
-  public Customer register(@RequestBody Customer customer) throws ExistingCustomerException {
+  public Customer register(@RequestBody String customerJson)
+      throws ValidationException, ExistingCustomerException, InvalidJsonException {
+    customerJson = Sanitizer.sanitizeJson(customerJson);
+    Customer customer;
+    try {
+      customer = Util.MAPPER.readValue(customerJson, Customer.class);
+    } catch (JsonProcessingException e) {
+      throw new InvalidJsonException(
+          "Failed to create an instance of Customer with the given json!", e);
+    }
     return customerService.register(customer);
   }
 }

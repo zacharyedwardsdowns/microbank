@@ -1,6 +1,7 @@
 package com.microbank.customer.service;
 
 import com.microbank.customer.exception.ExistingCustomerException;
+import com.microbank.customer.exception.ValidationException;
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.repository.CustomerRepository;
 import com.microbank.customer.util.Util;
@@ -19,7 +20,7 @@ public class CustomerService {
   /**
    * Injects the necessary dependencies.
    *
-   * @param customerRepository A MongoRepository for users.
+   * @param customerRepository A MongoRepository for customers.
    */
   @Autowired
   public CustomerService(CustomerRepository customerRepository) {
@@ -27,12 +28,15 @@ public class CustomerService {
   }
 
   /**
-   * Register a new user in the database.
+   * Register a new customer in the database.
    *
-   * @param user The user to register.
-   * @return The information of the newly registered user.
+   * @param customer The customer to register.
+   * @return The information of the newly registered customer.
+   * @throws ValidationException Thrown if a validation error occurs.
+   * @throws ExistingCustomerException Thrown if a customer already exists with the given username.
    */
-  public Customer register(Customer customer) throws ExistingCustomerException {
+  public Customer register(Customer customer)
+      throws ValidationException, ExistingCustomerException {
     Customer searchCustomer = new Customer();
     searchCustomer.setUsername(customer.getUsername());
     Example<Customer> query = Example.of(customer, Util.defaultMatcher());
