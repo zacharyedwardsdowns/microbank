@@ -1,7 +1,5 @@
 package com.microbank.customer.util;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import com.mongodb.client.MongoClient;
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,6 +29,6 @@ public class MongoDbConfigurationTest extends MongoDbConfiguration {
 
   @Test
   public void testGetDatabaseName() {
-    assertEquals(DB, mongoDbConfiguration.getDatabaseName());
+    Assert.assertEquals(DB, mongoDbConfiguration.getDatabaseName());
   }
 }
