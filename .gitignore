@@ -38,4 +38,4 @@ gradlew.bat
 build
 
 ### Custom ###
-**/main/**/mongodb-password
+mongodb-password
