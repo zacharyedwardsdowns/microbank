@@ -1,6 +1,7 @@
 package com.microbank.customer.controller.advice;
 
 import com.microbank.customer.exception.ExistingCustomerException;
+import com.microbank.customer.exception.InvalidJsonException;
 import com.microbank.customer.model.exception.ExceptionCause;
 import com.microbank.customer.model.exception.ExceptionResponse;
 import java.time.LocalDateTime;
@@ -17,15 +18,40 @@ public class ControllerExceptionHandler {
   @ExceptionHandler(value = ExistingCustomerException.class)
   protected ResponseEntity<ExceptionResponse> existingCustomerException(
       Exception e, HttpServletRequest request) {
+    ExceptionResponse exceptionResponse =
+        createDefaultExceptionResponse(e, request, HttpStatus.CONFLICT);
+    return new ResponseEntity<>(
+        exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
+  }
+
+  @ExceptionHandler(value = InvalidJsonException.class)
+  protected ResponseEntity<ExceptionResponse> invalidJsonException(
+      Exception e, HttpServletRequest request) {
+    ExceptionResponse exceptionResponse =
+        createDefaultExceptionResponse(e, request, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(
+        exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
+  }
+
+  /**
+   * Creates a default ExceptionResponse from the given exception and request. Uses the given status
+   * as the response status of the controller.
+   *
+   * @param e The exception to build a message with.
+   * @param request The request to get the URI with.
+   * @param status The status to respond with.
+   * @return A default ExceptionResponse.
+   */
+  private ExceptionResponse createDefaultExceptionResponse(
+      Exception e, HttpServletRequest request, HttpStatus status) {
     ExceptionResponse exceptionResponse = new ExceptionResponse();
     exceptionResponse.setTimestamp(now());
-    exceptionResponse.setStatus(HttpStatus.CONFLICT.value());
+    exceptionResponse.setStatus(status.value());
     exceptionResponse.setError(e.getClass().getSimpleName());
     exceptionResponse.setMessage(e.getMessage());
     exceptionResponse.setPath(request.getRequestURI());
     exceptionResponse.setCause(fillCause(e));
-    return new ResponseEntity<>(
-        exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
+    return exceptionResponse;
   }
 
   /**

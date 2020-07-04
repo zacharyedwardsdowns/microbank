@@ -9,6 +9,8 @@ import com.microbank.customer.security.Sanitizer;
 import com.microbank.customer.service.CustomerService;
 import com.microbank.customer.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,7 +40,7 @@ public class CustomerController {
    * @throws ExistingCustomerException Thrown if a customer already exists with the given username.
    */
   @PostMapping("register")
-  public Customer register(@RequestBody String customerJson)
+  public ResponseEntity<Customer> register(@RequestBody String customerJson)
       throws ValidationException, ExistingCustomerException, InvalidJsonException {
     customerJson = Sanitizer.sanitizeJson(customerJson);
     Customer customer;
@@ -48,6 +50,6 @@ public class CustomerController {
       throw new InvalidJsonException(
           "Failed to create an instance of Customer with the given json!", e);
     }
-    return customerService.register(customer);
+    return new ResponseEntity<>(customerService.register(customer), HttpStatus.CREATED);
   }
 }

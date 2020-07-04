@@ -7,6 +7,9 @@ import org.jsoup.safety.Whitelist;
 /** Contains sanitization methods for user input. */
 public final class Sanitizer {
 
+  /** Prevents instantiation. */
+  private Sanitizer() {}
+
   /**
    * Sanitizes json using Jsoup and JsonSanitizer.
    *
