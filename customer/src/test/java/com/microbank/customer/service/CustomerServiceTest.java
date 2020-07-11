@@ -17,6 +17,7 @@ import org.springframework.core.io.ClassPathResource;
 public class CustomerServiceTest {
 
   private static CustomerRepository mockCustomerRepository;
+  private static ValidationService mockValidationService;
   private CustomerService customerService;
   private static String json;
   private Customer customer;
@@ -24,6 +25,7 @@ public class CustomerServiceTest {
   @BeforeClass
   public static void setupClass() throws Exception {
     mockCustomerRepository = Mockito.mock(CustomerRepository.class);
+    mockValidationService = Mockito.mock(ValidationService.class);
 
     final File resource = new ClassPathResource("json/Customer.json").getFile();
     json = Files.readString(resource.toPath());
@@ -32,7 +34,7 @@ public class CustomerServiceTest {
 
   @Before
   public void setup() throws Exception {
-    customerService = new CustomerService(mockCustomerRepository);
+    customerService = new CustomerService(mockCustomerRepository, mockValidationService);
     customer = Util.MAPPER.readValue(json, Customer.class);
   }
 

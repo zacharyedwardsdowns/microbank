@@ -2,6 +2,7 @@ package com.microbank.customer.controller.advice;
 
 import com.microbank.customer.exception.ExistingCustomerException;
 import com.microbank.customer.exception.InvalidJsonException;
+import com.microbank.customer.exception.ValidationException;
 import com.microbank.customer.model.exception.ExceptionCause;
 import com.microbank.customer.model.exception.ExceptionResponse;
 import java.time.LocalDateTime;
@@ -24,7 +25,7 @@ public class ControllerExceptionHandler {
         exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
   }
 
-  @ExceptionHandler(value = InvalidJsonException.class)
+  @ExceptionHandler(value = {InvalidJsonException.class, ValidationException.class})
   protected ResponseEntity<ExceptionResponse> invalidJsonException(
       Exception e, HttpServletRequest request) {
     ExceptionResponse exceptionResponse =

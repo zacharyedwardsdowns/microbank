@@ -10,21 +10,25 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 /**
- * A service to save and query customer data from the database. Is validated by the
- * ValidationService service.
+ * A service to save and query customer data from a database. Is validated by
+ * ValidationService.java.
  */
 @Service
 public class CustomerService {
   private CustomerRepository customerRepository;
+  private ValidationService validationService;
 
   /**
    * Injects the necessary dependencies.
    *
    * @param customerRepository A MongoRepository for customers.
+   * @param validationService Validates customer information before contacting the database.
    */
   @Autowired
-  public CustomerService(CustomerRepository customerRepository) {
+  public CustomerService(
+      CustomerRepository customerRepository, ValidationService validationService) {
     this.customerRepository = customerRepository;
+    this.validationService = validationService;
   }
 
   /**
@@ -37,6 +41,8 @@ public class CustomerService {
    */
   public Customer register(Customer customer)
       throws ValidationException, ExistingCustomerException {
+    validationService.validateNewCustomer(customer);
+
     Customer searchCustomer = new Customer();
     searchCustomer.setUsername(customer.getUsername());
     Example<Customer> query = Example.of(customer, Util.defaultMatcher());

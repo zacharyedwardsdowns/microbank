@@ -18,6 +18,6 @@ public final class Util {
    * @return The default ExampleMatcher.
    */
   public static ExampleMatcher defaultMatcher() {
-    return ExampleMatcher.matching().withIgnoreNullValues().withIgnoreCase();
+    return ExampleMatcher.matching().withIgnoreNullValues();
   }
 }

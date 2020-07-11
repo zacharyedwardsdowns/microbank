@@ -39,7 +39,7 @@ public class CustomerController {
    * @throws InvalidJsonException Thrown upon failure to read the given json into Customer.
    * @throws ExistingCustomerException Thrown if a customer already exists with the given username.
    */
-  @PostMapping("register")
+  @PostMapping("/register")
   public ResponseEntity<Customer> register(@RequestBody String customerJson)
       throws ValidationException, ExistingCustomerException, InvalidJsonException {
     customerJson = Sanitizer.sanitizeJson(customerJson);
