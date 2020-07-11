@@ -1,4 +1,4 @@
-package com.microbank.customer.model.exception;
+package com.microbank.customer.exception.model;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -13,11 +13,8 @@ import lombok.ToString;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExceptionResponse {
-  private String timestamp;
-  private Integer status;
+public class ExceptionCause {
   private String error;
   private String message;
-  private String path;
   private ExceptionCause cause;
 }
