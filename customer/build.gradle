@@ -5,7 +5,7 @@ buildscript {
     ext {
         lombokVersion = '1.18.12'
         cucumberVersion = '6.1.2'
-        springBootVersion = '2.2.5.RELEASE'
+        springBootVersion = '2.3.2.RELEASE'
     }
 }
 

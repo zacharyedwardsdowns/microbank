@@ -45,7 +45,7 @@ public class CustomerService {
 
     Customer searchCustomer = new Customer();
     searchCustomer.setUsername(customer.getUsername());
-    Example<Customer> query = Example.of(customer, Util.defaultMatcher());
+    Example<Customer> query = Example.of(searchCustomer, Util.defaultMatcher());
 
     if (this.customerRepository.exists(query)) {
       throw new ExistingCustomerException(
