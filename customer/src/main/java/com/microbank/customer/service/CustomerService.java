@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CustomerService {
-  private CustomerRepository customerRepository;
-  private ValidationService validationService;
+  private final CustomerRepository customerRepository;
+  private final ValidationService validationService;
 
   /**
    * Injects the necessary dependencies.
@@ -26,7 +26,7 @@ public class CustomerService {
    */
   @Autowired
   public CustomerService(
-      CustomerRepository customerRepository, ValidationService validationService) {
+      final CustomerRepository customerRepository, final ValidationService validationService) {
     this.customerRepository = customerRepository;
     this.validationService = validationService;
   }
@@ -39,13 +39,13 @@ public class CustomerService {
    * @throws ValidationException Thrown if a validation error occurs.
    * @throws ExistingCustomerException Thrown if a customer already exists with the given username.
    */
-  public Customer register(Customer customer)
+  public Customer register(final Customer customer)
       throws ValidationException, ExistingCustomerException {
     validationService.validateNewCustomer(customer);
 
-    Customer searchCustomer = new Customer();
+    final Customer searchCustomer = new Customer();
     searchCustomer.setUsername(customer.getUsername());
-    Example<Customer> query = Example.of(searchCustomer, Util.defaultMatcher());
+    final Example<Customer> query = Example.of(searchCustomer, Util.defaultMatcher());
 
     if (this.customerRepository.exists(query)) {
       throw new ExistingCustomerException(

@@ -21,7 +21,7 @@ public class SanitizerTest {
 
   @Test
   public void testSanitizeJson() throws Exception {
-    String result = Sanitizer.sanitizeJson(json);
+    final String result = Sanitizer.sanitizeJson(json);
     Assert.assertEquals(json, result);
   }
 }

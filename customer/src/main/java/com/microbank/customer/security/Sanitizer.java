@@ -16,7 +16,7 @@ public final class Sanitizer {
    * @param json The json string to sanitize.
    * @return A sanitized json.
    */
-  public static String sanitizeJson(String json) {
+  public static String sanitizeJson(final String json) {
     return JsonSanitizer.sanitize(Jsoup.clean(json, Whitelist.basic()));
   }
 }

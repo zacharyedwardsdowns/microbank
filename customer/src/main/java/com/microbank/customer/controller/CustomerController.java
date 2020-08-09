@@ -26,7 +26,7 @@ public class CustomerController {
    * @param customerService A service for the business logic of customer.
    */
   @Autowired
-  public CustomerController(CustomerService customerService) {
+  public CustomerController(final CustomerService customerService) {
     this.customerService = customerService;
   }
 
@@ -43,10 +43,10 @@ public class CustomerController {
   public ResponseEntity<Customer> register(@RequestBody String customerJson)
       throws ValidationException, ExistingCustomerException, InvalidJsonException {
     customerJson = Sanitizer.sanitizeJson(customerJson);
-    Customer customer;
+    final Customer customer;
     try {
       customer = Util.MAPPER.readValue(customerJson, Customer.class);
-    } catch (JsonProcessingException e) {
+    } catch (final JsonProcessingException e) {
       throw new InvalidJsonException(
           "Failed to create an instance of Customer with the given json!", e);
     }

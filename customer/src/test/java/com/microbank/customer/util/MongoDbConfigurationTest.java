@@ -23,7 +23,7 @@ public class MongoDbConfigurationTest extends MongoDbConfiguration {
 
   @Test
   public void testMongoClient() {
-    MongoClient mongoClient = mongoDbConfiguration.mongoClient();
+    final MongoClient mongoClient = mongoDbConfiguration.mongoClient();
     Assert.assertNotNull(mongoClient);
   }
 

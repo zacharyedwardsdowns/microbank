@@ -22,9 +22,9 @@ public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
   private final String db;
 
   MongoDbConfiguration(
-      @Value("${customer.mongodb.host}") String host,
-      @Value("${customer.mongodb.user}") String user,
-      @Value("${customer.mongodb.db}") String db) {
+      @Value("${customer.mongodb.host}") final String host,
+      @Value("${customer.mongodb.user}") final String user,
+      @Value("${customer.mongodb.db}") final String db) {
     this.host = host;
     this.user = user;
     this.db = db;

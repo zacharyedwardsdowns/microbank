@@ -49,7 +49,7 @@ public class CustomerControllerTest {
   public void testRegister() throws Exception {
     Mockito.when(mockCustomerService.register(customer)).thenReturn(customer);
 
-    String response =
+    final String response =
         mockMvc
             .perform(
                 MockMvcRequestBuilders.post("/register")
@@ -61,15 +61,15 @@ public class CustomerControllerTest {
             .getResponse()
             .getContentAsString();
 
-    Customer result = Util.MAPPER.readValue(response, Customer.class);
+    final Customer result = Util.MAPPER.readValue(response, Customer.class);
     Assert.assertEquals(customer, result);
   }
 
   @Test
   public void testRegisterInvalidJsonException() throws Exception {
-    String content = "{\"Fake\":\"Json\"}";
+    final String content = "{\"Fake\":\"Json\"}";
 
-    String response =
+    final String response =
         mockMvc
             .perform(
                 MockMvcRequestBuilders.post("/register")
@@ -81,7 +81,7 @@ public class CustomerControllerTest {
             .getResponse()
             .getContentAsString();
 
-    JsonNode result = Util.MAPPER.readTree(response);
+    final JsonNode result = Util.MAPPER.readTree(response);
     Assert.assertEquals(result.get("error").asText(), InvalidJsonException.class.getSimpleName());
   }
 
@@ -89,7 +89,7 @@ public class CustomerControllerTest {
   public void testRegisterExistingCustomerException() throws Exception {
     Mockito.when(mockCustomerService.register(customer)).thenThrow(ExistingCustomerException.class);
 
-    String response =
+    final String response =
         mockMvc
             .perform(
                 MockMvcRequestBuilders.post("/register")
@@ -101,7 +101,7 @@ public class CustomerControllerTest {
             .getResponse()
             .getContentAsString();
 
-    JsonNode result = Util.MAPPER.readTree(response);
+    final JsonNode result = Util.MAPPER.readTree(response);
     Assert.assertEquals(
         result.get("error").asText(), ExistingCustomerException.class.getSimpleName());
   }

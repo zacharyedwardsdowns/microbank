@@ -18,8 +18,8 @@ public class ControllerExceptionHandler {
 
   @ExceptionHandler(value = ExistingCustomerException.class)
   protected ResponseEntity<ExceptionResponse> existingCustomerException(
-      Exception e, HttpServletRequest request) {
-    ExceptionResponse exceptionResponse =
+      final Exception e, final HttpServletRequest request) {
+    final ExceptionResponse exceptionResponse =
         createDefaultExceptionResponse(e, request, HttpStatus.CONFLICT);
     return new ResponseEntity<>(
         exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
@@ -27,8 +27,8 @@ public class ControllerExceptionHandler {
 
   @ExceptionHandler(value = {InvalidJsonException.class, ValidationException.class})
   protected ResponseEntity<ExceptionResponse> invalidJsonException(
-      Exception e, HttpServletRequest request) {
-    ExceptionResponse exceptionResponse =
+      final Exception e, final HttpServletRequest request) {
+    final ExceptionResponse exceptionResponse =
         createDefaultExceptionResponse(e, request, HttpStatus.BAD_REQUEST);
     return new ResponseEntity<>(
         exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
@@ -44,8 +44,8 @@ public class ControllerExceptionHandler {
    * @return A default ExceptionResponse.
    */
   private ExceptionResponse createDefaultExceptionResponse(
-      Exception e, HttpServletRequest request, HttpStatus status) {
-    ExceptionResponse exceptionResponse = new ExceptionResponse();
+      final Exception e, final HttpServletRequest request, final HttpStatus status) {
+    final ExceptionResponse exceptionResponse = new ExceptionResponse();
     exceptionResponse.setTimestamp(now());
     exceptionResponse.setStatus(status.value());
     exceptionResponse.setError(e.getClass().getSimpleName());
@@ -61,9 +61,9 @@ public class ControllerExceptionHandler {
    * @param e The base Exception.
    * @return An ExceptionCause containing all causes.
    */
-  private ExceptionCause fillCause(Throwable e) {
-    ExceptionCause exceptionCause = new ExceptionCause();
-    Throwable cause = e.getCause();
+  private ExceptionCause fillCause(final Throwable e) {
+    final ExceptionCause exceptionCause = new ExceptionCause();
+    final Throwable cause = e.getCause();
     if (cause != null) {
       exceptionCause.setError(cause.getClass().getSimpleName());
       exceptionCause.setMessage(cause.getMessage());
