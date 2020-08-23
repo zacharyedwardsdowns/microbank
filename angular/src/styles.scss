@@ -1,0 +1,21 @@
+@import './microbank-app-theme.scss';
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-dialog-container .mat-dialog-container {
+  border-radius: 0rem;
+  margin: 0rem;
+  padding: 0rem;
+}
+
+.mat-tab-body-wrapper{
+  flex-grow: 1;
+}

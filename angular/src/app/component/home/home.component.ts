@@ -1,21 +1,46 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, AfterViewInit } from '@angular/core';
+import { ModalTemplate } from 'src/app/model/modal-template.model';
+import { ModalService } from 'src/app/service/modal.service';
+import { LoginComponent } from '../login/login.component';
+import { DOCUMENT } from '@angular/common';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
-  constructor(private route: Router) {}
+export class HomeComponent implements AfterViewInit {
+  public tabs: string[] = ['Home', 'About'];
+  private lastSelectedTab: HTMLElement;
 
-  ngOnInit(): void {}
+  constructor(
+    private route: Router,
+    private modalService: ModalService,
+    @Inject(DOCUMENT) private document: Document
+  ) {}
 
-  loginPage() {
-    this.route.navigate(['/login']);
+  ngAfterViewInit(): void {
+    const element = this.document.getElementById('HomeTab');
+    this.lastSelectedTab = element;
+    this.selectTab(element);
   }
 
-  registerPage() {
+  loginModal(): void {
+    const modalTemplate: ModalTemplate = {
+      panelClass: 'modal-dialog-container',
+    };
+    this.modalService.openModal(LoginComponent, modalTemplate);
+  }
+
+  registerModal(): void {
     this.route.navigate(['/register']);
+  }
+
+  selectTab(element: HTMLElement): void {
+    if (element.tagName !== 'BUTTON') element = element.parentElement;
+    this.lastSelectedTab.style.borderBottom = '';
+    element.style.borderBottom = `0.2rem solid`;
+    this.lastSelectedTab = element;
   }
 }

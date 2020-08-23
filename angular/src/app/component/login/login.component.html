@@ -1,1 +1,17 @@
-<p>login works!</p>
+<body>
+  <header fxLayout="row" fxLayoutAlign="center end">
+    <h1 mat-dialog-title>Login</h1>
+    <span fxFlex></span>
+    <button (click)="close()" id="closeButton" mat-icon-button>
+      <!-- <img id="closeImage" src="/assets/white-x.png" alt="image"> -->
+      <mat-icon [inline]="true" fxLayoutAlign="center center">highlight_off</mat-icon>
+    </button>
+  </header>
+  <main cdkFocusRegionstart>
+    <mat-form-field appearance="fill">
+      <mat-label>Username</mat-label>
+      <input matInput>
+      <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+    </mat-form-field>
+  </main>
+</body>

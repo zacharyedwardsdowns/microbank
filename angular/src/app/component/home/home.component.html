@@ -1,11 +1,12 @@
-<body>
+<body class="mat-app-background">
   <header>
-    <div class="tabBar">
-      <app-main-tab-bar></app-main-tab-bar>
-    </div>
-    <div class="navButtons">
-      <button class="navButton" id="loginButton" (click)="loginPage()" mat-button>Login</button>
-      <button class="navButton" id="registerButton" (click)="registerPage()" mat-button>Register</button>
-    </div>
+    <mat-toolbar id="toolbar" color="primary">
+      <nav id="nav" *ngFor="let tab of tabs">
+        <button id="{{tab}}Tab" (click)="selectTab($event.target)" class="nav-button" mat-button>{{tab}}</button>
+      </nav>
+      <span class="spacer"></span>
+      <button class="toolbar-button" id="login" (click)="loginModal()" mat-raised-button>Login</button>
+      <button class="toolbar-button" id="register" (click)="registerModal()" mat-raised-button>Register</button>
+    </mat-toolbar>
   </header>
 </body>
