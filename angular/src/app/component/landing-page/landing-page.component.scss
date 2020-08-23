@@ -1,0 +1,35 @@
+#nav {
+  height: 100%;
+}
+
+.nav-button {
+  border-color: var(--accent-lighter) !important;
+  border-radius: 0rem;
+  height: 100%;
+  width: 7rem;
+}
+
+.toolbar-button {
+  background-color: var(--accent-darker);
+  display: inline-block;
+  margin-right: 1.5rem;
+  width: 6rem;
+}
+
+#register {
+  margin-right: 2rem;
+}
+
+#tab-group {
+  background-color: var(--primary-default);
+  display: flex;
+}
+
+#toolbar {
+  padding: 0;
+  display: flex;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}

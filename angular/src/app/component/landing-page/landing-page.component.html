@@ -1,0 +1,14 @@
+<body class="mat-app-background">
+  <header>
+    <mat-toolbar id="toolbar" color="primary">
+      <nav id="nav" *ngFor="let tab of tabs">
+        <button routerLink="{{tab.route}}" routerLinkActive="active-link" id="{{tab.name}}Tab" class="nav-button"
+          mat-button (click)="selectTab($event.target)">{{tab.name}}</button>
+      </nav>
+      <span class="spacer"></span>
+      <button class="toolbar-button" id="login" (click)="loginModal()" mat-raised-button>Login</button>
+      <button class="toolbar-button" id="register" (click)="registerModal()" mat-raised-button>Register</button>
+    </mat-toolbar>
+  </header>
+  <router-outlet></router-outlet>
+</body>

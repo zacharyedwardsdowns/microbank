@@ -12,16 +12,20 @@ import { MatInputModule } from '@angular/material/input';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HomeComponent } from './component/home/home.component';
+import { LandingPageComponent } from './component/landing-page/landing-page.component';
 import { LoginComponent } from './component/login/login.component';
 import { RegisterComponent } from './component/register/register.component';
+import { HomeComponent } from './component/home/home.component';
+import { AboutComponent } from './component/about/about.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
+    LandingPageComponent,
     LoginComponent,
     RegisterComponent,
+    HomeComponent,
+    AboutComponent,
   ],
   imports: [
     FormsModule,
