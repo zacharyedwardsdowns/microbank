@@ -7,6 +7,8 @@ import { ModalService } from 'src/app/service/modal.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
+  public hide = true;
+
   constructor(private modelService: ModalService) {}
 
   ngOnInit(): void {}

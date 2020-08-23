@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit, AfterViewInit } from '@angular/core';
 import { ThemingService } from 'src/app/service/theming.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { ThemingService } from 'src/app/service/theming.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   constructor(private themingService: ThemingService) {}
   @HostBinding('class') public cssClass: string;
 
@@ -14,5 +14,9 @@ export class AppComponent implements OnInit {
     this.themingService.theme.subscribe((theme: string) => {
       this.cssClass = theme;
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.themingService.setVariablesAndRefresh();
   }
 }

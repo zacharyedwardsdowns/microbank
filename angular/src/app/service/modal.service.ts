@@ -16,7 +16,8 @@ export class ModalService {
   openModal(
     component: ComponentType<any>,
     template: ModalTemplate,
-    width?: string
+    width?: string,
+    height?: string
   ): MatDialogRef<AnalyserNode, ModalTemplate> {
     if (!width) template.width = defaultWidth;
     this.dialogReference = this.dialog.open(component, template);

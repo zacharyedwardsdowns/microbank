@@ -1,5 +1,11 @@
-:host{
+@import 'src/styles.scss';
+
+:host {
   box-sizing: border-box;
   display: block;
   height: 100%;
+}
+
+#colors {
+  display: none;
 }

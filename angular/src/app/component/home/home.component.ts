@@ -4,6 +4,7 @@ import { ModalService } from 'src/app/service/modal.service';
 import { LoginComponent } from '../login/login.component';
 import { DOCUMENT } from '@angular/common';
 import { Router } from '@angular/router';
+import { RegisterComponent } from '../register/register.component';
 
 @Component({
   selector: 'app-home',
@@ -34,13 +35,16 @@ export class HomeComponent implements AfterViewInit {
   }
 
   registerModal(): void {
-    this.route.navigate(['/register']);
+    const modalTemplate: ModalTemplate = {
+      panelClass: 'modal-dialog-container',
+    };
+    this.modalService.openModal(RegisterComponent, modalTemplate);
   }
 
   selectTab(element: HTMLElement): void {
     if (element.tagName !== 'BUTTON') element = element.parentElement;
     this.lastSelectedTab.style.borderBottom = '';
-    element.style.borderBottom = `0.2rem solid`;
+    element.style.borderBottom = '0.2rem solid';
     this.lastSelectedTab = element;
   }
 }

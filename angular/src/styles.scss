@@ -1,5 +1,15 @@
 @import './microbank-app-theme.scss';
 
+// Initialized by ngAfterViewInit() in app.component.ts
+:root {
+  --primary-default: null;
+  --accent-default: null;
+  --accent-lighter: null;
+  --accent-darker: null;
+  --warn-default: null;
+  --text-color: null;
+}
+
 html,
 body {
   height: 100%;
@@ -16,6 +26,10 @@ body {
   padding: 0rem;
 }
 
-.mat-tab-body-wrapper{
+.mat-tab-body-wrapper {
   flex-grow: 1;
+}
+
+.mat-button-focus-overlay {
+  background-color: transparent !important;
 }

@@ -14,17 +14,17 @@
   $accent-darker: mat-color($accent, darker);
   $warn-default: mat-color($warn);
 
-  --primary-default: #{$primary-default};
-  --accent-default: #{$accent-default};
-  --accent-lighter: #{$accent-lighter};
-  --accent-darker: #{$accent-darker};
-  --warn-default: #{$warn-default};
+  --theme-primary-default: #{$primary-default};
+  --theme-accent-default: #{$accent-default};
+  --theme-accent-lighter: #{$accent-lighter};
+  --theme-accent-darker: #{$accent-darker};
+  --theme-warn-default: #{$warn-default};
+  --theme-text-color: black;
 }
 
 .dark-theme {
-  color: $light-primary-text;
   $primary: mat-palette($mat-gray, 800);
-  $accent: mat-palette($mat-gray, 800, 700, 900);
+  $accent: mat-palette($mat-gray, 700, 300, 900);
   $warn: mat-palette($mat-red);
   $theme: mat-dark-theme($primary, $accent, $warn);
   @include angular-material-theme($theme);
@@ -35,9 +35,10 @@
   $accent-darker: mat-color($accent, darker);
   $warn-default: mat-color($warn);
 
-  --primary-default: #{$primary-default};
-  --accent-default: #{$accent-default};
-  --accent-lighter: #{$accent-lighter};
-  --accent-darker: #{$accent-darker};
-  --warn-default: #{$warn-default};
+  --theme-primary-default: #{$primary-default};
+  --theme-accent-default: #{$accent-default};
+  --theme-accent-lighter: #{$accent-lighter};
+  --theme-accent-darker: #{$accent-darker};
+  --theme-warn-default: #{$warn-default};
+  --theme-text-color: white;
 }
