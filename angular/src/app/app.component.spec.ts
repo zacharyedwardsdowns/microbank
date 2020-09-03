@@ -1,35 +1,38 @@
-import { TestBed, async } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { ThemingService } from './service/theming.service';
+import { BehaviorSubject } from 'rxjs';
 
 describe('AppComponent', () => {
-  let title = 'microbank-ui';
+  let fixture: ComponentFixture<AppComponent>;
+  const theme: string = 'dark-theme';
+  let mockThemingService: any;
 
   beforeEach(async(() => {
+    mockThemingService = jasmine.createSpyObj(['setVariablesAndRefresh']);
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
       declarations: [AppComponent],
+      providers: [{ provide: ThemingService, useValue: mockThemingService }],
     }).compileComponents();
   }));
 
+  beforeEach(() => {
+    mockThemingService.theme = new BehaviorSubject(theme);
+    fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+  });
+
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'microbank-ui'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual(title);
+  it('should instantiate host binding class', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.getAttribute('class')).toEqual(theme);
   });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain(
-      `${title} app is running!`
-    );
+  it('should call theming service to set variables', () => {
+    expect(mockThemingService.setVariablesAndRefresh).toHaveBeenCalled();
   });
 });

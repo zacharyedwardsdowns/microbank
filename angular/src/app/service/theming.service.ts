@@ -65,8 +65,8 @@ export class ThemingService {
       computedStyle.getPropertyValue('--theme-warn-default')
     );
     style.setProperty(
-      '--text-color',
-      computedStyle.getPropertyValue('--theme-text-color')
+      '--contrast-color',
+      computedStyle.getPropertyValue('--theme-contrast-color')
     );
   }
 }

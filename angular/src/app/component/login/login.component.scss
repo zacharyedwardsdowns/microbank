@@ -1,6 +1,6 @@
 body {
   background: var(--primary-default);
-  height: 28rem;
+  border-radius: 1rem;
 }
 
 header {
@@ -15,13 +15,13 @@ main {
 h1 {
   font-weight: bolder;
   font-size: 2.3rem;
-  color: var(--accent-lighter);
+  color: var(--contrast-color);
   margin-bottom: 0.3rem;
   margin-left: 1rem;
 }
 
 #close-button {
-  color: var(--accent-lighter);
+  color: var(--contrast-color);
   border: none;
   background: none;
   width: 2.9rem;
@@ -36,21 +36,21 @@ h1 {
 }
 
 #sign-in-button {
-  background-color: var(--accent-lighter);
+  background-color: var(--contrast-color);
   margin-right: 0.5rem;
 }
 
 #register-button {
   margin-left: 0.5rem;
   background-color: var(--primary-default);
-  border-color: var(--accent-lighter) !important;
-  color: var(--accent-lighter);
+  border-color: var(--contrast-color) !important;
+  color: var(--contrast-color);
   border: 0.2rem solid;
 }
 
 .form-icon {
   background-color: transparent;
-  color: var(--accent-lighter);
+  color: var(--contrast-color);
   margin: 0rem;
 }
 
@@ -63,13 +63,13 @@ h1 {
 }
 
 #account-icon {
-  color: var(--accent-lighter);
+  color: var(--contrast-color);
   margin-bottom: 3.5rem;
   font-size: 5rem;
 }
 
 .form {
-  color: var(--accent-lighter);
+  color: var(--contrast-color);
 }
 
 .mat-icon-button {
