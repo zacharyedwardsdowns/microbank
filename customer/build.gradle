@@ -5,14 +5,14 @@ buildscript {
     ext {
         lombokVersion = '1.18.12'
         cucumberVersion = '6.1.2'
-        springBootVersion = '2.3.2.RELEASE'
+        springBootVersion = '2.3.3.RELEASE'
     }
 }
 
 plugins {
     id 'java'
     id 'jacoco'
-	id 'org.springframework.boot' version "${springBootVersion}"
+    id 'org.springframework.boot' version "${springBootVersion}"
     id 'com.github.sherter.google-java-format' version '0.9'
 }
 
@@ -22,7 +22,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'com.github.sherter.google-java-format'
 
 googleJavaFormat {
-  toolVersion = "1.7"
+    toolVersion = "1.7"
 }
 
 jacoco {
@@ -64,7 +64,7 @@ description = 'microbank-customer-service'
 sourceCompatibility = '1.11'
 
 springBoot {
-	mainClassName = 'com.microbank.customer.Application'
+    mainClassName = 'com.microbank.customer.Application'
 }
 
 tasks.withType(JavaCompile) {
@@ -73,22 +73,22 @@ tasks.withType(JavaCompile) {
 
 // Fail if Javadoc warnings are present.
 tasks.withType(Javadoc) {
-	options.addStringOption('Xwerror', '-quiet')
+    options.addStringOption('Xwerror', '-quiet')
 }
 
 task verifyFormatting(type: VerifyGoogleJavaFormat) {
-  source 'src/main'
-  source 'src/test'
-  source 'src/integration'
-  include '**/*.java'
+    source 'src/main'
+    source 'src/test'
+    source 'src/integration'
+    include '**/*.java'
 }
 
 task format(type: GoogleJavaFormat) {
-  source 'src/main'
-  source 'src/test'
-  source 'src/integration'
-  include '**/*.java'
-  finalizedBy verifyFormatting
+    source 'src/main'
+    source 'src/test'
+    source 'src/integration'
+    include '**/*.java'
+    finalizedBy verifyFormatting
 }
 
 jacocoTestReport {
@@ -101,9 +101,9 @@ jacocoTestReport {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it,
-            exclude:    ['**/model/**',
-                        '**/exception/**',
-                        '**/*Application*'])
+                    exclude: ['**/model/**',
+                              '**/exception/**',
+                              '**/*Application*'])
         }))
     }
 }
@@ -120,9 +120,9 @@ jacocoTestCoverageVerification {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it,
-            exclude:    ['**/model/**',
-                        '**/exception/**',
-                        '**/*Application*'])
+                    exclude: ['**/model/**',
+                              '**/exception/**',
+                              '**/*Application*'])
         }))
     }
 }
@@ -136,7 +136,7 @@ check {
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
     finalizedBy jacocoTestReport
 }
 

@@ -1,10 +1,12 @@
 package com.microbank.customer.service;
 
 import com.microbank.customer.exception.ExistingCustomerException;
+import com.microbank.customer.exception.ResourceNotFoundException;
 import com.microbank.customer.exception.ValidationException;
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.repository.CustomerRepository;
 import com.microbank.customer.util.Util;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -52,6 +54,27 @@ public class CustomerService {
           "A customer already exists with the username " + customer.getUsername() + "!");
     } else {
       return this.customerRepository.insert(customer);
+    }
+  }
+
+  /**
+   * Retrieves a customer from the database by their username.
+   *
+   * @param username The username to search with.
+   * @return The customer with the given username.
+   * @throws ResourceNotFoundException Thrown if no customer exists witht the given username.
+   */
+  public Customer getCustomerByUsername(final String username) throws ResourceNotFoundException {
+    final Customer searchCustomer = new Customer();
+    searchCustomer.setUsername(username);
+    final Example<Customer> query = Example.of(searchCustomer, Util.defaultMatcher());
+
+    final Optional<Customer> customer = this.customerRepository.findOne(query);
+
+    if (customer.isPresent()) {
+      return customer.get();
+    } else {
+      throw new ResourceNotFoundException("No customer exists with the username " + username + "!");
     }
   }
 }
