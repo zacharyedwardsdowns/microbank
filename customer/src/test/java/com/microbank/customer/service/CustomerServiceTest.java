@@ -1,12 +1,14 @@
 package com.microbank.customer.service;
 
 import com.microbank.customer.exception.ExistingCustomerException;
+import com.microbank.customer.exception.ResourceNotFoundException;
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.repository.CustomerRepository;
 import com.microbank.customer.security.Sanitizer;
 import com.microbank.customer.util.Util;
 import java.io.File;
 import java.nio.file.Files;
+import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -49,5 +51,18 @@ public class CustomerServiceTest {
   public void testRegisterExistingCustomerException() throws Exception {
     Mockito.when(mockCustomerRepository.exists(Mockito.any())).thenReturn(true);
     customerService.register(customer);
+  }
+
+  @Test
+  public void testGetCustomerByUsername() throws Exception {
+    Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.of(customer));
+    final Customer result = customerService.getCustomerByUsername(customer.getUsername());
+    Assert.assertEquals(customer, result);
+  }
+
+  @Test(expected = ResourceNotFoundException.class)
+  public void testGetCustomerByUsernameResourceNotFoundException() throws Exception {
+    Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.empty());
+    final Customer result = customerService.getCustomerByUsername(customer.getUsername());
   }
 }

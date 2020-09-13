@@ -8,8 +8,10 @@ import com.microbank.customer.model.Customer;
 import com.microbank.customer.security.Sanitizer;
 import com.microbank.customer.service.CustomerService;
 import com.microbank.customer.util.Util;
+
 import java.io.File;
 import java.nio.file.Files;
+
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -104,5 +106,24 @@ public class CustomerControllerTest {
     final JsonNode result = Util.MAPPER.readTree(response);
     Assert.assertEquals(
         result.get("error").asText(), ExistingCustomerException.class.getSimpleName());
+  }
+
+  @Test
+  public void testGetCustomerByUsername() throws Exception {
+    Mockito.when(mockCustomerService.getCustomerByUsername(customer.getUsername()))
+        .thenReturn(customer);
+
+    final String response =
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders.get("/customer/" + customer.getUsername())
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+    final Customer result = Util.MAPPER.readValue(response, Customer.class);
+    Assert.assertEquals(customer, result);
   }
 }
