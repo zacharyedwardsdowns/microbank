@@ -2,15 +2,16 @@ import { AppPage } from './app.po';
 import { browser, logging } from 'protractor';
 
 describe('workspace-project App', () => {
+  const pageTitle = 'MicroBank';
   let page: AppPage;
 
   beforeEach(() => {
     page = new AppPage();
   });
 
-  it('should display welcome message', () => {
+  it(`should have the title ${pageTitle}`, () => {
     page.navigateTo();
-    expect(page.getTitleText()).toEqual('angular app is running!');
+    expect(page.getTitleText()).toEqual(pageTitle);
   });
 
   afterEach(async () => {
