@@ -13,7 +13,7 @@ import { RegisterComponent } from '../register/register.component';
   styleUrls: ['./landing-page.component.scss'],
 })
 export class LandingPageComponent implements AfterViewInit {
-  private lastSelectedTab: HTMLElement;
+  public lastSelectedTab: HTMLElement;
   public tabs: Tab[] = [
     { name: 'Home', route: 'home' },
     { name: 'About', route: 'about' },

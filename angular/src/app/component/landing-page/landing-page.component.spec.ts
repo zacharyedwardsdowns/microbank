@@ -5,6 +5,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ModalService } from 'src/app/service/modal.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 describe('LandingPageComponent', () => {
   let fixture: ComponentFixture<LandingPageComponent>;
@@ -15,7 +16,12 @@ describe('LandingPageComponent', () => {
   beforeEach(async(() => {
     mockModalService = jasmine.createSpyObj(['openModal']);
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, MatDialogModule, BrowserAnimationsModule],
+      imports: [
+        RouterTestingModule,
+        MatDialogModule,
+        BrowserAnimationsModule,
+        MatToolbarModule,
+      ],
       declarations: [LandingPageComponent],
       providers: [{ provide: ModalService, useValue: mockModalService }],
     }).compileComponents();
@@ -61,5 +67,6 @@ describe('LandingPageComponent', () => {
       `${component.tabs[1].name}Tab`
     ).firstChild as HTMLElement;
     component.selectTab(child);
+    expect(component.lastSelectedTab).toEqual(child.parentElement);
   });
 });
