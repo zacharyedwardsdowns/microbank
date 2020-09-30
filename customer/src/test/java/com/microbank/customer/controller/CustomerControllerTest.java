@@ -8,10 +8,8 @@ import com.microbank.customer.model.Customer;
 import com.microbank.customer.security.Sanitizer;
 import com.microbank.customer.service.CustomerService;
 import com.microbank.customer.util.Util;
-
 import java.io.File;
 import java.nio.file.Files;
-
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
