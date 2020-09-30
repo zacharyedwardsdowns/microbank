@@ -2,6 +2,7 @@ import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { ThemingService } from './service/theming.service';
 import { BehaviorSubject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
@@ -11,6 +12,7 @@ describe('AppComponent', () => {
   beforeEach(async(() => {
     mockThemingService = jasmine.createSpyObj(['setVariablesAndRefresh']);
     TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
       declarations: [AppComponent],
       providers: [{ provide: ThemingService, useValue: mockThemingService }],
     }).compileComponents();
