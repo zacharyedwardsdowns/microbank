@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.lang.NonNull;
 import org.springframework.util.FileCopyUtils;
 
 @Configuration
@@ -30,25 +31,26 @@ public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
     this.db = db;
   }
 
+  @NonNull
   @Override
   public MongoClient mongoClient() {
     final String pass = getPassword();
 
-    final StringBuilder connectionString =
-        new StringBuilder()
-            .append("mongodb+srv://")
-            .append(user)
-            .append(":")
-            .append(pass)
-            .append("@")
-            .append(host)
-            .append("/")
-            .append(db)
-            .append("?retryWrites=true&w=majority");
+    final String connectionString =
+        "mongodb+srv://"
+            + user
+            + ":"
+            + pass
+            + "@"
+            + host
+            + "/"
+            + db
+            + "?retryWrites=true&w=majority";
 
-    return MongoClients.create(connectionString.toString());
+    return MongoClients.create(connectionString);
   }
 
+  @NonNull
   @Override
   protected String getDatabaseName() {
     return db;

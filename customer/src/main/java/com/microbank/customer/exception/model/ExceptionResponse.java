@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/** A model to represent the controller response when an exception occurs. */
 @Getter
 @Setter
 @ToString

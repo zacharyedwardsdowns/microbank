@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.InvalidJsonException;
 import com.microbank.customer.controller.advice.ControllerExceptionHandler;
 import com.microbank.customer.exception.ExistingCustomerException;
+import com.microbank.customer.exception.ResourceNotFoundException;
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.security.Sanitizer;
 import com.microbank.customer.service.CustomerService;
@@ -33,7 +34,6 @@ public class CustomerControllerTest {
     final File resource = new ClassPathResource("json/Customer.json").getFile();
     json = Files.readString(resource.toPath());
     json = Sanitizer.sanitizeJson(json);
-    json = json.replace(" ", "");
     customer = Util.MAPPER.readValue(json, Customer.class);
 
     mockCustomerService = Mockito.mock(CustomerService.class);
@@ -114,8 +114,8 @@ public class CustomerControllerTest {
     final String response =
         mockMvc
             .perform(
-                MockMvcRequestBuilders.get("/customer/" + customer.getUsername())
-                    .accept(MediaType.APPLICATION_JSON))
+                MockMvcRequestBuilders.get("/username/" + customer.getUsername())
+                    .contentType(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andReturn()
             .getResponse()
@@ -123,5 +123,25 @@ public class CustomerControllerTest {
 
     final Customer result = Util.MAPPER.readValue(response, Customer.class);
     Assert.assertEquals(customer, result);
+  }
+
+  @Test
+  public void testGetCustomerByUsernameResourceNotFoundException() throws Exception {
+    Mockito.when(mockCustomerService.getCustomerByUsername(customer.getUsername()))
+        .thenThrow(ResourceNotFoundException.class);
+
+    final String response =
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders.get("/username/" + customer.getUsername())
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isNotFound())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+    final JsonNode result = Util.MAPPER.readTree(response);
+    Assert.assertEquals(
+        result.get("error").asText(), ResourceNotFoundException.class.getSimpleName());
   }
 }

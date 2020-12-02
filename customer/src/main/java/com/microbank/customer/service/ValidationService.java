@@ -18,6 +18,12 @@ public class ValidationService {
   private static final String PASSWORD_REGEX =
       "^(?=.*[A-Za-z])((?=.*[0-9])|(?=.*[@$!%*#?]))[A-Za-z0-9@$!%*#?]{8,50}$";
 
+  /**
+   * Validate the relevant fields of a given customer and throw an exception for invalid data.
+   *
+   * @param customer The customer to validate.
+   * @throws ValidationException Upon finding invalid data in the given customer.
+   */
   public void validateNewCustomer(final Customer customer) throws ValidationException {
 
     if (customer.getUsername() == null || !customer.getUsername().matches(USERNAME_REGEX)) {
@@ -41,7 +47,7 @@ public class ValidationService {
 
     if (customer.getPassword() == null || commonPassword(customer)) {
       throw new InvalidPasswordException(
-          "Invalid Password! Must be between 8-50 characters long, have at least one letter and one number or symbol, and not contain common words such as 'password' or personal information.");
+          "Invalid Password! Must be between 8-50 characters long, have at least one letter and one number or symbol, and not contain common words such as 'password', or any personal information.");
     }
   }
 

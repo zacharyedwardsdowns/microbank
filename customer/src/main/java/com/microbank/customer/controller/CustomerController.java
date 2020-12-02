@@ -52,6 +52,13 @@ public class CustomerController {
     return new ResponseEntity<>(customerService.register(customer), HttpStatus.CREATED);
   }
 
+  /**
+   * Get customer information from the database using their username.
+   *
+   * @param username The unique identifier of a customer.
+   * @return The customer information for the given username.
+   * @throws ResourceNotFoundException If no customer exists for the given username.
+   */
   @GetMapping("/username/{username}")
   public ResponseEntity<Customer> getCustomerByUsername(
       @PathVariable(name = "username") final String username) throws ResourceNotFoundException {
