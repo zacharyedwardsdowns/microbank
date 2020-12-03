@@ -1,9 +1,8 @@
-package com.microbank.customer.step;
+package com.microbank.customer;
 
 import com.microbank.customer.client.RestClient;
 import com.microbank.customer.exception.RestClientException;
 import com.microbank.customer.model.Customer;
-import com.microbank.customer.util.BaseIntegration;
 import com.microbank.customer.util.Util;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -13,7 +12,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.springframework.http.HttpMethod;
 
-public class CustomerWorkflowStep extends BaseIntegration {
+public class ScenarioCustomerRegistration extends CucumberBaseStep {
 
   private static final RestClient REST_CLIENT = new RestClient();
   private String customerPayload;

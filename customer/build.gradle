@@ -31,12 +31,6 @@ jacoco {
     reportsDir = file("$buildDir/jacoco")
 }
 
-configurations {
-    intTestImplementation.extendsFrom testImplementation
-    intTestImplementation.extendsFrom implementation
-    intTestRuntimeOnly.extendsFrom runtimeOnly
-}
-
 repositories {
     mavenCentral()
 }
@@ -52,6 +46,7 @@ dependencies {
     implementation "org.apache.httpcomponents:httpclient:4.5.10"
     implementation "io.cucumber:cucumber-java:${cucumberVersion}"
     implementation "io.cucumber:cucumber-junit:${cucumberVersion}"
+    implementation "io.cucumber:cucumber-spring:${cucumberVersion}"
     implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}"
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:2.2.1.RELEASE'
@@ -86,14 +81,12 @@ tasks.withType(Javadoc) {
 task verifyFormatting(type: VerifyGoogleJavaFormat) {
     source 'src/main'
     source 'src/test'
-    source 'src/integration'
     include '**/*.java'
 }
 
 task format(type: GoogleJavaFormat) {
     source 'src/main'
     source 'src/test'
-    source 'src/integration'
     include '**/*.java'
     finalizedBy verifyFormatting
 }
@@ -134,6 +127,18 @@ jacocoTestCoverageVerification {
     }
 }
 
+sourceSets {
+    test {
+        java {
+            srcDir 'src/test/java'
+            srcDir 'src/test/integration'
+        }
+        resources {
+            srcDir 'src/test/resources'
+        }
+    }
+}
+
 compileJava {
     finalizedBy javadoc, format
 }
@@ -145,22 +150,4 @@ check {
 test {
     useJUnitPlatform()
     finalizedBy jacocoTestReport
-}
-
-sourceSets {
-    intTest {
-        java {
-            srcDir 'src/integration/java'
-        }
-        resources {
-            srcDir 'src/integration/resources'
-        }
-        compileClasspath += sourceSets.main.output
-        runtimeClasspath += sourceSets.main.output
-    }
-}
-
-task intTest(type: Test) {
-    testClassesDirs = sourceSets.intTest.output.classesDirs
-    classpath = sourceSets.intTest.runtimeClasspath
 }

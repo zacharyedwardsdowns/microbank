@@ -1,11 +1,10 @@
-package com.microbank.customer.step;
+package com.microbank.customer;
 
-import com.microbank.customer.util.BaseIntegration;
 import io.cucumber.java.en.And;
 import org.junit.Assert;
 import org.springframework.http.HttpStatus;
 
-public class ReusableSteps extends BaseIntegration {
+public class ReusableCommonSteps extends CucumberBaseStep {
 
   @And("a status code of 201 is received")
   public void statusCode201() {

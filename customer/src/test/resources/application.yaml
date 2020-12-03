@@ -1,0 +1,17 @@
+server:
+  servlet:
+    context-path: /microbank-customer
+---
+server:
+  port: 6010
+---
+customer:
+  mongodb:
+    host: freecluster-s3rjf.mongodb.net
+    user: AtlasAdmin
+    db: microbank
+---
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
