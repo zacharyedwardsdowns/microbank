@@ -53,9 +53,7 @@ public class CustomerService {
       throw new ExistingCustomerException(
           "A customer already exists with the username " + customer.getUsername() + "!");
     } else {
-      final Customer result = this.customerRepository.insert(customer);
-      removePassword(result);
-      return result;
+      return this.customerRepository.insert(customer);
     }
   }
 
@@ -74,21 +72,9 @@ public class CustomerService {
     final Optional<Customer> customer = this.customerRepository.findOne(query);
 
     if (customer.isPresent()) {
-      final Customer result = customer.get();
-      removePassword(result);
-      return result;
+      return customer.get();
     } else {
       throw new ResourceNotFoundException("No customer exists with the username " + username + "!");
     }
-  }
-
-  /**
-   * Exists to explain why the password is being set to null. Removes the password from the
-   * response. (Should look into making it an Aspect)
-   *
-   * @param customer The customer to remove the password from.
-   */
-  private void removePassword(final Customer customer) {
-    customer.setPassword(null);
   }
 }
