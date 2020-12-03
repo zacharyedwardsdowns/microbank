@@ -9,5 +9,5 @@ import org.junit.runner.RunWith;
     glue = "com.microbank.customer.step",
     features = "src/integration/resources/feature",
     plugin = "html:build/cucumber/cucumber-html-report.html",
-    tags = "@example")
+    tags = "@Initial")
 public class CucumberRunner {}

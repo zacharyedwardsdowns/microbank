@@ -1,2 +1,2 @@
-uri:
-  base: http://localhost:6010
+base: http://localhost:6010/microbank-customer
+register: /register
