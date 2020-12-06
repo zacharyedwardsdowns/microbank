@@ -23,7 +23,8 @@ public class CucumberBaseStep {
   private static final Logger LOG = LoggerFactory.getLogger(CucumberBaseStep.class);
   private static Map<String, Object> properties;
 
-  private static ResponseEntity<Customer> customerResponseEntity;
+  public static ResponseEntity<Customer> customerResponseEntity;
+  public static Customer customer;
 
   static {
     try {
@@ -44,17 +45,12 @@ public class CucumberBaseStep {
     return getBaseUri() + properties.get("register");
   }
 
+  public String getCustomerInformationEndpoint() {
+    return getBaseUri() + properties.get("getCustomerInformation");
+  }
+
   public String readFile(final String resourcePath) throws IOException {
     final File resource = new ClassPathResource(resourcePath).getFile();
     return Sanitizer.sanitizeJson(Files.readString(resource.toPath()));
-  }
-
-  public static ResponseEntity<Customer> getCustomerResponseEntity() {
-    return customerResponseEntity;
-  }
-
-  public static void setCustomerResponseEntity(
-      final ResponseEntity<Customer> customerResponseEntity) {
-    CucumberBaseStep.customerResponseEntity = customerResponseEntity;
   }
 }
