@@ -38,15 +38,15 @@ public class CucumberBaseStep {
   }
 
   private String getBaseUri() {
-    return (String) properties.get("base");
+    return (String) properties.get("baseUri");
   }
 
   public String getRegisterEndpoint() {
-    return getBaseUri() + properties.get("register");
+    return getBaseUri() + properties.get("registerCustomer");
   }
 
   public String getCustomerInformationEndpoint() {
-    return getBaseUri() + properties.get("getCustomerInformation");
+    return getBaseUri() + properties.get("getOrDeleteCustomerInfo");
   }
 
   public String readFile(final String resourcePath) throws IOException {

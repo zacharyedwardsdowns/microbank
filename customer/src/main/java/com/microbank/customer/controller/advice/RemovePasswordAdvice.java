@@ -24,7 +24,7 @@ public class RemovePasswordAdvice implements ResponseBodyAdvice<Customer> {
 
   @Override
   public Customer beforeBodyWrite(
-      final Customer body,
+      @Nullable final Customer body,
       @Nullable final MethodParameter returnType,
       @Nullable final MediaType selectedContentType,
       @Nullable final Class<? extends HttpMessageConverter<?>> selectedConverterType,

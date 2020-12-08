@@ -115,7 +115,7 @@ public class CustomerControllerTest {
         mockMvc
             .perform(
                 MockMvcRequestBuilders.get("/username/" + customer.getUsername())
-                    .contentType(MediaType.APPLICATION_JSON))
+                    .accept(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andReturn()
             .getResponse()
@@ -134,7 +134,46 @@ public class CustomerControllerTest {
         mockMvc
             .perform(
                 MockMvcRequestBuilders.get("/username/" + customer.getUsername())
-                    .contentType(MediaType.APPLICATION_JSON))
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isNotFound())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+    final JsonNode result = Util.MAPPER.readTree(response);
+    Assert.assertEquals(
+        result.get("error").asText(), ResourceNotFoundException.class.getSimpleName());
+  }
+
+  @Test
+  public void testDeleteCustomerByUsername() throws Exception {
+    Mockito.when(mockCustomerService.deleteCustomerByUsername(customer.getUsername()))
+        .thenReturn(customer);
+
+    final String response =
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders.delete("/username/" + customer.getUsername())
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+    final Customer result = Util.MAPPER.readValue(response, Customer.class);
+    Assert.assertEquals(customer, result);
+  }
+
+  @Test
+  public void testDeleteCustomerByUsernameResourceNotFoundException() throws Exception {
+    Mockito.when(mockCustomerService.deleteCustomerByUsername(customer.getUsername()))
+        .thenThrow(ResourceNotFoundException.class);
+
+    final String response =
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders.delete("/username/" + customer.getUsername())
+                    .accept(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isNotFound())
             .andReturn()
             .getResponse()

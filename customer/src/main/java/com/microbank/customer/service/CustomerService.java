@@ -38,8 +38,8 @@ public class CustomerService {
    *
    * @param customer The customer to register.
    * @return The information of the newly registered customer.
-   * @throws ValidationException Thrown if a validation error occurs.
-   * @throws ExistingCustomerException Thrown if a customer already exists with the given username.
+   * @throws ValidationException A validation error occurred.
+   * @throws ExistingCustomerException A customer already exists with the given username.
    */
   public Customer register(final Customer customer)
       throws ValidationException, ExistingCustomerException {
@@ -62,7 +62,7 @@ public class CustomerService {
    *
    * @param username The username to search with.
    * @return The customer with the given username.
-   * @throws ResourceNotFoundException Thrown if no customer exists with the given username.
+   * @throws ResourceNotFoundException No customer exists with the given username.
    */
   public Customer getCustomerByUsername(final String username) throws ResourceNotFoundException {
     final Customer searchCustomer = new Customer();
@@ -76,5 +76,18 @@ public class CustomerService {
     } else {
       throw new ResourceNotFoundException("No customer exists with the username " + username + "!");
     }
+  }
+
+  /**
+   * Deletes a customer using the given username as a unique identifier.
+   *
+   * @param username The username of the customer to delete.
+   * @return The deleted customer.
+   * @throws ResourceNotFoundException No customer exists with the given username.
+   */
+  public Customer deleteCustomerByUsername(final String username) throws ResourceNotFoundException {
+    final Customer deleteCustomer = getCustomerByUsername(username);
+    this.customerRepository.delete(deleteCustomer);
+    return deleteCustomer;
   }
 }

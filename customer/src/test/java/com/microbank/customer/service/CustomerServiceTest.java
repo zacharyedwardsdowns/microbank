@@ -63,6 +63,20 @@ public class CustomerServiceTest {
   @Test(expected = ResourceNotFoundException.class)
   public void testGetCustomerByUsernameResourceNotFoundException() throws Exception {
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.empty());
-    final Customer result = customerService.getCustomerByUsername(customer.getUsername());
+    customerService.getCustomerByUsername(customer.getUsername());
+  }
+
+  @Test
+  public void testDeleteCustomerByUsername() throws Exception {
+    Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.of(customer));
+    final Customer result = customerService.deleteCustomerByUsername(customer.getUsername());
+    Mockito.verify(mockCustomerRepository, Mockito.times(1)).delete(customer);
+    Assert.assertEquals(customer, result);
+  }
+
+  @Test(expected = ResourceNotFoundException.class)
+  public void testDeleteCustomerByUsernameResourceNotFoundException() throws Exception {
+    Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.empty());
+    customerService.deleteCustomerByUsername(customer.getUsername());
   }
 }

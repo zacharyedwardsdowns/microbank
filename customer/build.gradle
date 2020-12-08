@@ -130,11 +130,7 @@ jacocoTestCoverageVerification {
 sourceSets {
     test {
         java {
-            srcDir 'src/test/java'
             srcDir 'src/test/integration'
-        }
-        resources {
-            srcDir 'src/test/resources'
         }
     }
 }

@@ -34,9 +34,9 @@ public class CustomerController {
    *
    * @param customerJson The customer to register represented as a json string.
    * @return The information of the newly registered customer.
-   * @throws ValidationException Thrown if a validation error occurs.
-   * @throws InvalidJsonException Thrown upon failure to read the given json into Customer.
-   * @throws ExistingCustomerException Thrown if a customer already exists with the given username.
+   * @throws ValidationException A validation error occurred.
+   * @throws InvalidJsonException Failure to read the given json into Customer.
+   * @throws ExistingCustomerException A customer already exists with the given username.
    */
   @PostMapping("/register")
   public ResponseEntity<Customer> register(@RequestBody String customerJson)
@@ -57,11 +57,24 @@ public class CustomerController {
    *
    * @param username The unique identifier of a customer.
    * @return The customer information for the given username.
-   * @throws ResourceNotFoundException If no customer exists for the given username.
+   * @throws ResourceNotFoundException No customer exists for the given username.
    */
   @GetMapping("/username/{username}")
   public ResponseEntity<Customer> getCustomerByUsername(
       @PathVariable(name = "username") final String username) throws ResourceNotFoundException {
     return new ResponseEntity<>(customerService.getCustomerByUsername(username), HttpStatus.OK);
+  }
+
+  /**
+   * Deletes a customer from the database using their username.
+   *
+   * @param username The unique identifier of a customer to delete by.
+   * @return The customer that was deleted.
+   * @throws ResourceNotFoundException No customer exists for the given username.
+   */
+  @DeleteMapping("/username/{username}")
+  public ResponseEntity<Customer> deleteCustomerByUsername(
+      @PathVariable(name = "username") final String username) throws ResourceNotFoundException {
+    return new ResponseEntity<>(customerService.deleteCustomerByUsername(username), HttpStatus.OK);
   }
 }
