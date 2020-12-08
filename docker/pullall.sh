@@ -1,4 +1,6 @@
-docker pull registry.gitlab.com/zacharyedwardsdowns/micro-bank/angular
-docker pull registry.gitlab.com/zacharyedwardsdowns/micro-bank/eureka
-docker pull registry.gitlab.com/zacharyedwardsdowns/micro-bank/zuul
-docker pull registry.gitlab.com/zacharyedwardsdowns/micro-bank/customer
+# Pull docker images for all MicroBank services.
+cd "$(dirname "$0")"
+cd ../angular; ./pull.sh
+cd ../eureka; ./pull.sh
+cd ../zuul; ./pull.sh
+cd ../customer; ./pull.sh
