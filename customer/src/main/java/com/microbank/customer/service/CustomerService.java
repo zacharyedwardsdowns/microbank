@@ -1,6 +1,7 @@
 package com.microbank.customer.service;
 
 import com.microbank.customer.exception.ExistingCustomerException;
+import com.microbank.customer.exception.MissingRequirementsException;
 import com.microbank.customer.exception.ResourceNotFoundException;
 import com.microbank.customer.exception.ValidationException;
 import com.microbank.customer.model.Customer;
@@ -89,5 +90,21 @@ public class CustomerService {
     final Customer deleteCustomer = getCustomerByUsername(username);
     this.customerRepository.delete(deleteCustomer);
     return deleteCustomer;
+  }
+
+  /**
+   * Verifies a customer exists using the getCustomerByUsername() method.
+   *
+   * @param customer A Customer object that should contain the username of the customer to verify.
+   * @throws ResourceNotFoundException No customer exists for the given username.
+   * @throws MissingRequirementsException The username field of the given Customer is null.
+   */
+  public void verifyCustomerExists(final Customer customer)
+      throws ResourceNotFoundException, MissingRequirementsException {
+    if (customer.getUsername() == null) {
+      throw new MissingRequirementsException(
+          "Must provide a username to verify if a customer exists!");
+    }
+    getCustomerByUsername(customer.getUsername());
   }
 }

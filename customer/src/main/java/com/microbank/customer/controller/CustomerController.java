@@ -1,10 +1,7 @@
 package com.microbank.customer.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.microbank.customer.exception.ExistingCustomerException;
-import com.microbank.customer.exception.InvalidJsonException;
-import com.microbank.customer.exception.ResourceNotFoundException;
-import com.microbank.customer.exception.ValidationException;
+import com.microbank.customer.exception.*;
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.security.Sanitizer;
 import com.microbank.customer.service.CustomerService;
@@ -76,5 +73,29 @@ public class CustomerController {
   public ResponseEntity<Customer> deleteCustomerByUsername(
       @PathVariable(name = "username") final String username) throws ResourceNotFoundException {
     return new ResponseEntity<>(customerService.deleteCustomerByUsername(username), HttpStatus.OK);
+  }
+
+  /**
+   * Verifies a customer exists in the database using the username passed through the request body.
+   *
+   * @param customerJson A Customer json containing the username of the customer to verify.
+   * @return Response code 204 if the customer exists.
+   * @throws InvalidJsonException Failure to read the given json into Customer.
+   * @throws ResourceNotFoundException No customer exists for the given username.
+   * @throws MissingRequirementsException The username field of the given Customer is null.
+   */
+  @PostMapping("/verify/customer/exists")
+  public ResponseEntity<Void> verifyCustomerExists(@RequestBody String customerJson)
+      throws InvalidJsonException, ResourceNotFoundException, MissingRequirementsException {
+    customerJson = Sanitizer.sanitizeJson(customerJson);
+    final Customer customer;
+    try {
+      customer = Util.MAPPER.readValue(customerJson, Customer.class);
+    } catch (final JsonProcessingException e) {
+      throw new InvalidJsonException(
+          "Failed to create an instance of Customer with the given json!", e);
+    }
+    customerService.verifyCustomerExists(customer);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }

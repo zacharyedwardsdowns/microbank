@@ -1,6 +1,7 @@
 package com.microbank.customer.service;
 
 import com.microbank.customer.exception.ExistingCustomerException;
+import com.microbank.customer.exception.MissingRequirementsException;
 import com.microbank.customer.exception.ResourceNotFoundException;
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.repository.CustomerRepository;
@@ -78,5 +79,23 @@ public class CustomerServiceTest {
   public void testDeleteCustomerByUsernameResourceNotFoundException() throws Exception {
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.empty());
     customerService.deleteCustomerByUsername(customer.getUsername());
+  }
+
+  @Test
+  public void testVerifyCustomerExists() throws Exception {
+    Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.of(customer));
+    customerService.verifyCustomerExists(customer);
+    Mockito.verify(mockCustomerRepository, Mockito.times(1)).findOne(Mockito.any());
+  }
+
+  @Test(expected = ResourceNotFoundException.class)
+  public void testVerifyCustomerExistsResourceNotFoundException() throws Exception {
+    Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.empty());
+    customerService.verifyCustomerExists(customer);
+  }
+
+  @Test(expected = MissingRequirementsException.class)
+  public void testVerifyCustomerExistsMissingRequirementsException() throws Exception {
+    customerService.verifyCustomerExists(new Customer());
   }
 }

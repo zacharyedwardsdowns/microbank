@@ -1,9 +1,6 @@
 package com.microbank.customer.controller.advice;
 
-import com.microbank.customer.exception.ExistingCustomerException;
-import com.microbank.customer.exception.InvalidJsonException;
-import com.microbank.customer.exception.ResourceNotFoundException;
-import com.microbank.customer.exception.ValidationException;
+import com.microbank.customer.exception.*;
 import com.microbank.customer.exception.model.ExceptionCause;
 import com.microbank.customer.exception.model.ExceptionResponse;
 import java.time.LocalDateTime;
@@ -26,20 +23,25 @@ public class ControllerExceptionHandler {
         exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
   }
 
-  @ExceptionHandler(value = {InvalidJsonException.class, ValidationException.class})
-  protected ResponseEntity<ExceptionResponse> invalidJsonException(
-      final Exception e, final HttpServletRequest request) {
-    final ExceptionResponse exceptionResponse =
-        createDefaultExceptionResponse(e, request, HttpStatus.BAD_REQUEST);
-    return new ResponseEntity<>(
-        exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
-  }
-
   @ExceptionHandler(value = ResourceNotFoundException.class)
   protected ResponseEntity<ExceptionResponse> resourceNotFoundException(
       final Exception e, final HttpServletRequest request) {
     final ExceptionResponse exceptionResponse =
         createDefaultExceptionResponse(e, request, HttpStatus.NOT_FOUND);
+    return new ResponseEntity<>(
+        exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
+  }
+
+  @ExceptionHandler(
+      value = {
+        InvalidJsonException.class,
+        ValidationException.class,
+        MissingRequirementsException.class
+      })
+  protected ResponseEntity<ExceptionResponse> invalidJsonException(
+      final Exception e, final HttpServletRequest request) {
+    final ExceptionResponse exceptionResponse =
+        createDefaultExceptionResponse(e, request, HttpStatus.BAD_REQUEST);
     return new ResponseEntity<>(
         exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
   }
