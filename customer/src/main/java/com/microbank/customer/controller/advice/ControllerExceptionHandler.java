@@ -6,6 +6,7 @@ import com.microbank.customer.exception.model.ExceptionResponse;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ControllerExceptionHandler {
 
   @ExceptionHandler(value = ExistingCustomerException.class)
-  protected ResponseEntity<ExceptionResponse> existingCustomerException(
+  protected ResponseEntity<ExceptionResponse> conflictException(
       final Exception e, final HttpServletRequest request) {
     final ExceptionResponse exceptionResponse =
         createDefaultExceptionResponse(e, request, HttpStatus.CONFLICT);
@@ -24,7 +25,7 @@ public class ControllerExceptionHandler {
   }
 
   @ExceptionHandler(value = ResourceNotFoundException.class)
-  protected ResponseEntity<ExceptionResponse> resourceNotFoundException(
+  protected ResponseEntity<ExceptionResponse> notFoundException(
       final Exception e, final HttpServletRequest request) {
     final ExceptionResponse exceptionResponse =
         createDefaultExceptionResponse(e, request, HttpStatus.NOT_FOUND);
@@ -34,14 +35,23 @@ public class ControllerExceptionHandler {
 
   @ExceptionHandler(
       value = {
-        InvalidJsonException.class,
         ValidationException.class,
+        InvalidJsonException.class,
         MissingRequirementsException.class
       })
-  protected ResponseEntity<ExceptionResponse> invalidJsonException(
+  protected ResponseEntity<ExceptionResponse> badRequestException(
       final Exception e, final HttpServletRequest request) {
     final ExceptionResponse exceptionResponse =
         createDefaultExceptionResponse(e, request, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(
+        exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
+  }
+
+  @ExceptionHandler(value = {DataAccessException.class, FailedToRegisterCustomerException.class})
+  protected ResponseEntity<ExceptionResponse> internalServerErrorException(
+      final Exception e, final HttpServletRequest request) {
+    final ExceptionResponse exceptionResponse =
+        createDefaultExceptionResponse(e, request, HttpStatus.INTERNAL_SERVER_ERROR);
     return new ResponseEntity<>(
         exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
   }

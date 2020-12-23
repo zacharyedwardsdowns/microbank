@@ -1,14 +1,15 @@
 package com.microbank.customer.service;
 
-import com.microbank.customer.exception.ExistingCustomerException;
-import com.microbank.customer.exception.MissingRequirementsException;
-import com.microbank.customer.exception.ResourceNotFoundException;
-import com.microbank.customer.exception.ValidationException;
+import com.microbank.customer.exception.*;
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.repository.CustomerRepository;
 import com.microbank.customer.util.Util;
 import java.util.Optional;
+import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CustomerService {
+  private static final Logger LOG = LoggerFactory.getLogger(CustomerService.class);
   private final CustomerRepository customerRepository;
   private final ValidationService validationService;
 
@@ -41,9 +43,10 @@ public class CustomerService {
    * @return The information of the newly registered customer.
    * @throws ValidationException A validation error occurred.
    * @throws ExistingCustomerException A customer already exists with the given username.
+   * @throws FailedToRegisterCustomerException Failed to register the customer after 3 attempts.
    */
   public Customer register(final Customer customer)
-      throws ValidationException, ExistingCustomerException {
+      throws ValidationException, ExistingCustomerException, FailedToRegisterCustomerException {
     validationService.validateNewCustomer(customer);
 
     final Customer searchCustomer = new Customer();
@@ -54,7 +57,26 @@ public class CustomerService {
       throw new ExistingCustomerException(
           "A customer already exists with the username " + customer.getUsername() + "!");
     } else {
-      return this.customerRepository.insert(customer);
+      customer.setJoinedOn(Util.currentTime());
+      customer.setLastUpdatedOn(customer.getJoinedOn());
+      Customer registeredCustomer = null;
+      final int attempts = 3;
+
+      for (int i = 0; i < attempts; i++) {
+        customer.setCustomerId(UUID.randomUUID().toString());
+        try {
+          registeredCustomer = customerRepository.insert(customer);
+          break;
+        } catch (DuplicateKeyException e) {
+          LOG.error("Failed to generate a unique UUID!");
+        }
+      }
+
+      if (registeredCustomer == null) {
+        throw new FailedToRegisterCustomerException(
+            "Failed to register a customer after " + attempts + " attempts!");
+      }
+      return registeredCustomer;
     }
   }
 

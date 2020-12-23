@@ -36,10 +36,12 @@ public class CustomerController {
    * @throws ValidationException A validation error occurred.
    * @throws InvalidJsonException Failure to read the given json into Customer.
    * @throws ExistingCustomerException A customer already exists with the given username.
+   * @throws FailedToRegisterCustomerException Failed to register the customer.
    */
   @PostMapping("/customer")
   public ResponseEntity<Customer> register(@RequestBody String customerJson)
-      throws ValidationException, ExistingCustomerException, InvalidJsonException {
+      throws ValidationException, ExistingCustomerException, InvalidJsonException,
+          FailedToRegisterCustomerException {
     customerJson = Sanitizer.sanitizeJson(customerJson);
     final Customer customer;
     try {
