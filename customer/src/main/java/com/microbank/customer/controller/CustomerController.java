@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 /** Provides endpoints for verifying login, registering customers, and querying customer data. */
 @RestController
 public class CustomerController {
+  private static final String INVALID_JSON =
+      "Failed to create an instance of Customer with the given json!";
   private final CustomerService customerService;
 
   /**
@@ -35,7 +37,7 @@ public class CustomerController {
    * @throws InvalidJsonException Failure to read the given json into Customer.
    * @throws ExistingCustomerException A customer already exists with the given username.
    */
-  @PostMapping("/register")
+  @PostMapping("/customer")
   public ResponseEntity<Customer> register(@RequestBody String customerJson)
       throws ValidationException, ExistingCustomerException, InvalidJsonException {
     customerJson = Sanitizer.sanitizeJson(customerJson);
@@ -43,8 +45,7 @@ public class CustomerController {
     try {
       customer = Util.MAPPER.readValue(customerJson, Customer.class);
     } catch (final JsonProcessingException e) {
-      throw new InvalidJsonException(
-          "Failed to create an instance of Customer with the given json!", e);
+      throw new InvalidJsonException(INVALID_JSON, e);
     }
     return new ResponseEntity<>(customerService.register(customer), HttpStatus.CREATED);
   }
@@ -56,7 +57,7 @@ public class CustomerController {
    * @return The customer information for the given username.
    * @throws ResourceNotFoundException No customer exists for the given username.
    */
-  @GetMapping("/username/{username}")
+  @GetMapping("/customer/{username}")
   public ResponseEntity<Customer> getCustomerByUsername(
       @PathVariable(name = "username") final String username) throws ResourceNotFoundException {
     return new ResponseEntity<>(customerService.getCustomerByUsername(username), HttpStatus.OK);
@@ -69,7 +70,7 @@ public class CustomerController {
    * @return The customer that was deleted.
    * @throws ResourceNotFoundException No customer exists for the given username.
    */
-  @DeleteMapping("/username/{username}")
+  @DeleteMapping("/customer/{username}")
   public ResponseEntity<Customer> deleteCustomerByUsername(
       @PathVariable(name = "username") final String username) throws ResourceNotFoundException {
     return new ResponseEntity<>(customerService.deleteCustomerByUsername(username), HttpStatus.OK);
@@ -92,8 +93,7 @@ public class CustomerController {
     try {
       customer = Util.MAPPER.readValue(customerJson, Customer.class);
     } catch (final JsonProcessingException e) {
-      throw new InvalidJsonException(
-          "Failed to create an instance of Customer with the given json!", e);
+      throw new InvalidJsonException(INVALID_JSON, e);
     }
     customerService.verifyCustomerExists(customer);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -27,9 +27,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 public class CustomerControllerTest {
 
   private static final String VERIFY_CUSTOMER_EXISTS_ENDPOINT = "/verify/customer/exists";
-  private static final String REGISTER_ENDPOINT = "/register";
+  private static final String REGISTER_ENDPOINT = "/customer";
   private static final String BAD_JSON = "{\"Bad\":\"Json\"}";
-  private static String CUSTOMER_INFO_ENDPOINT = "/username/";
+  private static String CUSTOMER_INFO_ENDPOINT = "/customer/";
   private static CustomerService mockCustomerService;
   private static Customer customer;
   private static MockMvc mockMvc;
