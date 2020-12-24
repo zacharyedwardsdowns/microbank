@@ -11,12 +11,22 @@ public final class Sanitizer {
   private Sanitizer() {}
 
   /**
+   * Sanitizes a given string using Jsoup.
+   *
+   * @param string The string to sanitize.
+   * @return A sanitized string.
+   */
+  public static String sanitizeString(final String string) {
+    return Jsoup.clean(string, Whitelist.basic());
+  }
+
+  /**
    * Sanitizes json using Jsoup and JsonSanitizer.
    *
    * @param json The json string to sanitize.
    * @return A sanitized json.
    */
   public static String sanitizeJson(final String json) {
-    return JsonSanitizer.sanitize(Jsoup.clean(json, Whitelist.basic()));
+    return JsonSanitizer.sanitize(sanitizeString(json));
   }
 }

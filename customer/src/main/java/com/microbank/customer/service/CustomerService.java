@@ -115,18 +115,20 @@ public class CustomerService {
   }
 
   /**
-   * Verifies a customer exists using the getCustomerByUsername() method.
+   * Verifies if the given password matches the password of the given user.
    *
-   * @param customer A Customer object that should contain the username of the customer to verify.
+   * @param username The username of the user to check for a password match against.
+   * @param password The password to check matches.
+   * @return True if the password matches and false otherwise.
    * @throws ResourceNotFoundException No customer exists for the given username.
-   * @throws MissingRequirementsException The username field of the given Customer is null.
+   * @throws MissingRequirementsException The password parameter is null.
    */
-  public void verifyCustomerExists(final Customer customer)
+  public boolean verifyPasswordMatches(final String username, final String password)
       throws ResourceNotFoundException, MissingRequirementsException {
-    if (customer.getUsername() == null) {
-      throw new MissingRequirementsException(
-          "Must provide a username to verify if a customer exists!");
+    if (password == null || password.equals("") || password.equalsIgnoreCase("null")) {
+      throw new MissingRequirementsException("Must provide a password to check if it matches!");
     }
-    getCustomerByUsername(customer.getUsername());
+    final Customer customer = getCustomerByUsername(username);
+    return customer.getPassword().equals(password);
   }
 }

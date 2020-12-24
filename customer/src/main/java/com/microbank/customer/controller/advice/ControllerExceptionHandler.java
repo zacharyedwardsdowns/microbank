@@ -3,17 +3,26 @@ package com.microbank.customer.controller.advice;
 import com.microbank.customer.exception.*;
 import com.microbank.customer.exception.model.ExceptionCause;
 import com.microbank.customer.exception.model.ExceptionResponse;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import com.microbank.customer.util.Util;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class ControllerExceptionHandler {
+@Order(Ordered.HIGHEST_PRECEDENCE)
+public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(value = ExistingCustomerException.class)
   protected ResponseEntity<ExceptionResponse> conflictException(
@@ -56,6 +65,18 @@ public class ControllerExceptionHandler {
         exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
   }
 
+  @NonNull
+  @Override
+  @ExceptionHandler(Exception.class)
+  protected ResponseEntity<Object> handleExceptionInternal(
+      @NonNull Exception e,
+      @Nullable Object body,
+      @Nullable HttpHeaders headers,
+      @NonNull HttpStatus status,
+      @NonNull WebRequest request) {
+    return new ResponseEntity<>(createDefaultExceptionResponse(e, request, status), status);
+  }
+
   /**
    * Creates a default ExceptionResponse from the given exception and request. Uses the given status
    * as the response status of the controller.
@@ -68,12 +89,42 @@ public class ControllerExceptionHandler {
   private ExceptionResponse createDefaultExceptionResponse(
       final Exception e, final HttpServletRequest request, final HttpStatus status) {
     final ExceptionResponse exceptionResponse = new ExceptionResponse();
-    exceptionResponse.setTimestamp(now());
+    exceptionResponse.setPath(request.getRequestURI());
+    return createDefaultExceptionResponseHelper(e, exceptionResponse, status);
+  }
+
+  /**
+   * Creates a default ExceptionResponse from the given exception and request. Uses the given status
+   * as the response status of the controller.
+   *
+   * @param e The exception to build a message with.
+   * @param request The request to get the URI with.
+   * @param status The status to respond with.
+   * @return A default ExceptionResponse.
+   */
+  private ExceptionResponse createDefaultExceptionResponse(
+      final Exception e, final WebRequest request, final HttpStatus status) {
+    final ExceptionResponse exceptionResponse = new ExceptionResponse();
+    exceptionResponse.setPath(((ServletWebRequest) request).getRequest().getRequestURI());
+    return createDefaultExceptionResponseHelper(e, exceptionResponse, status);
+  }
+
+  /**
+   * A helper method that does most of the exception response building.
+   *
+   * @param e The exception to build a message with.
+   * @param exceptionResponse An exception response with the URI.
+   * @param status The status to respond with.
+   * @return A default ExceptionResponse.
+   */
+  private ExceptionResponse createDefaultExceptionResponseHelper(
+      final Exception e, final ExceptionResponse exceptionResponse, final HttpStatus status) {
+    exceptionResponse.setTimestamp(Util.currentTime());
     exceptionResponse.setStatus(status.value());
     exceptionResponse.setError(e.getClass().getSimpleName());
     exceptionResponse.setMessage(e.getMessage());
-    exceptionResponse.setPath(request.getRequestURI());
     exceptionResponse.setCause(fillCause(e));
+    exceptionResponse.setTrace(ExceptionUtils.getStackTrace(e));
     return exceptionResponse;
   }
 
@@ -94,14 +145,5 @@ public class ControllerExceptionHandler {
     } else {
       return null;
     }
-  }
-
-  /**
-   * Method to retrieve the current date and time as a string.
-   *
-   * @return The date and time of when the method was called.
-   */
-  private String now() {
-    return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
   }
 }

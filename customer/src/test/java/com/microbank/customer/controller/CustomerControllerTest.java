@@ -14,6 +14,7 @@ import com.microbank.customer.util.Util;
 import java.io.File;
 import java.nio.file.Files;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -26,14 +27,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 public class CustomerControllerTest {
 
-  private static final String VERIFY_CUSTOMER_EXISTS_ENDPOINT = "/verify/customer/exists";
+  private static String VERIFY_PASSWORD_MATCHES_ENDPOINT = "/password/match";
   private static final String REGISTER_ENDPOINT = "/customer";
   private static final String BAD_JSON = "{\"Bad\":\"Json\"}";
   private static String CUSTOMER_INFO_ENDPOINT = "/customer/";
-  private static CustomerService mockCustomerService;
+  private CustomerService mockCustomerService;
   private static Customer customer;
-  private static MockMvc mockMvc;
   private static String json;
+  private MockMvc mockMvc;
 
   @BeforeClass
   public static void setupClass() throws Exception {
@@ -42,15 +43,17 @@ public class CustomerControllerTest {
     json = Sanitizer.sanitizeJson(json);
     customer = Util.MAPPER.readValue(json, Customer.class);
 
-    mockCustomerService = Mockito.mock(CustomerService.class);
-    final CustomerController customerController = new CustomerController(mockCustomerService);
+    CUSTOMER_INFO_ENDPOINT += customer.getUsername();
+    VERIFY_PASSWORD_MATCHES_ENDPOINT = CUSTOMER_INFO_ENDPOINT + VERIFY_PASSWORD_MATCHES_ENDPOINT;
+  }
 
+  @Before
+  public void setup() {
+    mockCustomerService = Mockito.mock(CustomerService.class);
     mockMvc =
-        MockMvcBuilders.standaloneSetup(customerController)
+        MockMvcBuilders.standaloneSetup(new CustomerController(mockCustomerService))
             .setControllerAdvice(new ControllerExceptionHandler())
             .build();
-
-    CUSTOMER_INFO_ENDPOINT += customer.getUsername();
   }
 
   @Test
@@ -184,29 +187,45 @@ public class CustomerControllerTest {
   }
 
   @Test
-  public void testVerifyCustomerExists() throws Exception {
+  public void verifyPasswordMatches() throws Exception {
+    Mockito.when(
+            mockCustomerService.verifyPasswordMatches(
+                customer.getUsername(), customer.getPassword()))
+        .thenReturn(true);
+
     mockMvc
         .perform(
-            MockMvcRequestBuilders.post(VERIFY_CUSTOMER_EXISTS_ENDPOINT)
-                .content(json)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+            MockMvcRequestBuilders.get(VERIFY_PASSWORD_MATCHES_ENDPOINT)
+                .header("password", customer.getPassword()))
         .andExpect(MockMvcResultMatchers.status().isNoContent());
   }
 
   @Test
-  public void testVerifyCustomerExistsResourceNotFoundException() throws Exception {
-    Mockito.doThrow(ResourceNotFoundException.class)
-        .when(mockCustomerService)
-        .verifyCustomerExists(customer);
+  public void verifyPasswordMatchesFalse() throws Exception {
+    Mockito.when(
+            mockCustomerService.verifyPasswordMatches(
+                customer.getUsername(), customer.getPassword()))
+        .thenReturn(false);
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.get(VERIFY_PASSWORD_MATCHES_ENDPOINT)
+                .header("password", customer.getPassword()))
+        .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+  }
+
+  @Test
+  public void verifyPasswordMatchesResourceNotFoundException() throws Exception {
+    Mockito.when(
+            mockCustomerService.verifyPasswordMatches(
+                customer.getUsername(), customer.getPassword()))
+        .thenThrow(ResourceNotFoundException.class);
 
     final String response =
         mockMvc
             .perform(
-                MockMvcRequestBuilders.post(VERIFY_CUSTOMER_EXISTS_ENDPOINT)
-                    .content(json)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON))
+                MockMvcRequestBuilders.get(VERIFY_PASSWORD_MATCHES_ENDPOINT)
+                    .header("password", customer.getPassword()))
             .andExpect(MockMvcResultMatchers.status().isNotFound())
             .andReturn()
             .getResponse()
@@ -216,41 +235,23 @@ public class CustomerControllerTest {
   }
 
   @Test
-  public void testVerifyCustomerExistsMissingRequirementsException() throws Exception {
-    Mockito.doThrow(MissingRequirementsException.class)
-        .when(mockCustomerService)
-        .verifyCustomerExists(customer);
+  public void verifyPasswordMatchesMissingRequirementsException() throws Exception {
+    Mockito.when(
+            mockCustomerService.verifyPasswordMatches(
+                customer.getUsername(), customer.getPassword()))
+        .thenThrow(MissingRequirementsException.class);
 
     final String response =
         mockMvc
             .perform(
-                MockMvcRequestBuilders.post(VERIFY_CUSTOMER_EXISTS_ENDPOINT)
-                    .content(json)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON))
+                MockMvcRequestBuilders.get(VERIFY_PASSWORD_MATCHES_ENDPOINT)
+                    .header("password", customer.getPassword()))
             .andExpect(MockMvcResultMatchers.status().isBadRequest())
             .andReturn()
             .getResponse()
             .getContentAsString();
 
     verifyError(response, MissingRequirementsException.class);
-  }
-
-  @Test
-  public void testVerifyCustomerExistsInvalidJsonException() throws Exception {
-    final String response =
-        mockMvc
-            .perform(
-                MockMvcRequestBuilders.post(VERIFY_CUSTOMER_EXISTS_ENDPOINT)
-                    .content(BAD_JSON)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isBadRequest())
-            .andReturn()
-            .getResponse()
-            .getContentAsString();
-
-    verifyError(response, InvalidJsonException.class);
   }
 
   /**
@@ -262,6 +263,7 @@ public class CustomerControllerTest {
    */
   private void verifyError(final String response, final Class<?> clazz)
       throws JsonProcessingException {
+    Assert.assertNotNull(response);
     final JsonNode result = Util.MAPPER.readTree(response);
     Assert.assertEquals(result.get("error").asText(), clazz.getSimpleName());
   }

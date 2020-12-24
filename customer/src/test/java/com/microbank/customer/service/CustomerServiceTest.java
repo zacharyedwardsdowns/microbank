@@ -82,20 +82,29 @@ public class CustomerServiceTest {
   }
 
   @Test
-  public void testVerifyCustomerExists() throws Exception {
+  public void verifyPasswordMatches() throws Exception {
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.of(customer));
-    customerService.verifyCustomerExists(customer);
-    Mockito.verify(mockCustomerRepository, Mockito.times(1)).findOne(Mockito.any());
+    final boolean response =
+        customerService.verifyPasswordMatches(customer.getUsername(), customer.getPassword());
+    Assert.assertTrue(response);
+  }
+
+  @Test
+  public void verifyPasswordMatchesFalse() throws Exception {
+    Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.of(customer));
+    final boolean response =
+        customerService.verifyPasswordMatches(customer.getUsername(), customer.getPassword() + "1");
+    Assert.assertFalse(response);
   }
 
   @Test(expected = ResourceNotFoundException.class)
-  public void testVerifyCustomerExistsResourceNotFoundException() throws Exception {
+  public void verifyPasswordMatchesResourceNotFoundException() throws Exception {
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.empty());
-    customerService.verifyCustomerExists(customer);
+    customerService.verifyPasswordMatches(customer.getUsername(), customer.getPassword());
   }
 
   @Test(expected = MissingRequirementsException.class)
-  public void testVerifyCustomerExistsMissingRequirementsException() throws Exception {
-    customerService.verifyCustomerExists(new Customer());
+  public void verifyPasswordMatchesMissingRequirementsException() throws Exception {
+    customerService.verifyPasswordMatches(customer.getUsername(), null);
   }
 }

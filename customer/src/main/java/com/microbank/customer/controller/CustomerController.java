@@ -61,7 +61,8 @@ public class CustomerController {
    */
   @GetMapping("/customer/{username}")
   public ResponseEntity<Customer> getCustomerByUsername(
-      @PathVariable(name = "username") final String username) throws ResourceNotFoundException {
+      @PathVariable(name = "username") String username) throws ResourceNotFoundException {
+    username = Sanitizer.sanitizeString(username);
     return new ResponseEntity<>(customerService.getCustomerByUsername(username), HttpStatus.OK);
   }
 
@@ -74,30 +75,30 @@ public class CustomerController {
    */
   @DeleteMapping("/customer/{username}")
   public ResponseEntity<Customer> deleteCustomerByUsername(
-      @PathVariable(name = "username") final String username) throws ResourceNotFoundException {
+      @PathVariable(name = "username") String username) throws ResourceNotFoundException {
+    username = Sanitizer.sanitizeString(username);
     return new ResponseEntity<>(customerService.deleteCustomerByUsername(username), HttpStatus.OK);
   }
 
   /**
-   * Verifies a customer exists in the database using the username passed through the request body.
+   * Verifies if the given password matches the password of the given user.
    *
-   * @param customerJson A Customer json containing the username of the customer to verify.
-   * @return Response code 204 if the customer exists.
-   * @throws InvalidJsonException Failure to read the given json into Customer.
+   * @param username The username of the user to check for a password match against.
+   * @param password The password to check matches.
+   * @return Response code 204 if the password matches and 401 otherwise.
    * @throws ResourceNotFoundException No customer exists for the given username.
-   * @throws MissingRequirementsException The username field of the given Customer is null.
+   * @throws MissingRequirementsException The password request header is null.
    */
-  @PostMapping("/verify/customer/exists")
-  public ResponseEntity<Void> verifyCustomerExists(@RequestBody String customerJson)
-      throws InvalidJsonException, ResourceNotFoundException, MissingRequirementsException {
-    customerJson = Sanitizer.sanitizeJson(customerJson);
-    final Customer customer;
-    try {
-      customer = Util.MAPPER.readValue(customerJson, Customer.class);
-    } catch (final JsonProcessingException e) {
-      throw new InvalidJsonException(INVALID_JSON, e);
+  @GetMapping("/customer/{username}/password/match")
+  public ResponseEntity<Void> verifyPasswordMatches(
+      @PathVariable(name = "username") String username, @RequestHeader("password") String password)
+      throws ResourceNotFoundException, MissingRequirementsException {
+    username = Sanitizer.sanitizeString(username);
+    password = Sanitizer.sanitizeString(password);
+    if (customerService.verifyPasswordMatches(username, password)) {
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    } else {
+      return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    customerService.verifyCustomerExists(customer);
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }
