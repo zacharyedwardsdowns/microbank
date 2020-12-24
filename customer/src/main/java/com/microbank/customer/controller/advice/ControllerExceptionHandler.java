@@ -6,8 +6,6 @@ import com.microbank.customer.exception.model.ExceptionResponse;
 import com.microbank.customer.util.Util;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,7 +19,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-@Order(Ordered.HIGHEST_PRECEDENCE)
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(value = ExistingCustomerException.class)
