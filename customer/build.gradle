@@ -48,6 +48,7 @@ dependencies {
     implementation "io.cucumber:cucumber-junit:${cucumberVersion}"
     implementation "io.cucumber:cucumber-spring:${cucumberVersion}"
     implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}"
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:2.2.1.RELEASE'
 
