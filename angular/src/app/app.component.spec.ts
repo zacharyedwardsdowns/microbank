@@ -1,4 +1,4 @@
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { TestBed, ComponentFixture, waitForAsync } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { ThemingService } from './service/theming.service';
 import { BehaviorSubject } from 'rxjs';
@@ -9,7 +9,7 @@ describe('AppComponent', () => {
   const theme: string = 'dark-theme';
   let mockThemingService: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     mockThemingService = jasmine.createSpyObj(['setVariablesAndRefresh']);
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
