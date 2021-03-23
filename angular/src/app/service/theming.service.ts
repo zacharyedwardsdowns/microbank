@@ -7,10 +7,11 @@ import { DOCUMENT } from '@angular/common';
 })
 export class ThemingService {
   private themes = ['dark-theme', 'light-theme']; // <- list all themes in this array
-  public theme = new BehaviorSubject('light-theme'); // <- initial theme
+  public theme = new BehaviorSubject('dark-theme'); // <- initial theme
+  public mql: MediaQueryList;
 
   constructor(
-    private ref: ApplicationRef,
+    public ref: ApplicationRef,
     @Inject(DOCUMENT) private document: Document
   ) {
     const darkModeOn =
@@ -23,14 +24,7 @@ export class ThemingService {
     }
 
     // Watch for changes of the preference
-    window.matchMedia('(prefers-color-scheme: dark)').addListener((e) => {
-      const turnOn = e.matches;
-      this.theme.next(turnOn ? 'dark-theme' : 'light-theme');
-
-      // Trigger UI refresh, set color variables, trigger another UI refresh.
-      this.ref.tick();
-      this.setVariablesAndRefresh();
-    });
+    this.mql = window.matchMedia('(prefers-color-scheme: dark)');
   }
 
   public setVariablesAndRefresh(): void {

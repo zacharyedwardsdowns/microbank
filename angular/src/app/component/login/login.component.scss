@@ -9,14 +9,14 @@ header {
 }
 
 main {
-  height: 87%;
+  height: 85%;
 }
 
 h1 {
   font-weight: bolder;
   font-size: 2.3rem;
   color: var(--contrast-color);
-  margin-bottom: 0.3rem;
+  margin-bottom: 2.5%;
   margin-left: 1rem;
 }
 
@@ -37,11 +37,11 @@ h1 {
 
 #sign-in-button {
   background-color: var(--contrast-color);
-  margin-right: 0.5rem;
+  margin-left: 0.5rem;
 }
 
 #register-button {
-  margin-left: 0.5rem;
+  margin-right: 0.5rem;
   background-color: var(--primary-default);
   border-color: var(--contrast-color) !important;
   color: var(--contrast-color);
@@ -60,6 +60,7 @@ h1 {
 
 #user-icon {
   height: 100%;
+  pointer-events: none;
 }
 
 #account-icon {
@@ -70,6 +71,10 @@ h1 {
 
 .form {
   color: var(--contrast-color);
+}
+
+mat-form-field {
+  transition: none;
 }
 
 .mat-icon-button {
