@@ -13,9 +13,6 @@ public class ScenarioGetCustomerInformation extends CucumberBaseStep {
   public void getCustomerInformation() throws RestClientException {
     customerResponseEntity =
         REST_CLIENT.sendRequest(
-            getCustomerInformationEndpoint() + customer.getUsername(),
-            HttpMethod.GET,
-            null,
-            Customer.class);
+            getCustomerInformationEndpoint() + customerId, HttpMethod.GET, null, Customer.class);
   }
 }

@@ -55,30 +55,30 @@ public class CustomerServiceTest {
   }
 
   @Test
-  public void testGetCustomerByUsername() throws Exception {
+  public void testGetCustomerByCustomerId() throws Exception {
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.of(customer));
-    final Customer result = customerService.getCustomerByUsername(customer.getUsername());
+    final Customer result = customerService.getCustomerByCustomerId(customer.getCustomerId());
     Assert.assertEquals(customer, result);
   }
 
   @Test(expected = ResourceNotFoundException.class)
-  public void testGetCustomerByUsernameResourceNotFoundException() throws Exception {
+  public void testGetCustomerByCustomerIdResourceNotFoundException() throws Exception {
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.empty());
-    customerService.getCustomerByUsername(customer.getUsername());
+    customerService.getCustomerByCustomerId(customer.getCustomerId());
   }
 
   @Test
-  public void testDeleteCustomerByUsername() throws Exception {
+  public void testDeleteCustomerByCustomerId() throws Exception {
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.of(customer));
-    final Customer result = customerService.deleteCustomerByUsername(customer.getUsername());
+    final Customer result = customerService.deleteCustomerByCustomerId(customer.getCustomerId());
     Mockito.verify(mockCustomerRepository, Mockito.times(1)).delete(customer);
     Assert.assertEquals(customer, result);
   }
 
   @Test(expected = ResourceNotFoundException.class)
-  public void testDeleteCustomerByUsernameResourceNotFoundException() throws Exception {
+  public void testDeleteCustomerByCustomerIdResourceNotFoundException() throws Exception {
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.empty());
-    customerService.deleteCustomerByUsername(customer.getUsername());
+    customerService.deleteCustomerByCustomerId(customer.getCustomerId());
   }
 
   @Test
@@ -97,8 +97,8 @@ public class CustomerServiceTest {
     Assert.assertFalse(response);
   }
 
-  @Test(expected = ResourceNotFoundException.class)
-  public void verifyPasswordMatchesResourceNotFoundException() throws Exception {
+  @Test
+  public void verifyPasswordMatchesOfNonExistentUser() throws Exception {
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.empty());
     customerService.verifyPasswordMatches(customer.getUsername(), customer.getPassword());
   }

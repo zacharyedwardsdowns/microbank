@@ -68,7 +68,7 @@ $microbank-warn: ( //
 
 .light-theme {
   $primary: mat-palette($microbank-primary);
-  $accent: mat-palette($microbank-accent, 300, 200, 400);
+  $accent: mat-palette($microbank-accent, 200, 100, 300);
   $warn: mat-palette($microbank-warn);
   $theme: mat-light-theme($primary, $accent, $warn);
 

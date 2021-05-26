@@ -54,11 +54,11 @@ dependencies {
 
     runtimeOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
 
+    testImplementation "org.assertj:assertj-core:${assertjVersion}"
     testImplementation "io.cucumber:cucumber-junit:${cucumberVersion}"
     testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}") {
         exclude group: 'org.assertj', module: 'assertj-core'
     }
-    testImplementation "org.assertj:assertj-core:${assertjVersion}"
 }
 
 group = 'com.microbank'

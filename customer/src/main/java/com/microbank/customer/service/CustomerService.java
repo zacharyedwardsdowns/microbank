@@ -22,6 +22,7 @@ public class CustomerService {
   private static final Logger LOG = LoggerFactory.getLogger(CustomerService.class);
   private final CustomerRepository customerRepository;
   private final ValidationService validationService;
+  private static final int ATTEMPTS = 3;
 
   /**
    * Injects the necessary dependencies.
@@ -60,34 +61,95 @@ public class CustomerService {
       customer.setJoinedOn(Util.currentTime());
       customer.setLastUpdatedOn(customer.getJoinedOn());
       Customer registeredCustomer = null;
-      final int attempts = 3;
 
-      for (int i = 0; i < attempts; i++) {
+      for (int i = 0; i < ATTEMPTS; i++) {
         customer.setCustomerId(UUID.randomUUID().toString());
         try {
           registeredCustomer = customerRepository.insert(customer);
           break;
-        } catch (DuplicateKeyException e) {
-          LOG.error("Failed to generate a unique UUID!");
+        } catch (final DuplicateKeyException e) {
+          LOG.warn("Failed to generate a unique UUID!");
         }
       }
 
       if (registeredCustomer == null) {
         throw new FailedToRegisterCustomerException(
-            "Failed to register a customer after " + attempts + " attempts!");
+            "Failed to register a customer after " + ATTEMPTS + " attempts!");
+      } else {
+        LOG.debug("Successfully registered customer!");
       }
       return registeredCustomer;
     }
   }
 
   /**
-   * Retrieves a customer from the database by their username.
+   * Retrieves a customer from the database by their customerId.
+   *
+   * @param customerId The customerId to search with.
+   * @return The customer with the given customerId.
+   * @throws ResourceNotFoundException No customer exists with the given customerId.
+   */
+  public Customer getCustomerByCustomerId(final String customerId)
+      throws ResourceNotFoundException {
+    final Customer searchCustomer = new Customer();
+    searchCustomer.setCustomerId(customerId);
+    final Example<Customer> query = Example.of(searchCustomer, Util.defaultMatcher());
+
+    final Optional<Customer> customer = this.customerRepository.findOne(query);
+
+    if (customer.isPresent()) {
+      LOG.debug("Successfully retrieved customer by customerId!");
+      return customer.get();
+    } else {
+      throw new ResourceNotFoundException(
+          "No customer exists with the customerId " + customerId + "!");
+    }
+  }
+
+  /**
+   * Deletes a customer using the given customerId as a unique identifier.
+   *
+   * @param customerId The username of the customer to delete.
+   * @return The deleted customer.
+   * @throws ResourceNotFoundException No customer exists with the given customerId.
+   */
+  public Customer deleteCustomerByCustomerId(final String customerId)
+      throws ResourceNotFoundException {
+    final Customer deleteCustomer = getCustomerByCustomerId(customerId);
+    this.customerRepository.delete(deleteCustomer);
+    LOG.debug("Successfully deleted customer by customerId!");
+    return deleteCustomer;
+  }
+
+  /**
+   * Verifies if the given password matches the password of the given user.
+   *
+   * @param username The username of the user to check for a password match against.
+   * @param password The password to check matches.
+   * @return True if the password matches and false otherwise.
+   * @throws MissingRequirementsException The password parameter is null.
+   */
+  public boolean verifyPasswordMatches(final String username, final String password)
+      throws MissingRequirementsException {
+    if (Util.nullOrEmpty(password)) {
+      throw new MissingRequirementsException("Must provide a password to check if it matches!");
+    }
+    try {
+      final Customer customer = getCustomerByUsername(username);
+      return customer.getPassword().equals(password);
+    } catch (final ResourceNotFoundException e) {
+      return false;
+    }
+  }
+
+  /**
+   * Retrieves a customer from the database by their username. For use within this service only.
    *
    * @param username The username to search with.
    * @return The customer with the given username.
    * @throws ResourceNotFoundException No customer exists with the given username.
    */
-  public Customer getCustomerByUsername(final String username) throws ResourceNotFoundException {
+  private Customer getCustomerByUsername(final String username) throws ResourceNotFoundException {
     final Customer searchCustomer = new Customer();
     searchCustomer.setUsername(username);
     final Example<Customer> query = Example.of(searchCustomer, Util.defaultMatcher());
@@ -99,36 +161,5 @@ public class CustomerService {
     } else {
       throw new ResourceNotFoundException("No customer exists with the username " + username + "!");
     }
-  }
-
-  /**
-   * Deletes a customer using the given username as a unique identifier.
-   *
-   * @param username The username of the customer to delete.
-   * @return The deleted customer.
-   * @throws ResourceNotFoundException No customer exists with the given username.
-   */
-  public Customer deleteCustomerByUsername(final String username) throws ResourceNotFoundException {
-    final Customer deleteCustomer = getCustomerByUsername(username);
-    this.customerRepository.delete(deleteCustomer);
-    return deleteCustomer;
-  }
-
-  /**
-   * Verifies if the given password matches the password of the given user.
-   *
-   * @param username The username of the user to check for a password match against.
-   * @param password The password to check matches.
-   * @return True if the password matches and false otherwise.
-   * @throws ResourceNotFoundException No customer exists for the given username.
-   * @throws MissingRequirementsException The password parameter is null.
-   */
-  public boolean verifyPasswordMatches(final String username, final String password)
-      throws ResourceNotFoundException, MissingRequirementsException {
-    if (password == null || password.equals("") || password.equalsIgnoreCase("null")) {
-      throw new MissingRequirementsException("Must provide a password to check if it matches!");
-    }
-    final Customer customer = getCustomerByUsername(username);
-    return customer.getPassword().equals(password);
   }
 }

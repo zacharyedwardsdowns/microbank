@@ -8,7 +8,7 @@ import { ModalTemplate } from 'src/app/model/modal-template.model';
 })
 export class ModalService {
   public dialogReference: MatDialogRef<any, ModalTemplate>;
-  public readonly defaultHeight: string = '28rem';
+  public readonly defaultHeight: string = '30rem';
   public readonly defaultWidth: string = '25rem';
 
   constructor(public dialog: MatDialog) {}
