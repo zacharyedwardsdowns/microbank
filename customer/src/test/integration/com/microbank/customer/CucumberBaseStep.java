@@ -25,6 +25,7 @@ public class CucumberBaseStep {
 
   public static ResponseEntity<Customer> customerResponseEntity;
   public static Customer customer;
+  public static String customerId;
 
   static {
     try {

@@ -53,31 +53,32 @@ public class CustomerController {
   }
 
   /**
-   * Get customer information from the database using their username.
+   * Get customer information from the database using their customerId.
    *
-   * @param username The unique identifier of a customer.
-   * @return The customer information for the given username.
-   * @throws ResourceNotFoundException No customer exists for the given username.
+   * @param customerId The unique identifier of a customer.
+   * @return The customer information for the given customerId.
+   * @throws ResourceNotFoundException No customer exists for the given customerId.
    */
-  @GetMapping("/customer/{username}")
-  public ResponseEntity<Customer> getCustomerByUsername(
-      @PathVariable(name = "username") String username) throws ResourceNotFoundException {
-    username = Sanitizer.sanitizeString(username);
-    return new ResponseEntity<>(customerService.getCustomerByUsername(username), HttpStatus.OK);
+  @GetMapping("/customer/{customerId}")
+  public ResponseEntity<Customer> getCustomerByCustomerId(
+      @PathVariable(name = "customerId") String customerId) throws ResourceNotFoundException {
+    customerId = Sanitizer.sanitizeString(customerId);
+    return new ResponseEntity<>(customerService.getCustomerByCustomerId(customerId), HttpStatus.OK);
   }
 
   /**
-   * Deletes a customer from the database using their username.
+   * Deletes a customer from the database using their customerId.
    *
-   * @param username The unique identifier of a customer to delete by.
+   * @param customerId The unique identifier of a customer to delete by.
    * @return The customer that was deleted.
-   * @throws ResourceNotFoundException No customer exists for the given username.
+   * @throws ResourceNotFoundException No customer exists for the given customerId.
    */
-  @DeleteMapping("/customer/{username}")
+  @DeleteMapping("/customer/{customerId}")
   public ResponseEntity<Customer> deleteCustomerByUsername(
-      @PathVariable(name = "username") String username) throws ResourceNotFoundException {
-    username = Sanitizer.sanitizeString(username);
-    return new ResponseEntity<>(customerService.deleteCustomerByUsername(username), HttpStatus.OK);
+      @PathVariable(name = "customerId") String customerId) throws ResourceNotFoundException {
+    customerId = Sanitizer.sanitizeString(customerId);
+    return new ResponseEntity<>(
+        customerService.deleteCustomerByCustomerId(customerId), HttpStatus.OK);
   }
 
   /**
@@ -86,13 +87,12 @@ public class CustomerController {
    * @param username The username of the user to check for a password match against.
    * @param password The password to check matches.
    * @return Response code 204 if the password matches and 401 otherwise.
-   * @throws ResourceNotFoundException No customer exists for the given username.
    * @throws MissingRequirementsException The password request header is null.
    */
   @GetMapping("/customer/{username}/password/match")
   public ResponseEntity<Void> verifyPasswordMatches(
       @PathVariable(name = "username") String username, @RequestHeader("password") String password)
-      throws ResourceNotFoundException, MissingRequirementsException {
+      throws MissingRequirementsException {
     username = Sanitizer.sanitizeString(username);
     password = Sanitizer.sanitizeString(password);
     if (customerService.verifyPasswordMatches(username, password)) {

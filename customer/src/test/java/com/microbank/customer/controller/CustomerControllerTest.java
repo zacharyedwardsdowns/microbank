@@ -1,7 +1,5 @@
 package com.microbank.customer.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.InvalidJsonException;
 import com.microbank.customer.controller.advice.ControllerExceptionHandler;
 import com.microbank.customer.exception.ExistingCustomerException;
@@ -10,6 +8,7 @@ import com.microbank.customer.exception.ResourceNotFoundException;
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.security.Sanitizer;
 import com.microbank.customer.service.CustomerService;
+import com.microbank.customer.util.TestUtil;
 import com.microbank.customer.util.Util;
 import java.io.File;
 import java.nio.file.Files;
@@ -30,7 +29,7 @@ public class CustomerControllerTest {
   private static String VERIFY_PASSWORD_MATCHES_ENDPOINT = "/password/match";
   private static final String REGISTER_ENDPOINT = "/customer";
   private static final String BAD_JSON = "{\"Bad\":\"Json\"}";
-  private static String CUSTOMER_INFO_ENDPOINT = "/customer/";
+  private static String CUSTOMER_ENDPOINT = "/customer/";
   private CustomerService mockCustomerService;
   private static Customer customer;
   private static String json;
@@ -43,8 +42,9 @@ public class CustomerControllerTest {
     json = Sanitizer.sanitizeJson(json);
     customer = Util.MAPPER.readValue(json, Customer.class);
 
-    CUSTOMER_INFO_ENDPOINT += customer.getUsername();
-    VERIFY_PASSWORD_MATCHES_ENDPOINT = CUSTOMER_INFO_ENDPOINT + VERIFY_PASSWORD_MATCHES_ENDPOINT;
+    CUSTOMER_ENDPOINT += customer.getCustomerId();
+    VERIFY_PASSWORD_MATCHES_ENDPOINT =
+        "/customer/" + customer.getUsername() + VERIFY_PASSWORD_MATCHES_ENDPOINT;
   }
 
   @Before
@@ -90,7 +90,7 @@ public class CustomerControllerTest {
             .getResponse()
             .getContentAsString();
 
-    verifyError(response, InvalidJsonException.class);
+    TestUtil.verifyError(response, InvalidJsonException.class);
   }
 
   @Test
@@ -109,19 +109,18 @@ public class CustomerControllerTest {
             .getResponse()
             .getContentAsString();
 
-    verifyError(response, ExistingCustomerException.class);
+    TestUtil.verifyError(response, ExistingCustomerException.class);
   }
 
   @Test
-  public void testGetCustomerByUsername() throws Exception {
-    Mockito.when(mockCustomerService.getCustomerByUsername(customer.getUsername()))
+  public void testGetCustomerByCustomerId() throws Exception {
+    Mockito.when(mockCustomerService.getCustomerByCustomerId(customer.getCustomerId()))
         .thenReturn(customer);
 
     final String response =
         mockMvc
             .perform(
-                MockMvcRequestBuilders.get(CUSTOMER_INFO_ENDPOINT)
-                    .accept(MediaType.APPLICATION_JSON))
+                MockMvcRequestBuilders.get(CUSTOMER_ENDPOINT).accept(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andReturn()
             .getResponse()
@@ -132,33 +131,31 @@ public class CustomerControllerTest {
   }
 
   @Test
-  public void testGetCustomerByUsernameResourceNotFoundException() throws Exception {
-    Mockito.when(mockCustomerService.getCustomerByUsername(customer.getUsername()))
+  public void testGetCustomerByCustomerIdResourceNotFoundException() throws Exception {
+    Mockito.when(mockCustomerService.getCustomerByCustomerId(customer.getCustomerId()))
         .thenThrow(ResourceNotFoundException.class);
 
     final String response =
         mockMvc
             .perform(
-                MockMvcRequestBuilders.get(CUSTOMER_INFO_ENDPOINT)
-                    .accept(MediaType.APPLICATION_JSON))
+                MockMvcRequestBuilders.get(CUSTOMER_ENDPOINT).accept(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isNotFound())
             .andReturn()
             .getResponse()
             .getContentAsString();
 
-    verifyError(response, ResourceNotFoundException.class);
+    TestUtil.verifyError(response, ResourceNotFoundException.class);
   }
 
   @Test
-  public void testDeleteCustomerByUsername() throws Exception {
-    Mockito.when(mockCustomerService.deleteCustomerByUsername(customer.getUsername()))
+  public void testDeleteCustomerByCustomerId() throws Exception {
+    Mockito.when(mockCustomerService.deleteCustomerByCustomerId(customer.getCustomerId()))
         .thenReturn(customer);
 
     final String response =
         mockMvc
             .perform(
-                MockMvcRequestBuilders.delete(CUSTOMER_INFO_ENDPOINT)
-                    .accept(MediaType.APPLICATION_JSON))
+                MockMvcRequestBuilders.delete(CUSTOMER_ENDPOINT).accept(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andReturn()
             .getResponse()
@@ -169,21 +166,20 @@ public class CustomerControllerTest {
   }
 
   @Test
-  public void testDeleteCustomerByUsernameResourceNotFoundException() throws Exception {
-    Mockito.when(mockCustomerService.deleteCustomerByUsername(customer.getUsername()))
+  public void testDeleteCustomerByCustomerIdResourceNotFoundException() throws Exception {
+    Mockito.when(mockCustomerService.deleteCustomerByCustomerId(customer.getCustomerId()))
         .thenThrow(ResourceNotFoundException.class);
 
     final String response =
         mockMvc
             .perform(
-                MockMvcRequestBuilders.delete(CUSTOMER_INFO_ENDPOINT)
-                    .accept(MediaType.APPLICATION_JSON))
+                MockMvcRequestBuilders.delete(CUSTOMER_ENDPOINT).accept(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isNotFound())
             .andReturn()
             .getResponse()
             .getContentAsString();
 
-    verifyError(response, ResourceNotFoundException.class);
+    TestUtil.verifyError(response, ResourceNotFoundException.class);
   }
 
   @Test
@@ -215,26 +211,6 @@ public class CustomerControllerTest {
   }
 
   @Test
-  public void verifyPasswordMatchesResourceNotFoundException() throws Exception {
-    Mockito.when(
-            mockCustomerService.verifyPasswordMatches(
-                customer.getUsername(), customer.getPassword()))
-        .thenThrow(ResourceNotFoundException.class);
-
-    final String response =
-        mockMvc
-            .perform(
-                MockMvcRequestBuilders.get(VERIFY_PASSWORD_MATCHES_ENDPOINT)
-                    .header("password", customer.getPassword()))
-            .andExpect(MockMvcResultMatchers.status().isNotFound())
-            .andReturn()
-            .getResponse()
-            .getContentAsString();
-
-    verifyError(response, ResourceNotFoundException.class);
-  }
-
-  @Test
   public void verifyPasswordMatchesMissingRequirementsException() throws Exception {
     Mockito.when(
             mockCustomerService.verifyPasswordMatches(
@@ -251,20 +227,6 @@ public class CustomerControllerTest {
             .getResponse()
             .getContentAsString();
 
-    verifyError(response, MissingRequirementsException.class);
-  }
-
-  /**
-   * Verifies the given response contains an error with the name of the given class.
-   *
-   * @param response The response containing the given class name.
-   * @param clazz The class to check for in the response.
-   * @throws JsonProcessingException Failure to map the response to JsonNode.
-   */
-  private void verifyError(final String response, final Class<?> clazz)
-      throws JsonProcessingException {
-    Assert.assertNotNull(response);
-    final JsonNode result = Util.MAPPER.readTree(response);
-    Assert.assertEquals(result.get("error").asText(), clazz.getSimpleName());
+    TestUtil.verifyError(response, MissingRequirementsException.class);
   }
 }

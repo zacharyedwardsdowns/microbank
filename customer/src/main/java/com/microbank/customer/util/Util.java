@@ -11,6 +11,7 @@ public final class Util {
   /** Prevents instantiation. */
   private Util() {}
 
+  /** A general ObjectMapper for Jackson operations. */
   public static final ObjectMapper MAPPER = new ObjectMapper().registerModule(new JavaTimeModule());
 
   /**
@@ -29,5 +30,15 @@ public final class Util {
    */
   public static Instant currentTime() {
     return Instant.now();
+  }
+
+  /**
+   * Checks if the given string is null, empty, or "null".
+   *
+   * @param string The string to null/empty check.
+   * @return True if the given string is null or empty and false otherwise.
+   */
+  public static boolean nullOrEmpty(final String string) {
+    return string == null || string.equals("") || string.equalsIgnoreCase("null");
   }
 }

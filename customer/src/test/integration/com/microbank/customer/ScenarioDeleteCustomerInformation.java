@@ -1,6 +1,5 @@
-package com.microbank.customer.feature;
+package com.microbank.customer;
 
-import com.microbank.customer.CucumberBaseStep;
 import com.microbank.customer.client.RestClient;
 import com.microbank.customer.exception.RestClientException;
 import com.microbank.customer.model.Customer;
@@ -14,9 +13,6 @@ public class ScenarioDeleteCustomerInformation extends CucumberBaseStep {
   public void deleteCustomerInformation() throws RestClientException {
     customerResponseEntity =
         REST_CLIENT.sendRequest(
-            getCustomerInformationEndpoint() + customer.getUsername(),
-            HttpMethod.DELETE,
-            null,
-            Customer.class);
+            getCustomerInformationEndpoint() + customerId, HttpMethod.DELETE, null, Customer.class);
   }
 }

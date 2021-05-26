@@ -36,6 +36,7 @@ public class ReusableCommonSteps extends CucumberBaseStep {
     } else {
       Assert.fail("Null response from the customer service!");
     }
+    customerId = response.getCustomerId();
     customer = null;
   }
 

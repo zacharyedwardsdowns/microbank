@@ -4,6 +4,7 @@ import com.microbank.customer.exception.*;
 import com.microbank.customer.exception.model.ExceptionCause;
 import com.microbank.customer.exception.model.ExceptionResponse;
 import com.microbank.customer.util.Util;
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.dao.DataAccessException;
@@ -53,7 +54,14 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
   }
 
-  @ExceptionHandler(value = {DataAccessException.class, FailedToRegisterCustomerException.class})
+  @ExceptionHandler(
+      value = {
+        IOException.class,
+        RuntimeException.class,
+        NullPointerException.class,
+        DataAccessException.class,
+        FailedToRegisterCustomerException.class
+      })
   protected ResponseEntity<ExceptionResponse> internalServerErrorException(
       final Exception e, final HttpServletRequest request) {
     final ExceptionResponse exceptionResponse =
@@ -66,11 +74,11 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
   @Override
   @ExceptionHandler(Exception.class)
   protected ResponseEntity<Object> handleExceptionInternal(
-      @NonNull Exception e,
-      @Nullable Object body,
-      @Nullable HttpHeaders headers,
-      @NonNull HttpStatus status,
-      @NonNull WebRequest request) {
+      @NonNull final Exception e,
+      @Nullable final Object body,
+      @Nullable final HttpHeaders headers,
+      @NonNull final HttpStatus status,
+      @NonNull final WebRequest request) {
     return new ResponseEntity<>(createDefaultExceptionResponse(e, request, status), status);
   }
 
