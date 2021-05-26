@@ -25,12 +25,13 @@ public class ReusableCommonSteps extends CucumberBaseStep {
     Assert.assertNotNull(customerResponseEntity);
     final Customer response = customerResponseEntity.getBody();
     if (response != null) {
-      Assertions.assertThat(customer)
+      Assertions.assertThat(response)
           .usingRecursiveComparison()
-          .ignoringFields("password", "joinedOn", "lastUpdatedOn")
-          .isEqualTo(response);
+          .ignoringFields("password", "joinedOn", "lastUpdatedOn", "customerId")
+          .isEqualTo(customer);
       Assert.assertNull(response.getPassword());
       Assert.assertNotNull(response.getJoinedOn());
+      Assert.assertNotNull(response.getCustomerId());
       Assert.assertNotNull(response.getLastUpdatedOn());
     } else {
       Assert.fail("Null response from the customer service!");

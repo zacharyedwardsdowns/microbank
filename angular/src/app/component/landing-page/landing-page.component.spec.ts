@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { LandingPageComponent } from './landing-page.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -13,7 +13,7 @@ describe('LandingPageComponent', () => {
   let mockModalService: any;
   let router: Router;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     mockModalService = jasmine.createSpyObj(['openModal']);
     TestBed.configureTestingModule({
       imports: [

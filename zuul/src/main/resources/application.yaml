@@ -10,6 +10,7 @@ zuul:
   routes:
     customer:
       service-id: microbank-customer-service
+      stripPrefix: true
 ---
 eureka:
   client:
