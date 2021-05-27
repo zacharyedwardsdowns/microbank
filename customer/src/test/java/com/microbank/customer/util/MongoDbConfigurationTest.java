@@ -14,12 +14,12 @@ public class MongoDbConfigurationTest extends MongoDbConfiguration {
   private MongoDbConfiguration mongoDbConfiguration;
 
   public MongoDbConfigurationTest() {
-    super(HOST, USER, PASS, DB);
+    super(HOST, USER, PASS, DB, null);
   }
 
   @Before
   public void setup() {
-    mongoDbConfiguration = new MongoDbConfiguration(HOST, USER, PASS, DB);
+    mongoDbConfiguration = new MongoDbConfiguration(HOST, USER, PASS, DB, null);
   }
 
   @Test

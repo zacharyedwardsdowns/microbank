@@ -1,3 +1,7 @@
+spring:
+  cloud:
+    config:
+      uri: http://localhost:8888/microbank-customer-service/default
 server:
   servlet:
     context-path: /microbank-customer
@@ -12,9 +16,12 @@ customer:
     db: microbank
 atlas:
   mongodb:
-    password: ${PASS}
+    password: test
 ---
 eureka:
   client:
     registerWithEureka: false
     fetchRegistry: false
+---
+cucumber:
+  tests: true
