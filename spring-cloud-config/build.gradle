@@ -1,0 +1,44 @@
+buildscript {
+    ext {
+        springBootVersion = '2.2.4.RELEASE'
+    }
+}
+
+plugins {
+    id 'java'
+	id 'org.springframework.boot' version "${springBootVersion}"
+    id 'com.github.sherter.google-java-format' version '0.9'
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+
+googleJavaFormat {
+  toolVersion = "1.7"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    implementation "org.springframework.cloud:spring-cloud-config-server:${springBootVersion}"
+
+    runtimeOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+}
+
+group = 'com.microbank'
+version = '0.1.0'
+description = 'microbank-spring-cloud-config-server'
+sourceCompatibility = '1.11'
+
+springBoot {
+	mainClassName = 'com.microbank.spring.cloud.config.ConfigServer'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}

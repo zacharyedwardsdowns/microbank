@@ -25,6 +25,9 @@ fi
 
 
 # Begin running services.
+echo "Starting spring-cloud-config..."
+cd ../spring-cloud-config; ./run.sh
+
 echo "Starting eureka..."
 cd ../eureka; ./run.sh "$eurekaIp"
 

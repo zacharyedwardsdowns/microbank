@@ -4,3 +4,4 @@ cd ../angular; ./push.sh
 cd ../eureka; ./push.sh
 cd ../zuul; ./push.sh
 cd ../customer; ./push.sh
+cd ../spring-cloud-config; ./push.sh

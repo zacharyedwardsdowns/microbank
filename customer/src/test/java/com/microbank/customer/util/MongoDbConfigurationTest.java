@@ -10,15 +10,16 @@ public class MongoDbConfigurationTest extends MongoDbConfiguration {
   private static final String HOST = "freecluster-s3rjf.mongodb.net";
   private static final String DB = "test-microbank";
   private static final String USER = "tester";
+  private static final String PASS = "test";
   private MongoDbConfiguration mongoDbConfiguration;
 
   public MongoDbConfigurationTest() {
-    super(HOST, USER, DB);
+    super(HOST, USER, PASS, DB);
   }
 
   @Before
   public void setup() {
-    mongoDbConfiguration = new MongoDbConfiguration(HOST, USER, DB);
+    mongoDbConfiguration = new MongoDbConfiguration(HOST, USER, PASS, DB);
   }
 
   @Test

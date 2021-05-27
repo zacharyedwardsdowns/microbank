@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: microbank-spring-cloud-config-server
+  cloud:
+    config:
+      server:
+        git:
+          # When using https for gitlab need to include username and password in uri and in yaml.
+          # https://username:password@gitlab.com/username/repository.git
+          uri: ${uri}
+          username: zacharyedwardsdowns
+          password: ${pass}
+---
+server:
+  port: 8888

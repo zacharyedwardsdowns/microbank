@@ -6,6 +6,10 @@ services:
     image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/angular:latest
     ports:
       - "4200:80"
+  microbank-spring-cloud-config-server:
+    image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/spring-cloud-config:latest
+    ports:
+      - "8888:8888"
   microbank-eureka-server:
     image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/eureka:latest
     ports:

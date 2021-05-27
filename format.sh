@@ -6,3 +6,5 @@ echo -e "\nFormatting Zuul Service"
 cd ../zuul; gradle googleJavaFormat
 echo -e "\nFormatting Customer Service"
 cd ../customer; gradle googleJavaFormat
+echo -e "\nFormatting Spring Cloud Config Service"
+cd ../spring-cloud-config; gradle googleJavaFormat

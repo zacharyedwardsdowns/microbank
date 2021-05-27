@@ -10,6 +10,9 @@ customer:
     host: freecluster-s3rjf.mongodb.net
     user: AtlasAdmin
     db: microbank
+atlas:
+  mongodb:
+    password: ${PASS}
 ---
 eureka:
   client:

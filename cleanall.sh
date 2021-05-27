@@ -4,3 +4,4 @@ cd angular; rm -r dist
 cd ../eureka; gradle clean
 cd ../zuul; gradle clean
 cd ../customer; gradle clean
+cd ../spring-cloud-config; gradle clean

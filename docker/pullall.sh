@@ -4,3 +4,4 @@ cd ../angular; ./pull.sh
 cd ../eureka; ./pull.sh
 cd ../zuul; ./pull.sh
 cd ../customer; ./pull.sh
+cd ../spring-cloud-config; ./pull.sh
