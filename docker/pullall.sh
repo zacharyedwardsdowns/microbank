@@ -1,7 +1,9 @@
 # Pull docker images for all MicroBank services.
-cd "$(dirname "$0")"
-cd ../angular; ./pull.sh
-cd ../eureka; ./pull.sh
-cd ../zuul; ./pull.sh
-cd ../customer; ./pull.sh
-cd ../spring-cloud-config; ./pull.sh
+cd "$(dirname "$0")" || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
+cd ..
+
+sh utility-services/docker/pullall.sh
+echo -e "\nDocker: Pulling Angular Service"
+sh angular/pull.sh
+echo -e "\nDocker: Pulling Customer Service"
+sh customer/pull.sh

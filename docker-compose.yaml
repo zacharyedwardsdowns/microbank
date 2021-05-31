@@ -1,28 +1,26 @@
 # Use docker-compose up to run all MicroBank services.
 
-version: "3"
+version: "3.9"
 services:
-  microbank-angular-frontend:
+  microbank-angular:
     image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/angular:latest
     ports:
-      - "4200:80"
-  microbank-spring-cloud-config-server:
+      - "443:443"
+      - "80:80"
+  microbank-customer:
+    image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/customer:latest
+    restart: on-failure:3
+    ports:
+      - "6010:6010"
+  microbank-spring-cloud-config:
     image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/spring-cloud-config:latest
     ports:
       - "8888:8888"
-  microbank-eureka-server:
+  microbank-eureka:
     image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/eureka:latest
     ports:
       - "8761:8761"
-  microbank-zuul-gateway:
+  microbank-zuul:
     image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/zuul:latest
     ports:
       - "8765:8765"
-    environment:
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://microbank-eureka-server:8761/eureka
-  microbank-customer-service:
-    image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/customer:latest
-    ports:
-      - "6010:6010"
-    environment:
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://microbank-eureka-server:8761/eureka

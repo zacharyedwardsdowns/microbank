@@ -38,7 +38,7 @@ public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
       @Value("${atlas.mongodb.password}") final String pass,
       @Value("${customer.mongodb.db}") final String db,
       @Nullable final Environment environment) {
-    this.pass = getPassword(environment, pass);
+    this.pass = getPassword(environment, pass, new RestClient());
     this.host = host;
     this.user = user;
     this.db = db;
@@ -67,11 +67,11 @@ public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
     return db;
   }
 
-  private String getPassword(@Nullable final Environment environment, final String pass) {
+  protected String getPassword(
+      @Nullable final Environment environment, final String pass, final RestClient restClient) {
     if (environment != null) {
       final String cucumber = environment.getProperty("cucumber.tests");
       if (cucumber != null && cucumber.equals("true")) {
-        final RestClient restClient = new RestClient();
         final String response;
         try {
           response =

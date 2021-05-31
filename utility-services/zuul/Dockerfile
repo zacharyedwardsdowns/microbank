@@ -7,4 +7,4 @@ ARG workingDirectory
 WORKDIR ${workingDirectory}
 RUN apk add --no-cache openjdk11-jre
 COPY ./build/libs/*.jar ${workingDirectory}
-CMD java -jar ./zuul*.jar
+CMD java -jar -Deureka.client.serviceurl.defaultzone=http://microbank-eureka:8761/eureka ./zuul*.jar

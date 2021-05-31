@@ -16,11 +16,9 @@ Stop Application:<br>`docker-compose down`
 
 ### Docker
 
-Setup is required to run MicroBank on Docker without Docker Compose.
+Run Application:<br>`sh docker/runall.sh`
 
-Replace localhost with `172.35.6.72` in defaultZone of the application.yaml for all services that register with Eureka.
-
-Start the application using:<br>`sh runall.sh`
+Stop Application:<br>`sh docker/stopall.sh`
 
 ---
 
@@ -37,6 +35,8 @@ Executes 'docker build' for all services:<br>`sh docker/buildall.sh`
 Executes 'docker run' for all services:<br>`sh docker/runall.sh`
 
 Executes 'docker stop' and 'docker rm' for all services:<br>`sh docker/stopall.sh`
+
+Executes 'docker pull' for all services:<br>`sh docker/pullall.sh`
 
 Executes 'docker push' for all services:<br>`sh docker/pushall.sh`
 

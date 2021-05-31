@@ -1,0 +1,17 @@
+{
+  "name": "microbank-customer-service",
+  "profiles": [
+    "default"
+  ],
+  "label": null,
+  "version": "1238w9db712e71hd5u12gd",
+  "state": null,
+  "propertySources": [
+    {
+      "name": "https://gitlab.com/user/config.git/customer.yaml",
+      "source": {
+        "atlas.mongodb.password": "test"
+      }
+    }
+  ]
+}

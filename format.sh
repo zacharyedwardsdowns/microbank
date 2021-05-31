@@ -1,10 +1,9 @@
 # Format all microbank java files using google java format.
-cd "$(dirname "$0")"
-echo -e "Formatting Eureka Service"
-cd eureka; gradle googleJavaFormat
-echo -e "\nFormatting Zuul Service"
-cd ../zuul; gradle googleJavaFormat
+cd "$(dirname "$0")" || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
+
+cd utility-services || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
+sh format.sh
+
 echo -e "\nFormatting Customer Service"
-cd ../customer; gradle googleJavaFormat
-echo -e "\nFormatting Spring Cloud Config Service"
-cd ../spring-cloud-config; gradle googleJavaFormat
+cd ../customer || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
+gradle googleJavaFormat

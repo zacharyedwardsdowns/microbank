@@ -21,6 +21,16 @@ public class RestClient {
       final String payload,
       final Class<T> clazz)
       throws RestClientException {
+    return sendRequest(endpoint, httpMethod, payload, clazz, null);
+  }
+
+  public <T> ResponseEntity<T> sendRequest(
+      final String endpoint,
+      final HttpMethod httpMethod,
+      final String payload,
+      final Class<T> clazz,
+      RestTemplate restTemplate)
+      throws RestClientException {
 
     final ResponseEntity<T> responseEntity;
     CloseableHttpClient httpClient = null;
@@ -28,8 +38,10 @@ public class RestClient {
     try {
       final URI uri = new URI(endpoint);
       httpClient = HttpClients.createDefault();
-      final RestTemplate restTemplate =
-          new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClient));
+
+      if (restTemplate == null) {
+        restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClient));
+      }
 
       final HttpHeaders httpHeaders = new HttpHeaders();
       httpHeaders.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
