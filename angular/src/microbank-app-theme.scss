@@ -1,5 +1,6 @@
+@use '~@angular/material' as mat;
 @import '~@angular/material/theming';
-@include mat-core();
+@include mat.core();
 
 $microbank-contrast: ( //
   50: black,
@@ -67,21 +68,21 @@ $microbank-warn: ( //
 );
 
 .light-theme {
-  $primary: mat-palette($microbank-primary);
-  $accent: mat-palette($microbank-accent, 200, 100, 300);
-  $warn: mat-palette($microbank-warn);
-  $theme: mat-light-theme($primary, $accent, $warn);
+  $primary: mat.define-palette($microbank-primary);
+  $accent: mat.define-palette($microbank-accent, 200, 100, 300);
+  $warn: mat.define-palette($microbank-warn);
+  $theme: mat.define-light-theme($primary, $accent, $warn);
 
   $background: #f8f8f8;
   $background-theme: map-get($theme, background);
   $background-theme: map-merge($background-theme, (background: $background));
   $theme: map_merge($theme, (background: $background-theme));
 
-  $primary-default: mat-color($primary);
-  $accent-default: mat-color($accent);
-  $accent-lighter: mat-color($accent, lighter);
-  $accent-darker: mat-color($accent, darker);
-  $warn-default: mat-color($warn);
+  $primary-default: mat.get-color-from-palette($primary);
+  $accent-default: mat.get-color-from-palette($accent);
+  $accent-lighter: mat.get-color-from-palette($accent, lighter);
+  $accent-darker: mat.get-color-from-palette($accent, darker);
+  $warn-default: mat.get-color-from-palette($warn);
 
   --theme-primary-default: #{$primary-default};
   --theme-accent-default: #{$accent-default};
@@ -90,20 +91,20 @@ $microbank-warn: ( //
   --theme-warn-default: #{$warn-default};
   --theme-contrast-color: white;
 
-  @include angular-material-theme($theme);
+  @include mat.all-component-themes($theme);
 }
 
 .dark-theme {
-  $primary: mat-palette($mat-gray, 800);
-  $accent: mat-palette($mat-gray, 700, 300, 900);
-  $warn: mat-palette($mat-red);
-  $theme: mat-dark-theme($primary, $accent, $warn);
+  $primary: mat.define-palette(mat.$gray-palette, 800);
+  $accent: mat.define-palette(mat.$gray-palette, 700, 300, 900);
+  $warn: mat.define-palette(mat.$red-palette);
+  $theme: mat.define-dark-theme($primary, $accent, $warn);
 
-  $primary-default: mat-color($primary);
-  $accent-default: mat-color($accent);
-  $accent-lighter: mat-color($accent, lighter);
-  $accent-darker: mat-color($accent, darker);
-  $warn-default: mat-color($warn);
+  $primary-default: mat.get-color-from-palette($primary);
+  $accent-default: mat.get-color-from-palette($accent);
+  $accent-lighter: mat.get-color-from-palette($accent, lighter);
+  $accent-darker: mat.get-color-from-palette($accent, darker);
+  $warn-default: mat.get-color-from-palette($warn);
 
   --theme-primary-default: #{$primary-default};
   --theme-accent-default: #{$accent-default};
@@ -112,5 +113,5 @@ $microbank-warn: ( //
   --theme-warn-default: #{$warn-default};
   --theme-contrast-color: white;
 
-  @include angular-material-theme($theme);
+  @include mat.all-component-themes($theme);
 }
