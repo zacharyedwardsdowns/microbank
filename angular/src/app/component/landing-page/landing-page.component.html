@@ -2,8 +2,8 @@
   <header>
     <mat-toolbar id="toolbar" color="primary">
       <nav id="nav" *ngFor="let tab of tabs">
-          <button routerLink="{{tab.route}}" routerLinkActive="active-link" id="{{tab.name}}Tab" class="nav-button"
-            mat-button (click)="selectTab($event.target)">{{tab.name}}</button>
+        <button routerLink="{{tab.route}}" routerLinkActive="active-link" id="{{tab.name}}Tab" class="nav-button"
+          mat-button (click)="selectTab($event.target)">{{tab.name}}</button>
       </nav>
       <span class="spacer"></span>
       <button class="toolbar-button" id="login" (click)="loginModal()" mat-raised-button>Login</button>
@@ -11,4 +11,5 @@
     </mat-toolbar>
   </header>
   <router-outlet></router-outlet>
+  <router-outlet name='modal'></router-outlet>
 </body>

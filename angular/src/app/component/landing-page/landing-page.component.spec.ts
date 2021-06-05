@@ -3,12 +3,10 @@ import { LandingPageComponent } from './landing-page.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { ModalService } from 'src/app/service/modal.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RegistrationService } from 'src/app/service/registration.service';
 import { BehaviorSubject } from 'rxjs';
-import { RegisterComponent } from '../register/register.component';
 
 describe('LandingPageComponent', () => {
   let fixture: ComponentFixture<LandingPageComponent>;
@@ -31,7 +29,6 @@ describe('LandingPageComponent', () => {
         ],
         declarations: [LandingPageComponent],
         providers: [
-          { provide: ModalService, useValue: mockModalService },
           { provide: RegistrationService, useValue: mockRegistrationService },
         ],
       }).compileComponents();
@@ -41,7 +38,7 @@ describe('LandingPageComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(LandingPageComponent);
     component = fixture.componentInstance;
-    // router = TestBed.inject(Router);
+    router = TestBed.inject(Router);
   });
 
   it('should create', () => {

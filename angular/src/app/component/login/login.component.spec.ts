@@ -23,6 +23,7 @@ describe('LoginComponent', () => {
   beforeEach(
     waitForAsync(() => {
       mockModalService = jasmine.createSpyObj(['closeModal']);
+
       TestBed.configureTestingModule({
         imports: [
           RouterTestingModule,

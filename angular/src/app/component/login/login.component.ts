@@ -24,8 +24,9 @@ export class LoginComponent implements OnInit {
   }
 
   registrationPage() {
+    this.modelService.returnToPrevious = false;
     this.close();
     this.registrationService.initializeRegistrationTab.next(true);
-    this.router.navigate(['/registration']);
+    this.router.navigateByUrl('registration');
   }
 }

@@ -1,8 +1,5 @@
 import { Component, Inject, AfterViewInit, OnDestroy } from '@angular/core';
-import { ModalTemplate } from 'src/app/model/modal-template.model';
 import { Tab } from 'src/app/model/tab.model';
-import { ModalService } from 'src/app/service/modal.service';
-import { LoginComponent } from '../login/login.component';
 import { DOCUMENT } from '@angular/common';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -19,29 +16,26 @@ export class LandingPageComponent implements AfterViewInit, OnDestroy {
   public tabs: Tab[] = [
     { name: 'Home', route: 'home' },
     { name: 'About', route: 'about' },
-    { name: 'Register', route: 'registration' },
+    { name: 'Registration', route: 'registration' },
   ];
 
   constructor(
     private router: Router,
-    private modalService: ModalService,
     @Inject(DOCUMENT) private document: Document,
     private registrationService: RegistrationService
   ) {
-    this.registrationTabSub = this.registrationService.initializeRegistrationTab.subscribe(
-      (value) => {
+    this.registrationTabSub =
+      this.registrationService.initializeRegistrationTab.subscribe((value) => {
         if (value === true) {
           this.registrationPage();
         }
-      }
-    );
+      });
   }
 
   ngAfterViewInit(): void {
     let element: HTMLElement;
-    let registrationElement: HTMLElement = this.document.getElementById(
-      'RegisterTab'
-    );
+    let registrationElement: HTMLElement =
+      this.document.getElementById('RegistrationTab');
     registrationElement.style.display = 'none';
 
     if (this.router.url === '/about') {
@@ -50,8 +44,9 @@ export class LandingPageComponent implements AfterViewInit, OnDestroy {
       element = registrationElement;
       element.style.display = 'inline';
     } else {
-      element = this.document.getElementById('HomeTab');
+      this.document.getElementById('HomeTab');
     }
+
     this.lastSelectedTab = element;
     this.selectTab(element, false);
   }
@@ -61,14 +56,11 @@ export class LandingPageComponent implements AfterViewInit, OnDestroy {
   }
 
   loginModal(): void {
-    const modalTemplate: ModalTemplate = {
-      panelClass: 'modal-dialog-container',
-    };
-    this.modalService.openModal(LoginComponent, modalTemplate);
+    this.router.navigate([{ outlets: { modal: 'login-modal' } }]);
   }
 
   registrationPage(): void {
-    let element = this.document.getElementById('RegisterTab');
+    let element = this.document.getElementById('RegistrationTab');
     if (element.style.display === 'none' || element.style.display === '') {
       this.router.navigate(['/registration']);
       element.style.display = 'inline';
@@ -77,16 +69,22 @@ export class LandingPageComponent implements AfterViewInit, OnDestroy {
   }
 
   selectTab(element: HTMLElement, doNotSkip: boolean = true): void {
-    if (
-      doNotSkip &&
-      this.lastSelectedTab.id === 'RegisterTab' &&
-      element.id !== 'RegisterTab'
-    ) {
-      this.lastSelectedTab.style.display = 'none';
+    if (this.lastSelectedTab) {
+      if (
+        doNotSkip &&
+        this.lastSelectedTab.id === 'RegistrationTab' &&
+        element.id !== 'RegistrationTab'
+      ) {
+        this.lastSelectedTab.style.display = 'none';
+      }
+
+      this.lastSelectedTab.style.borderBottom = '';
     }
-    if (element.tagName !== 'BUTTON') element = element.parentElement;
-    this.lastSelectedTab.style.borderBottom = '';
-    element.style.borderBottom = '0.2rem solid';
-    this.lastSelectedTab = element;
+
+    if (element) {
+      if (element.tagName !== 'BUTTON') element = element.parentElement;
+      element.style.borderBottom = '0.2rem solid';
+      this.lastSelectedTab = element;
+    }
   }
 }

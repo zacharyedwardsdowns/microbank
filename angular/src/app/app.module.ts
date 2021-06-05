@@ -17,6 +17,7 @@ import { LoginComponent } from './component/login/login.component';
 import { RegisterComponent } from './component/register/register.component';
 import { HomeComponent } from './component/home/home.component';
 import { AboutComponent } from './component/about/about.component';
+import { ModalComponent } from './component/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { AboutComponent } from './component/about/about.component';
     RegisterComponent,
     HomeComponent,
     AboutComponent,
+    ModalComponent,
   ],
   imports: [
     FormsModule,

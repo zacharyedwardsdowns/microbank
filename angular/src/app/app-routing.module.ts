@@ -4,6 +4,7 @@ import { HomeComponent } from './component/home/home.component';
 import { AboutComponent } from './component/about/about.component';
 import { LandingPageComponent } from './component/landing-page/landing-page.component';
 import { RegisterComponent } from './component/register/register.component';
+import { ModalComponent } from './component/modal/modal.component';
 
 const routes: Routes = [
   {
@@ -14,6 +15,12 @@ const routes: Routes = [
       { path: 'home', component: HomeComponent },
       { path: 'about', component: AboutComponent },
       { path: 'registration', component: RegisterComponent },
+      { path: 'login-modal', component: ModalComponent, outlet: 'modal' },
+      {
+        path: 'login',
+        redirectTo: '/home(modal:login-modal)',
+        pathMatch: 'full',
+      },
     ],
   },
 ];

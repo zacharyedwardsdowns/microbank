@@ -10,6 +10,7 @@ export class ModalService {
   public dialogReference: MatDialogRef<any, ModalTemplate>;
   public readonly defaultHeight: string = '30rem';
   public readonly defaultWidth: string = '25rem';
+  public returnToPrevious: boolean = true;
 
   constructor(public dialog: MatDialog) {}
 
