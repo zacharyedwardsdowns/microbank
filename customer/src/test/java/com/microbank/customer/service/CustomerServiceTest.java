@@ -6,6 +6,7 @@ import com.microbank.customer.exception.ResourceNotFoundException;
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.repository.CustomerRepository;
 import com.microbank.customer.security.Sanitizer;
+import com.microbank.customer.security.model.Token;
 import com.microbank.customer.util.Util;
 import java.io.File;
 import java.nio.file.Files;
@@ -84,17 +85,17 @@ public class CustomerServiceTest {
   @Test
   public void verifyPasswordMatches() throws Exception {
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.of(customer));
-    final boolean response =
+    final Token response =
         customerService.verifyPasswordMatches(customer.getUsername(), customer.getPassword());
-    Assert.assertTrue(response);
+    Assert.assertNotNull(response);
   }
 
   @Test
   public void verifyPasswordMatchesFalse() throws Exception {
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.of(customer));
-    final boolean response =
+    final Token response =
         customerService.verifyPasswordMatches(customer.getUsername(), customer.getPassword() + "1");
-    Assert.assertFalse(response);
+    Assert.assertNull(response);
   }
 
   @Test

@@ -1,15 +1,27 @@
 package com.microbank.customer.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.microbank.customer.exception.*;
+import com.microbank.customer.exception.ExistingCustomerException;
+import com.microbank.customer.exception.FailedToRegisterCustomerException;
+import com.microbank.customer.exception.InvalidJsonException;
+import com.microbank.customer.exception.MissingRequirementsException;
+import com.microbank.customer.exception.ResourceNotFoundException;
+import com.microbank.customer.exception.ValidationException;
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.security.Sanitizer;
+import com.microbank.customer.security.model.Token;
 import com.microbank.customer.service.CustomerService;
 import com.microbank.customer.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
 
 /** Provides endpoints for verifying login, registering customers, and querying customer data. */
 @RestController
@@ -74,7 +86,7 @@ public class CustomerController {
    * @throws ResourceNotFoundException No customer exists for the given customerId.
    */
   @DeleteMapping("/customer/{customerId}")
-  public ResponseEntity<Customer> deleteCustomerByUsername(
+  public ResponseEntity<Customer> deleteCustomerByCustomerId(
       @PathVariable(name = "customerId") String customerId) throws ResourceNotFoundException {
     customerId = Sanitizer.sanitizeString(customerId);
     return new ResponseEntity<>(
@@ -90,15 +102,18 @@ public class CustomerController {
    * @throws MissingRequirementsException The password request header is null.
    */
   @GetMapping("/customer/{username}/password/match")
-  public ResponseEntity<Void> verifyPasswordMatches(
+  public ResponseEntity<Token> verifyPasswordMatches(
       @PathVariable(name = "username") String username, @RequestHeader("password") String password)
       throws MissingRequirementsException {
     username = Sanitizer.sanitizeString(username);
     password = Sanitizer.sanitizeString(password);
-    if (customerService.verifyPasswordMatches(username, password)) {
-      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    } else {
+
+    final Token token = customerService.verifyPasswordMatches(username, password);
+
+    if (token == null || token.getBearerToken() == null) {
       return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    } else {
+      return new ResponseEntity<>(token, HttpStatus.OK);
     }
   }
 }

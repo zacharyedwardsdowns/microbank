@@ -7,6 +7,7 @@ import com.microbank.customer.exception.MissingRequirementsException;
 import com.microbank.customer.exception.ResourceNotFoundException;
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.security.Sanitizer;
+import com.microbank.customer.security.model.Token;
 import com.microbank.customer.service.CustomerService;
 import com.microbank.customer.util.TestUtil;
 import com.microbank.customer.util.Util;
@@ -27,6 +28,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 public class CustomerControllerTest {
 
   private static String VERIFY_PASSWORD_MATCHES_ENDPOINT = "/password/match";
+  private static final Token TOKEN = new Token("token");
   private static final String REGISTER_ENDPOINT = "/customer";
   private static final String BAD_JSON = "{\"Bad\":\"Json\"}";
   private static String CUSTOMER_ENDPOINT = "/customer/";
@@ -187,13 +189,20 @@ public class CustomerControllerTest {
     Mockito.when(
             mockCustomerService.verifyPasswordMatches(
                 customer.getUsername(), customer.getPassword()))
-        .thenReturn(true);
+        .thenReturn(TOKEN);
 
-    mockMvc
-        .perform(
-            MockMvcRequestBuilders.get(VERIFY_PASSWORD_MATCHES_ENDPOINT)
-                .header("password", customer.getPassword()))
-        .andExpect(MockMvcResultMatchers.status().isNoContent());
+    final String response =
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders.get(VERIFY_PASSWORD_MATCHES_ENDPOINT)
+                    .header("password", customer.getPassword()))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+    final Token result = Util.MAPPER.readValue(response, Token.class);
+    Assert.assertEquals(TOKEN, result);
   }
 
   @Test
@@ -201,7 +210,7 @@ public class CustomerControllerTest {
     Mockito.when(
             mockCustomerService.verifyPasswordMatches(
                 customer.getUsername(), customer.getPassword()))
-        .thenReturn(false);
+        .thenReturn(null);
 
     mockMvc
         .perform(

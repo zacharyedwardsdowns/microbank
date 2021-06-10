@@ -1,8 +1,15 @@
 package com.microbank.customer.service;
 
-import com.microbank.customer.exception.*;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.microbank.customer.exception.ExistingCustomerException;
+import com.microbank.customer.exception.FailedToRegisterCustomerException;
+import com.microbank.customer.exception.MissingRequirementsException;
+import com.microbank.customer.exception.ResourceNotFoundException;
+import com.microbank.customer.exception.ValidationException;
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.repository.CustomerRepository;
+import com.microbank.customer.security.model.Token;
 import com.microbank.customer.util.Util;
 import java.util.Optional;
 import java.util.UUID;
@@ -129,16 +136,20 @@ public class CustomerService {
    * @return True if the password matches and false otherwise.
    * @throws MissingRequirementsException The password parameter is null.
    */
-  public boolean verifyPasswordMatches(final String username, final String password)
+  public Token verifyPasswordMatches(final String username, final String password)
       throws MissingRequirementsException {
     if (Util.nullOrEmpty(password)) {
       throw new MissingRequirementsException("Must provide a password to check if it matches!");
     }
     try {
       final Customer customer = getCustomerByUsername(username);
-      return customer.getPassword().equals(password);
+      if (customer.getPassword().equals(password)) {
+        return generateJwtToken(customer);
+      } else {
+        return null;
+      }
     } catch (final ResourceNotFoundException e) {
-      return false;
+      return null;
     }
   }
 
@@ -161,5 +172,18 @@ public class CustomerService {
     } else {
       throw new ResourceNotFoundException("No customer exists with the username " + username + "!");
     }
+  }
+
+  /**
+   * Generates a new JWT token for an authenticated user.
+   *
+   * @param customer the customer to generate a token for.
+   * @return A JWT token containing relevant information.
+   */
+  private Token generateJwtToken(final Customer customer) {
+    return new Token(
+        JWT.create()
+            .withClaim("customerId", customer.getCustomerId())
+            .sign(Algorithm.HMAC256("token")));
   }
 }
