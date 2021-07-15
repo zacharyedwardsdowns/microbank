@@ -13,4 +13,4 @@ echo -e "\n- DIST DIRECTORY REMOVED -"
 
 echo -e "\nCleaning Customer Service"
 cd ../customer || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
-gradle clean
+gradle --console=plain clean

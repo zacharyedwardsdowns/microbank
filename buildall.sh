@@ -10,4 +10,4 @@ ng build
 
 echo -e "\nBuilding Customer Service"
 cd ../customer || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
-gradle clean build
+gradle --console=plain clean build

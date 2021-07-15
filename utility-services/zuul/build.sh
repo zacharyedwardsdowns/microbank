@@ -1,6 +1,6 @@
 cd "$(dirname "$0")" || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
 
-gradle clean build; gradle_exit_code="$?"
+gradle --console=plain clean build; gradle_exit_code="$?"
 
 if [[ ( "$gradle_exit_code" == 0 ) ]]; then
 	echo ""
