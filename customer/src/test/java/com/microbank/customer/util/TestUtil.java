@@ -2,7 +2,7 @@ package com.microbank.customer.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 
 /** A testing utility class. */
 public final class TestUtil {
@@ -19,8 +19,8 @@ public final class TestUtil {
    */
   public static void verifyError(final String response, final Class<?> clazz)
       throws JsonProcessingException {
-    Assert.assertNotNull(response);
+    Assertions.assertNotNull(response);
     final JsonNode result = Util.MAPPER.readTree(response);
-    Assert.assertEquals(result.get("error").asText(), clazz.getSimpleName());
+    Assertions.assertEquals(result.get("error").asText(), clazz.getSimpleName());
   }
 }

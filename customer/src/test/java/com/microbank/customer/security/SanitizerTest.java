@@ -2,17 +2,17 @@ package com.microbank.customer.security;
 
 import java.io.File;
 import java.nio.file.Files;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 
-public class SanitizerTest {
+class SanitizerTest {
 
   private static String json;
 
-  @BeforeClass
-  public static void setupClass() throws Exception {
+  @BeforeAll
+  static void setupClass() throws Exception {
     final File resource = new ClassPathResource("json/Customer.json").getFile();
     json = Files.readString(resource.toPath());
     // Replace newlines with a space after them and then just newlines with an empty string.
@@ -20,8 +20,8 @@ public class SanitizerTest {
   }
 
   @Test
-  public void testSanitizeJson() throws Exception {
+  void testSanitizeJson() {
     final String result = Sanitizer.sanitizeJson(json);
-    Assert.assertEquals(json, result);
+    Assertions.assertEquals(json, result);
   }
 }

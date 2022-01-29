@@ -6,8 +6,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import java.io.IOException;
-import org.assertj.core.api.Assertions;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.http.HttpStatus;
 
 public class ReusableCommonSteps extends CucumberBaseStep {
@@ -16,25 +15,25 @@ public class ReusableCommonSteps extends CucumberBaseStep {
   public void getRegisteredUsername() throws IOException {
     final String customerJson = readFile("json/Customer.json");
     customer = Util.MAPPER.readValue(customerJson, Customer.class);
-    Assert.assertNotNull(customer);
-    Assert.assertNotNull(customer.getUsername());
+    Assertions.assertNotNull(customer);
+    Assertions.assertNotNull(customer.getUsername());
   }
 
   @Then("they receive their customer information back")
   public void validateCustomerInformationReceived() {
-    Assert.assertNotNull(customerResponseEntity);
+    Assertions.assertNotNull(customerResponseEntity);
     final Customer response = customerResponseEntity.getBody();
     if (response != null) {
-      Assertions.assertThat(response)
+      org.assertj.core.api.Assertions.assertThat(response)
           .usingRecursiveComparison()
           .ignoringFields("password", "joinedOn", "lastUpdatedOn", "customerId")
           .isEqualTo(customer);
-      Assert.assertNull(response.getPassword());
-      Assert.assertNotNull(response.getJoinedOn());
-      Assert.assertNotNull(response.getCustomerId());
-      Assert.assertNotNull(response.getLastUpdatedOn());
+      Assertions.assertNull(response.getPassword());
+      Assertions.assertNotNull(response.getJoinedOn());
+      Assertions.assertNotNull(response.getCustomerId());
+      Assertions.assertNotNull(response.getLastUpdatedOn());
     } else {
-      Assert.fail("Null response from the customer service!");
+      Assertions.fail("Null response from the customer service!");
     }
     customerId = response.getCustomerId();
     customer = null;
@@ -42,8 +41,8 @@ public class ReusableCommonSteps extends CucumberBaseStep {
 
   @And("a status code of 200 is received")
   public void statusCode200() {
-    Assert.assertNotNull(customerResponseEntity);
-    Assert.assertEquals(HttpStatus.OK, customerResponseEntity.getStatusCode());
+    Assertions.assertNotNull(customerResponseEntity);
+    Assertions.assertEquals(HttpStatus.OK, customerResponseEntity.getStatusCode());
     customerResponseEntity = null;
   }
 }

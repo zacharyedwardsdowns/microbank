@@ -12,6 +12,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+/** Advice used to ensure a customer's password never leaves the service. */
 @ControllerAdvice
 public class RemovePasswordAdvice implements ResponseBodyAdvice<Customer> {
   @Override

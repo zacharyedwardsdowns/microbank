@@ -19,6 +19,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+/** Configures connection to the MongoDB database. */
 @Configuration
 @EnableMongoRepositories(basePackages = "com.microbank.customer.repository")
 public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
@@ -67,6 +68,14 @@ public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
     return db;
   }
 
+  /**
+   * Fetches the password from GitLab using SpringCloudConfig utility service.
+   *
+   * @param environment Application environment.
+   * @param pass Default response if fetch fails.
+   * @param restClient Client used to call utility service.
+   * @return The MongoDB password.
+   */
   protected String getPassword(
       @Nullable final Environment environment, final String pass, final RestClient restClient) {
     if (environment != null) {

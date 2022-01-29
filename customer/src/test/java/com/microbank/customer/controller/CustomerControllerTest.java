@@ -13,10 +13,10 @@ import com.microbank.customer.util.TestUtil;
 import com.microbank.customer.util.Util;
 import java.io.File;
 import java.nio.file.Files;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
@@ -25,7 +25,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-public class CustomerControllerTest {
+class CustomerControllerTest {
 
   private static String VERIFY_PASSWORD_MATCHES_ENDPOINT = "/password/match";
   private static final Token TOKEN = new Token("token");
@@ -37,8 +37,8 @@ public class CustomerControllerTest {
   private static String json;
   private MockMvc mockMvc;
 
-  @BeforeClass
-  public static void setupClass() throws Exception {
+  @BeforeAll
+  static void setupClass() throws Exception {
     final File resource = new ClassPathResource("json/Customer.json").getFile();
     json = Files.readString(resource.toPath());
     json = Sanitizer.sanitizeJson(json);
@@ -49,8 +49,8 @@ public class CustomerControllerTest {
         "/customer/" + customer.getUsername() + VERIFY_PASSWORD_MATCHES_ENDPOINT;
   }
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     mockCustomerService = Mockito.mock(CustomerService.class);
     mockMvc =
         MockMvcBuilders.standaloneSetup(new CustomerController(mockCustomerService))
@@ -59,7 +59,7 @@ public class CustomerControllerTest {
   }
 
   @Test
-  public void testRegister() throws Exception {
+  void testRegister() throws Exception {
     Mockito.when(mockCustomerService.register(customer)).thenReturn(customer);
 
     final String response =
@@ -75,11 +75,11 @@ public class CustomerControllerTest {
             .getContentAsString();
 
     final Customer result = Util.MAPPER.readValue(response, Customer.class);
-    Assert.assertEquals(customer, result);
+    Assertions.assertEquals(customer, result);
   }
 
   @Test
-  public void testRegisterInvalidJsonException() throws Exception {
+  void testRegisterInvalidJsonException() throws Exception {
     final String response =
         mockMvc
             .perform(
@@ -96,7 +96,7 @@ public class CustomerControllerTest {
   }
 
   @Test
-  public void testRegisterExistingCustomerException() throws Exception {
+  void testRegisterExistingCustomerException() throws Exception {
     Mockito.when(mockCustomerService.register(customer)).thenThrow(ExistingCustomerException.class);
 
     final String response =
@@ -115,7 +115,7 @@ public class CustomerControllerTest {
   }
 
   @Test
-  public void testGetCustomerByCustomerId() throws Exception {
+  void testGetCustomerByCustomerId() throws Exception {
     Mockito.when(mockCustomerService.getCustomerByCustomerId(customer.getCustomerId()))
         .thenReturn(customer);
 
@@ -129,11 +129,11 @@ public class CustomerControllerTest {
             .getContentAsString();
 
     final Customer result = Util.MAPPER.readValue(response, Customer.class);
-    Assert.assertEquals(customer, result);
+    Assertions.assertEquals(customer, result);
   }
 
   @Test
-  public void testGetCustomerByCustomerIdResourceNotFoundException() throws Exception {
+  void testGetCustomerByCustomerIdResourceNotFoundException() throws Exception {
     Mockito.when(mockCustomerService.getCustomerByCustomerId(customer.getCustomerId()))
         .thenThrow(ResourceNotFoundException.class);
 
@@ -150,7 +150,7 @@ public class CustomerControllerTest {
   }
 
   @Test
-  public void testDeleteCustomerByCustomerId() throws Exception {
+  void testDeleteCustomerByCustomerId() throws Exception {
     Mockito.when(mockCustomerService.deleteCustomerByCustomerId(customer.getCustomerId()))
         .thenReturn(customer);
 
@@ -164,11 +164,11 @@ public class CustomerControllerTest {
             .getContentAsString();
 
     final Customer result = Util.MAPPER.readValue(response, Customer.class);
-    Assert.assertEquals(customer, result);
+    Assertions.assertEquals(customer, result);
   }
 
   @Test
-  public void testDeleteCustomerByCustomerIdResourceNotFoundException() throws Exception {
+  void testDeleteCustomerByCustomerIdResourceNotFoundException() throws Exception {
     Mockito.when(mockCustomerService.deleteCustomerByCustomerId(customer.getCustomerId()))
         .thenThrow(ResourceNotFoundException.class);
 
@@ -185,7 +185,7 @@ public class CustomerControllerTest {
   }
 
   @Test
-  public void verifyPasswordMatches() throws Exception {
+  void verifyPasswordMatches() throws Exception {
     Mockito.when(
             mockCustomerService.verifyPasswordMatches(
                 customer.getUsername(), customer.getPassword()))
@@ -202,11 +202,11 @@ public class CustomerControllerTest {
             .getContentAsString();
 
     final Token result = Util.MAPPER.readValue(response, Token.class);
-    Assert.assertEquals(TOKEN, result);
+    Assertions.assertEquals(TOKEN, result);
   }
 
   @Test
-  public void verifyPasswordMatchesFalse() throws Exception {
+  void verifyPasswordMatchesFalse() throws Exception {
     Mockito.when(
             mockCustomerService.verifyPasswordMatches(
                 customer.getUsername(), customer.getPassword()))
@@ -220,7 +220,7 @@ public class CustomerControllerTest {
   }
 
   @Test
-  public void verifyPasswordMatchesMissingRequirementsException() throws Exception {
+  void verifyPasswordMatchesMissingRequirementsException() throws Exception {
     Mockito.when(
             mockCustomerService.verifyPasswordMatches(
                 customer.getUsername(), customer.getPassword()))

@@ -16,9 +16,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+/** Component used to send http request to other services. */
 public class RestClient {
   private static final Logger LOG = LoggerFactory.getLogger(RestClient.class);
 
+  /**
+   * Sends and http request to the given endpoint and returns a ResponseEntity of type clazz..
+   *
+   * @param endpoint The endpoint to send an http request to.
+   * @param httpMethod The method of the request.
+   * @param payload The body (if any) of the request.
+   * @param clazz The class of the response.
+   * @param <T> Allows the response type to be generic.
+   * @return A generic ResponseEntity.
+   * @throws RestClientException If a request exception occurs.
+   */
   public <T> ResponseEntity<T> sendRequest(
       final String endpoint,
       final HttpMethod httpMethod,
@@ -28,6 +40,18 @@ public class RestClient {
     return sendRequest(endpoint, httpMethod, payload, clazz, null);
   }
 
+  /**
+   * Sends and http request to the given endpoint and returns a ResponseEntity of type clazz.
+   *
+   * @param endpoint The endpoint to send an http request to.
+   * @param httpMethod The method of the request.
+   * @param payload The body (if any) of the request.
+   * @param clazz The class of the response.
+   * @param restTemplate Allows for mocking the RestTemplate.
+   * @param <T> Allows the response type to be generic.
+   * @return A generic ResponseEntity.
+   * @throws RestClientException If a request exception occurs.
+   */
   public <T> ResponseEntity<T> sendRequest(
       final String endpoint,
       final HttpMethod httpMethod,

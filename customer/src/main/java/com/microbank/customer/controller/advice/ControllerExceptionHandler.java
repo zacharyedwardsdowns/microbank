@@ -19,9 +19,17 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/** Advice to create an ExceptionResponse for the controller when an exception is thrown. */
 @ControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
+  /**
+   * Handles the response for exceptions returning HttpStatus.CONFLICT.
+   *
+   * @param e The exception being handled.
+   * @param request The http request containing the uri.
+   * @return An ExceptionResponse with useful information.
+   */
   @ExceptionHandler(value = ExistingCustomerException.class)
   protected ResponseEntity<ExceptionResponse> conflictException(
       final Exception e, final HttpServletRequest request) {
@@ -31,6 +39,13 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
   }
 
+  /**
+   * Handles the response for exceptions returning HttpStatus.NOT_FOUND.
+   *
+   * @param e The exception being handled.
+   * @param request The http request containing the uri.
+   * @return An ExceptionResponse with useful information.
+   */
   @ExceptionHandler(value = ResourceNotFoundException.class)
   protected ResponseEntity<ExceptionResponse> notFoundException(
       final Exception e, final HttpServletRequest request) {
@@ -40,6 +55,13 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
   }
 
+  /**
+   * Handles the response for exceptions returning HttpStatus.BAD_REQUEST.
+   *
+   * @param e The exception being handled.
+   * @param request The http request containing the uri.
+   * @return An ExceptionResponse with useful information.
+   */
   @ExceptionHandler(
       value = {
         ValidationException.class,
@@ -54,6 +76,13 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
   }
 
+  /**
+   * Handles the response for exceptions returning HttpStatus.INTERNAL_SERVER_ERROR.
+   *
+   * @param e The exception being handled.
+   * @param request The http request containing the uri.
+   * @return An ExceptionResponse with useful information.
+   */
   @ExceptionHandler(
       value = {
         IOException.class,

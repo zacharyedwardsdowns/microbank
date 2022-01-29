@@ -2,7 +2,6 @@ package com.microbank.customer;
 
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.security.Sanitizer;
-import io.cucumber.spring.CucumberContextConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -10,15 +9,10 @@ import java.nio.file.Files;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.yaml.snakeyaml.Yaml;
 
-@CucumberContextConfiguration
-@SpringBootTest(
-    classes = Application.class,
-    webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class CucumberBaseStep {
   private static final Logger LOG = LoggerFactory.getLogger(CucumberBaseStep.class);
   private static Map<String, Object> properties;

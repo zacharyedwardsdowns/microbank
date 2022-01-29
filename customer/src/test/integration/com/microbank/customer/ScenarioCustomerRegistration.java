@@ -8,7 +8,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import java.io.IOException;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
@@ -21,7 +21,7 @@ public class ScenarioCustomerRegistration extends CucumberBaseStep {
   public void getRegistrationInformation() throws IOException {
     customerPayload = readFile("json/Customer.json");
     customer = Util.MAPPER.readValue(customerPayload, Customer.class);
-    Assert.assertNotNull(customer);
+    Assertions.assertNotNull(customer);
   }
 
   @When("they hit the customer registration endpoint")
@@ -33,8 +33,8 @@ public class ScenarioCustomerRegistration extends CucumberBaseStep {
 
   @And("a status code of 201 is received")
   public void statusCode201() {
-    Assert.assertNotNull(customerResponseEntity);
-    Assert.assertEquals(HttpStatus.CREATED, customerResponseEntity.getStatusCode());
+    Assertions.assertNotNull(customerResponseEntity);
+    Assertions.assertEquals(HttpStatus.CREATED, customerResponseEntity.getStatusCode());
     customerResponseEntity = null;
   }
 }

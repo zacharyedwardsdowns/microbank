@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
+/** Service to validate customer information. */
 @Service
 public class ValidationService {
 

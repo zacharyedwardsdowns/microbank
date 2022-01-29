@@ -5,9 +5,9 @@ import com.microbank.customer.security.Sanitizer;
 import java.io.File;
 import java.net.URI;
 import java.nio.file.Files;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -19,7 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-public class RestClientTest {
+class RestClientTest {
   private static final HttpMethod HTTP_METHOD = HttpMethod.GET;
   private static final Class<String> CLAZZ = String.class;
   private static final String ENDPOINT = "test.com";
@@ -27,9 +27,9 @@ public class RestClientTest {
   private RestClient restClient;
   private String json;
 
-  @Before
-  public void setup() throws Exception {
-    MockitoAnnotations.initMocks(this);
+  @BeforeEach
+  void setup() throws Exception {
+    MockitoAnnotations.openMocks(this);
     restClient = new RestClient();
 
     final File resource = new ClassPathResource("json/Customer.json").getFile();
@@ -38,7 +38,7 @@ public class RestClientTest {
   }
 
   @Test
-  public void sendRequest() throws Exception {
+  void sendRequest() throws Exception {
     final ResponseEntity<String> response = new ResponseEntity<>(null, HttpStatus.OK);
 
     Mockito.when(
@@ -49,12 +49,12 @@ public class RestClientTest {
                 ArgumentMatchers.eq(CLAZZ)))
         .thenReturn(response);
 
-    Assert.assertEquals(
+    Assertions.assertEquals(
         response, restClient.sendRequest(ENDPOINT, HTTP_METHOD, json, CLAZZ, mockRestTemplate));
   }
 
-  @Test(expected = RestClientException.class)
-  public void sendRequestRestClientException() throws Exception {
+  @Test()
+  void sendRequestRestClientException() {
     Mockito.when(
             mockRestTemplate.exchange(
                 ArgumentMatchers.any(URI.class),
@@ -63,6 +63,8 @@ public class RestClientTest {
                 ArgumentMatchers.eq(CLAZZ)))
         .thenThrow(org.springframework.web.client.RestClientException.class);
 
-    restClient.sendRequest(ENDPOINT, HTTP_METHOD, json, CLAZZ, mockRestTemplate);
+    Assertions.assertThrows(
+        RestClientException.class,
+        () -> restClient.sendRequest(ENDPOINT, HTTP_METHOD, json, CLAZZ, mockRestTemplate));
   }
 }

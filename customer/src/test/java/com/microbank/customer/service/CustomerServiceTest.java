@@ -11,14 +11,14 @@ import com.microbank.customer.util.Util;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.Optional;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.core.io.ClassPathResource;
 
-public class CustomerServiceTest {
+class CustomerServiceTest {
 
   private static CustomerRepository mockCustomerRepository;
   private static ValidationService mockValidationService;
@@ -26,8 +26,8 @@ public class CustomerServiceTest {
   private static String json;
   private Customer customer;
 
-  @BeforeClass
-  public static void setupClass() throws Exception {
+  @BeforeAll
+  static void setupClass() throws Exception {
     mockCustomerRepository = Mockito.mock(CustomerRepository.class);
     mockValidationService = Mockito.mock(ValidationService.class);
 
@@ -36,76 +36,87 @@ public class CustomerServiceTest {
     json = Sanitizer.sanitizeJson(json);
   }
 
-  @Before
-  public void setup() throws Exception {
+  @BeforeEach
+  void setup() throws Exception {
     customerService = new CustomerService(mockCustomerRepository, mockValidationService);
     customer = Util.MAPPER.readValue(json, Customer.class);
   }
 
   @Test
-  public void testRegister() throws Exception {
+  void testRegister() throws Exception {
     Mockito.when(mockCustomerRepository.insert(customer)).thenReturn(customer);
     final Customer result = customerService.register(customer);
-    Assert.assertEquals(customer, result);
+    Assertions.assertEquals(customer, result);
   }
 
-  @Test(expected = ExistingCustomerException.class)
-  public void testRegisterExistingCustomerException() throws Exception {
+  @Test()
+  void testRegisterExistingCustomerException() {
     Mockito.when(mockCustomerRepository.exists(Mockito.any())).thenReturn(true);
-    customerService.register(customer);
+    Assertions.assertThrows(
+        ExistingCustomerException.class, () -> customerService.register(customer));
   }
 
   @Test
-  public void testGetCustomerByCustomerId() throws Exception {
+  void testGetCustomerByCustomerId() throws Exception {
+
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.of(customer));
     final Customer result = customerService.getCustomerByCustomerId(customer.getCustomerId());
-    Assert.assertEquals(customer, result);
+    Assertions.assertEquals(customer, result);
   }
 
-  @Test(expected = ResourceNotFoundException.class)
-  public void testGetCustomerByCustomerIdResourceNotFoundException() throws Exception {
+  @Test()
+  void testGetCustomerByCustomerIdResourceNotFoundException() {
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.empty());
-    customerService.getCustomerByCustomerId(customer.getCustomerId());
+    Assertions.assertThrows(
+        ResourceNotFoundException.class,
+        () -> customerService.getCustomerByCustomerId(customer.getCustomerId()));
   }
 
   @Test
-  public void testDeleteCustomerByCustomerId() throws Exception {
+  void testDeleteCustomerByCustomerId() throws Exception {
+
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.of(customer));
     final Customer result = customerService.deleteCustomerByCustomerId(customer.getCustomerId());
     Mockito.verify(mockCustomerRepository, Mockito.times(1)).delete(customer);
-    Assert.assertEquals(customer, result);
+    Assertions.assertEquals(customer, result);
   }
 
-  @Test(expected = ResourceNotFoundException.class)
-  public void testDeleteCustomerByCustomerIdResourceNotFoundException() throws Exception {
+  @Test()
+  void testDeleteCustomerByCustomerIdResourceNotFoundException() {
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.empty());
-    customerService.deleteCustomerByCustomerId(customer.getCustomerId());
+    Assertions.assertThrows(
+        ResourceNotFoundException.class,
+        () -> customerService.deleteCustomerByCustomerId(customer.getCustomerId()));
   }
 
   @Test
-  public void verifyPasswordMatches() throws Exception {
+  void verifyPasswordMatches() throws Exception {
+
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.of(customer));
     final Token response =
         customerService.verifyPasswordMatches(customer.getUsername(), customer.getPassword());
-    Assert.assertNotNull(response);
+    Assertions.assertNotNull(response);
   }
 
   @Test
-  public void verifyPasswordMatchesFalse() throws Exception {
+  void verifyPasswordMatchesFalse() throws Exception {
+
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.of(customer));
     final Token response =
         customerService.verifyPasswordMatches(customer.getUsername(), customer.getPassword() + "1");
-    Assert.assertNull(response);
+    Assertions.assertNull(response);
   }
 
   @Test
-  public void verifyPasswordMatchesOfNonExistentUser() throws Exception {
+  void verifyPasswordMatchesOfNonExistentUser() throws Exception {
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.empty());
     customerService.verifyPasswordMatches(customer.getUsername(), customer.getPassword());
   }
 
-  @Test(expected = MissingRequirementsException.class)
-  public void verifyPasswordMatchesMissingRequirementsException() throws Exception {
-    customerService.verifyPasswordMatches(customer.getUsername(), null);
+  @Test()
+  void verifyPasswordMatchesMissingRequirementsException() {
+    Assertions.assertThrows(
+        MissingRequirementsException.class,
+        () -> customerService.verifyPasswordMatches(customer.getUsername(), null));
   }
 }

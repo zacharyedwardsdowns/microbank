@@ -2,7 +2,7 @@ package com.microbank.customer.security;
 
 import com.google.json.JsonSanitizer;
 import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
+import org.jsoup.safety.Safelist;
 
 /** Contains sanitization methods for user input. */
 public final class Sanitizer {
@@ -17,7 +17,7 @@ public final class Sanitizer {
    * @return A sanitized string.
    */
   public static String sanitizeString(final String string) {
-    return Jsoup.clean(string, Whitelist.basic());
+    return Jsoup.clean(string, Safelist.basic());
   }
 
   /**

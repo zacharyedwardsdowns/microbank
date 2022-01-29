@@ -7,20 +7,17 @@ import com.microbank.customer.security.Sanitizer;
 import com.mongodb.client.MongoClient;
 import java.io.File;
 import java.nio.file.Files;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class MongoDbConfigurationTest extends MongoDbConfiguration {
+class MongoDbConfigurationTest extends MongoDbConfiguration {
 
   private static final String HOST = "freecluster-s3rjf.mongodb.net";
   private static final String DB = "test-microbank";
@@ -32,13 +29,13 @@ public class MongoDbConfigurationTest extends MongoDbConfiguration {
   @Mock private RestClient mockRestClient;
   private String json;
 
-  public MongoDbConfigurationTest() {
+  MongoDbConfigurationTest() {
     super(HOST, USER, PASS, DB, null);
   }
 
-  @Before
-  public void setup() throws Exception {
-    MockitoAnnotations.initMocks(this);
+  @BeforeEach
+  void setup() throws Exception {
+    MockitoAnnotations.openMocks(this);
     mongoDbConfiguration = new MongoDbConfiguration(HOST, USER, PASS, DB, mockEnvironment);
 
     final File resource = new ClassPathResource("json/SpringCloudAtlasConfig.json").getFile();
@@ -47,18 +44,18 @@ public class MongoDbConfigurationTest extends MongoDbConfiguration {
   }
 
   @Test
-  public void testMongoClient() {
+  void testMongoClient() {
     final MongoClient mongoClient = mongoDbConfiguration.mongoClient();
-    Assert.assertNotNull(mongoClient);
+    Assertions.assertNotNull(mongoClient);
   }
 
   @Test
-  public void testGetDatabaseName() {
-    Assert.assertEquals(DB, mongoDbConfiguration.getDatabaseName());
+  void testGetDatabaseName() {
+    Assertions.assertEquals(DB, mongoDbConfiguration.getDatabaseName());
   }
 
   @Test
-  public void testGetPassword() throws Exception {
+  void testGetPassword() throws Exception {
 
     Mockito.when(this.mockEnvironment.getProperty("cucumber.tests")).thenReturn("true");
     Mockito.when(
@@ -69,12 +66,12 @@ public class MongoDbConfigurationTest extends MongoDbConfiguration {
                 ArgumentMatchers.eq(String.class)))
         .thenReturn(new ResponseEntity<>(json, HttpStatus.OK));
 
-    Assert.assertEquals(
+    Assertions.assertEquals(
         "test", mongoDbConfiguration.getPassword(mockEnvironment, "bad", mockRestClient));
   }
 
-  @Test(expected = MongoInstantiationException.class)
-  public void testGetPasswordNullResponse() throws Exception {
+  @Test
+  void testGetPasswordNullResponse() throws Exception {
 
     Mockito.when(this.mockEnvironment.getProperty("cucumber.tests")).thenReturn("true");
     Mockito.when(
@@ -85,11 +82,13 @@ public class MongoDbConfigurationTest extends MongoDbConfiguration {
                 ArgumentMatchers.eq(String.class)))
         .thenReturn(new ResponseEntity<>(null, HttpStatus.OK));
 
-    mongoDbConfiguration.getPassword(mockEnvironment, "bad", mockRestClient);
+    Assertions.assertThrows(
+        MongoInstantiationException.class,
+        () -> mongoDbConfiguration.getPassword(mockEnvironment, "bad", mockRestClient));
   }
 
-  @Test(expected = MongoInstantiationException.class)
-  public void testGetPasswordRestClientException() throws Exception {
+  @Test
+  void testGetPasswordRestClientException() throws Exception {
 
     Mockito.when(this.mockEnvironment.getProperty("cucumber.tests")).thenReturn("true");
     Mockito.when(
@@ -100,6 +99,8 @@ public class MongoDbConfigurationTest extends MongoDbConfiguration {
                 ArgumentMatchers.eq(String.class)))
         .thenThrow(RestClientException.class);
 
-    mongoDbConfiguration.getPassword(mockEnvironment, "bad", mockRestClient);
+    Assertions.assertThrows(
+        MongoInstantiationException.class,
+        () -> mongoDbConfiguration.getPassword(mockEnvironment, "bad", mockRestClient));
   }
 }

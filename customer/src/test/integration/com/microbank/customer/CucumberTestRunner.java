@@ -1,13 +1,21 @@
 package com.microbank.customer;
 
-import io.cucumber.junit.Cucumber;
-import io.cucumber.junit.CucumberOptions;
-import org.junit.runner.RunWith;
+import io.cucumber.junit.platform.engine.Constants;
+import org.junit.platform.suite.api.*;
 
-@RunWith(Cucumber.class)
-@CucumberOptions(
-    glue = "com.microbank.customer",
-    features = "src/test/integration/com/microbank/customer/feature",
-    plugin = "html:build/cucumber/cucumber-html-report.html",
-    tags = "@Initial")
+@Suite
+@IncludeEngines("cucumber")
+@SelectClasspathResource("feature")
+@ConfigurationParameter( //
+    key = Constants.PLUGIN_PUBLISH_QUIET_PROPERTY_NAME,
+    value = "true")
+@ConfigurationParameter( //
+    key = Constants.PLUGIN_PROPERTY_NAME,
+    value = "html:build/cucumber/cucumber.html")
+@ConfigurationParameter( //
+    key = Constants.GLUE_PROPERTY_NAME,
+    value = "com.microbank.customer")
+@ConfigurationParameter( //
+    key = Constants.FILTER_TAGS_PROPERTY_NAME,
+    value = "@Initial")
 public class CucumberTestRunner {}
