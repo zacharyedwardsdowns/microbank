@@ -1,21 +1,18 @@
 buildscript {
     ext {
-        springBootVersion = '2.2.4.RELEASE'
+        springBootVersion = '2.6.3'
+        springCloudVersion = '3.1.0'
     }
 }
 
 plugins {
     id 'java'
-	id 'org.springframework.boot' version "${springBootVersion}"
-    id 'com.github.sherter.google-java-format' version '0.9'
+    id "com.diffplug.spotless" version "6.2.0"
+    id 'org.springframework.boot' version "${springBootVersion}"
 }
 
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
-
-googleJavaFormat {
-  toolVersion = "1.7"
-}
 
 repositories {
     mavenCentral()
@@ -23,7 +20,7 @@ repositories {
 
 dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
-    implementation "org.springframework.cloud:spring-cloud-config-server:${springBootVersion}"
+    implementation "org.springframework.cloud:spring-cloud-config-server:${springCloudVersion}"
 
     runtimeOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
 
@@ -33,12 +30,25 @@ dependencies {
 group = 'com.microbank'
 version = '0.1.0'
 description = 'microbank-spring-cloud-config-server'
-sourceCompatibility = '1.11'
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 springBoot {
-	mainClassName = 'com.microbank.spring.cloud.config.ConfigServer'
+    mainClass.set('com.microbank.spring.cloud.config.ConfigServer')
 }
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+}
+
+spotless {
+    java {
+        importOrder()
+        removeUnusedImports()
+        googleJavaFormat('1.13.0')
+    }
+}
+
+compileJava {
+    finalizedBy spotlessJavaApply, spotlessJavaCheck
 }
