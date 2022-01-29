@@ -2,7 +2,7 @@
 ARG workingDirectory=/microbank/spring-cloud-config
 
 # Run the config server.
-FROM alpine:3.12
+FROM alpine:latest
 ARG PASS
 ARG URI
 ENV URI=${URI}

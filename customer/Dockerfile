@@ -2,7 +2,7 @@
 ARG workingDirectory=/microbank/customer
 
 # Run the customer service.
-FROM alpine:3.12
+FROM alpine:latest
 ARG workingDirectory
 WORKDIR ${workingDirectory}
 RUN apk add --no-cache openjdk11-jre

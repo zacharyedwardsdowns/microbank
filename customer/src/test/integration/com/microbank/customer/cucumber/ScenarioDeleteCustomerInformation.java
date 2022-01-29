@@ -1,4 +1,4 @@
-package com.microbank.customer;
+package com.microbank.customer.cucumber;
 
 import com.microbank.customer.client.RestClient;
 import com.microbank.customer.exception.RestClientException;
