@@ -1,4 +1,4 @@
-package com.microbank.customer;
+package com.microbank.customer.cucumber;
 
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.security.Sanitizer;

@@ -1,12 +1,13 @@
 spring:
   application:
     name: microbank-customer-service
-server:
-  servlet:
-    context-path: /microbank-customer
+  config:
+    import: configserver:http://localhost:8888
 ---
 server:
   port: 6010
+  servlet:
+    context-path: /microbank-customer
 ---
 eureka:
   client:

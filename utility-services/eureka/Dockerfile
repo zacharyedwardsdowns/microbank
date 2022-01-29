@@ -2,7 +2,7 @@
 ARG workingDirectory=/microbank/eureka
 
 # Run the eureka server.
-FROM alpine:3.12
+FROM alpine:latest
 ARG workingDirectory
 WORKDIR ${workingDirectory}
 RUN apk add --no-cache openjdk11-jre

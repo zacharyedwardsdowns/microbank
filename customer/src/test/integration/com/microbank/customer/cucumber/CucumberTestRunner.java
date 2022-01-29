@@ -1,4 +1,4 @@
-package com.microbank.customer;
+package com.microbank.customer.cucumber;
 
 import io.cucumber.junit.platform.engine.Constants;
 import org.junit.platform.suite.api.*;
@@ -14,7 +14,7 @@ import org.junit.platform.suite.api.*;
     value = "html:build/cucumber/cucumber.html")
 @ConfigurationParameter( //
     key = Constants.GLUE_PROPERTY_NAME,
-    value = "com.microbank.customer")
+    value = "com.microbank.customer.cucumber")
 @ConfigurationParameter( //
     key = Constants.FILTER_TAGS_PROPERTY_NAME,
     value = "@Initial")

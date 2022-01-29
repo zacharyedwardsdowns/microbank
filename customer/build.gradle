@@ -138,7 +138,7 @@ check {
 
 test {
     if (System.properties.get('build') == 'docker') {
-        exclude '**/CucumberTestRunner.class'
+        exclude '**/cucumber/**'
     }
     useJUnitPlatform()
     finalizedBy jacocoTestReport
