@@ -8,8 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "protractor": "protractor e2e/protractor.conf.js",
-    "preinstall": "npx npm-force-resolutions"
+    "protractor": "protractor e2e/protractor.conf.js"
   },
   "private": true,
   "dependencies": {

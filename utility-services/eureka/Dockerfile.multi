@@ -1,0 +1,20 @@
+# A global argument containing the working directory for the service.
+ARG workingDirectory=/microbank/eureka
+
+# The gradle build stage of the service.
+FROM gradle:7-jdk17 as build
+ARG workingDirectory
+WORKDIR ${workingDirectory}
+# Cache dependencies
+COPY ./build.gradle ./settings.gradle ./gradle.properties ./
+RUN gradle -q assemble || return 0
+# Gradle build
+COPY . .
+RUN gradle -q build
+
+# Run the eureka server.
+FROM openjdk:17-oracle
+ARG workingDirectory
+WORKDIR ${workingDirectory}
+COPY --from=build ${workingDirectory}/build/libs/*.jar ${workingDirectory}
+CMD java -jar ./eureka*.jar

@@ -1,4 +1,4 @@
-# A global argument containing the working directory for the service.
+# A global argument containing the working directory for the frontend.
 ARG workingDirectory=/usr/share/nginx/html
 
 # Run the angular frontend.

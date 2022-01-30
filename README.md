@@ -32,6 +32,8 @@ Executes 'gradle clean' for all services:<br>`sh cleanall.sh`
 
 Executes 'docker build' for all services:<br>`sh docker/buildall.sh`
 
+Docker multi-stage builds:<br>`sh docker/buildall.sh --multi`
+
 Executes 'docker run' for all services:<br>`sh docker/runall.sh`
 
 Executes 'docker stop' and 'docker rm' for all services:<br>`sh docker/stopall.sh`
