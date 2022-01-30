@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * The MicroBank customer service. Handles login, registration, and all data related to customers.
  */
 @SpringBootApplication
-public class Application {
+public class CustomerMicro {
 
   /**
    * Start the application.
@@ -15,6 +15,6 @@ public class Application {
    * @param args Application arguments.
    */
   public static void main(final String[] args) {
-    SpringApplication.run(Application.class, args);
+    SpringApplication.run(CustomerMicro.class, args);
   }
 }

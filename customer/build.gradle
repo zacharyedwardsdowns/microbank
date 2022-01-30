@@ -66,7 +66,7 @@ sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
 springBoot {
-    mainClass.set('com.microbank.customer.Application')
+    mainClass.set('com.microbank.customer.CustomerMicro')
 }
 
 java {
@@ -75,7 +75,7 @@ java {
 
 bootJar {
     manifest {
-        attributes 'Start-Class': 'com.microbank.customer.Application'
+        attributes 'Start-Class': 'com.microbank.customer.CustomerMicro'
     }
 }
 
@@ -106,7 +106,7 @@ jacocoTestReport {
             fileTree(dir: it,
                     exclude: ['**/model/**',
                               '**/exception/**',
-                              '**/*Application*'])
+                              '**/*CustomerMicro*'])
         }))
     }
 }
@@ -125,7 +125,7 @@ jacocoTestCoverageVerification {
             fileTree(dir: it,
                     exclude: ['**/model/**',
                               '**/exception/**',
-                              '**/*Application*'])
+                              '**/*CustomerMicro*'])
         }))
     }
 }
