@@ -69,6 +69,16 @@ springBoot {
     mainClass.set('com.microbank.customer.Application')
 }
 
+java {
+    jar.enabled = false
+}
+
+bootJar {
+    manifest {
+        attributes 'Start-Class': 'com.microbank.customer.Application'
+    }
+}
+
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }

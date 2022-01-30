@@ -2,9 +2,8 @@
 ARG workingDirectory=/microbank/eureka
 
 # Run the eureka server.
-FROM alpine:latest
+FROM openjdk:17-oracle
 ARG workingDirectory
 WORKDIR ${workingDirectory}
-RUN apk add --no-cache openjdk11-jre
 COPY ./build/libs/*.jar ${workingDirectory}
 CMD java -jar ./eureka*.jar

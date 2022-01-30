@@ -37,6 +37,16 @@ springBoot {
     mainClass.set('com.microbank.spring.cloud.config.ConfigServer')
 }
 
+java {
+    jar.enabled = false
+}
+
+bootJar {
+    manifest {
+        attributes 'Start-Class': 'com.microbank.spring.cloud.config.ConfigServer'
+    }
+}
+
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }

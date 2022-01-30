@@ -9,7 +9,7 @@ services:
       - "80:80"
   microbank-customer:
     image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/customer:latest
-    restart: on-failure:3
+    restart: on-failure
     ports:
       - "6010:6010"
   microbank-spring-cloud-config:

@@ -36,6 +36,16 @@ springBoot {
 	mainClass.set('com.microbank.zuul.ZuulGateway')
 }
 
+java {
+    jar.enabled = false
+}
+
+bootJar {
+    manifest {
+        attributes 'Start-Class': 'com.microbank.zuul.ZuulGateway'
+    }
+}
+
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }

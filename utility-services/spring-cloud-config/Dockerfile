@@ -2,13 +2,12 @@
 ARG workingDirectory=/microbank/spring-cloud-config
 
 # Run the config server.
-FROM alpine:latest
+FROM openjdk:17-oracle
 ARG PASS
 ARG URI
 ENV URI=${URI}
 ENV PASS=${PASS}
 ARG workingDirectory
 WORKDIR ${workingDirectory}
-RUN apk add --no-cache openjdk11-jre
 COPY ./build/libs/*.jar ${workingDirectory}
 CMD ["sh", "-c", "java -jar -Duri=$URI -Dpass=$PASS ./spring-cloud-config*.jar"]

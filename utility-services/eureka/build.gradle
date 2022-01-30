@@ -38,6 +38,16 @@ springBoot {
     mainClass.set('com.microbank.eureka.EurekaServer')
 }
 
+java {
+    jar.enabled = false
+}
+
+bootJar {
+    manifest {
+        attributes 'Start-Class': 'com.microbank.eureka.EurekaServer'
+    }
+}
+
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
