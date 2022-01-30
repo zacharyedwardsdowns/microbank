@@ -5,5 +5,5 @@ echo -e "\nDocker: Pushing Spring Cloud Config Service"
 sh ../spring-cloud-config/push.sh
 echo -e "\nDocker: Pushing Eureka Service"
 sh ../eureka/push.sh
-echo -e "\nDocker: Pushing Zuul Service"
-sh ../zuul/push.sh
+echo -e "\nDocker: Pushing Spring Cloud Gateway Service"
+sh ../spring-cloud-gateway/push.sh

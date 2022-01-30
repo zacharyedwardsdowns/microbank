@@ -1,0 +1,1 @@
+docker run -d -p "8765:8765" --name "microbank-spring-cloud-gateway" --network "microbank-network" registry.gitlab.com/zacharyedwardsdowns/micro-bank/spring-cloud-gateway

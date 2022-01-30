@@ -20,7 +20,7 @@ services:
     image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/eureka:latest
     ports:
       - "8761:8761"
-  microbank-zuul:
-    image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/zuul:latest
+  microbank-spring-cloud-gateway:
+    image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/spring-cloud-gateway:latest
     ports:
       - "8765:8765"

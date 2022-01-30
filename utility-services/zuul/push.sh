@@ -1,1 +1,0 @@
-docker push registry.gitlab.com/zacharyedwardsdowns/micro-bank/zuul

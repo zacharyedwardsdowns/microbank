@@ -5,5 +5,5 @@ echo -e "\nDocker: Building Spring Cloud Config Service"
 sh ../spring-cloud-config/build.sh
 echo -e "\nDocker: Building Eureka Service"
 sh ../eureka/build.sh
-echo -e "\nDocker: Building Zuul Service"
-sh ../zuul/build.sh
+echo -e "\nDocker: Building Spring Cloud Gateway Service"
+sh ../spring-cloud-gateway/build.sh

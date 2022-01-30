@@ -30,7 +30,7 @@ sh ../spring-cloud-config/run.sh
 echo -e "\nStarting eureka..."
 sh ../eureka/run.sh "$eurekaIp"
 
-echo -e "\nStarting zuul..."
-sh ../zuul/run.sh
+echo -e "\nStarting spring-cloud-gateway..."
+sh ../spring-cloud-gateway/run.sh
 
 echo -e "\nAll utility containers started.\n"

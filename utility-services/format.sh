@@ -9,6 +9,6 @@ echo -e "\nFormatting Eureka Service"
 cd ../eureka || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
 gradle --console=plain spotlessJavaApply
 
-echo -e "\nFormatting Zuul Service"
-cd ../zuul || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
+echo -e "\nFormatting Spring Cloud Gateway Service"
+cd ../spring-cloud-gateway || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
 gradle --console=plain spotlessJavaApply
