@@ -6,4 +6,4 @@ sh format.sh
 
 echo -e "\nFormatting Customer Service"
 cd ../customer || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
-gradle --console=plain googleJavaFormat
+gradle --console=plain spotlessJavaApply

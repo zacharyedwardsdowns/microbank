@@ -3,12 +3,12 @@ cd "$(dirname "$0")" || (echo -e "\nFailed to change directory at [$0: $LINENO]"
 
 echo -e "\nFormatting Spring Cloud Config Service"
 cd spring-cloud-config || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
-gradle --console=plain googleJavaFormat
+gradle --console=plain spotlessJavaApply
 
 echo -e "\nFormatting Eureka Service"
 cd ../eureka || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
-gradle --console=plain googleJavaFormat
+gradle --console=plain spotlessJavaApply
 
 echo -e "\nFormatting Zuul Service"
 cd ../zuul || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
-gradle --console=plain googleJavaFormat
+gradle --console=plain spotlessJavaApply
