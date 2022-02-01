@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-/** A model to represent and transfer a bearer token. */
+/** A model to represent and transfer tokens. */
 @Getter
 @Setter
 @ToString
@@ -17,6 +17,6 @@ import lombok.ToString;
 @AllArgsConstructor
 public class Token {
 
-  @JsonProperty("BearerToken")
-  private String bearerToken;
+  @JsonProperty("AccessToken")
+  private String accessToken;
 }

@@ -1,5 +1,6 @@
 package com.microbank.customer.cucumber;
 
+import com.microbank.customer.client.RestClient;
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.security.Sanitizer;
 import java.io.File;
@@ -9,7 +10,9 @@ import java.nio.file.Files;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.yaml.snakeyaml.Yaml;
 
@@ -17,9 +20,11 @@ public class CucumberBaseStep {
   private static final Logger LOG = LoggerFactory.getLogger(CucumberBaseStep.class);
   private static Map<String, Object> properties;
 
-  public static ResponseEntity<Customer> customerResponseEntity;
-  public static Customer customer;
-  public static String customerId;
+  protected static ResponseEntity<Customer> customerResponseEntity;
+  @Autowired protected RestClient restClient;
+  protected static Customer customer;
+  protected static String customerId;
+  protected static String accessToken;
 
   static {
     try {
@@ -36,16 +41,22 @@ public class CucumberBaseStep {
     return (String) properties.get("baseUri");
   }
 
-  public String getRegisterEndpoint() {
+  protected String getRegisterEndpoint() {
     return getBaseUri() + properties.get("registerCustomer");
   }
 
-  public String getCustomerInformationEndpoint() {
+  protected String getCustomerInformationEndpoint() {
     return getBaseUri() + properties.get("getOrDeleteCustomerInfo");
   }
 
-  public String readFile(final String resourcePath) throws IOException {
+  protected String readFile(final String resourcePath) throws IOException {
     final File resource = new ClassPathResource(resourcePath).getFile();
     return Sanitizer.sanitizeJson(Files.readString(resource.toPath()));
+  }
+
+  protected HttpHeaders accessToken() {
+    final HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+    return httpHeaders;
   }
 }

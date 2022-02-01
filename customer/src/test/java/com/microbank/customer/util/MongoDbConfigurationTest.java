@@ -30,13 +30,14 @@ class MongoDbConfigurationTest extends MongoDbConfiguration {
   private String json;
 
   MongoDbConfigurationTest() {
-    super(HOST, USER, PASS, DB, null);
+    super(HOST, USER, PASS, DB, null, null);
   }
 
   @BeforeEach
   void setup() throws Exception {
     MockitoAnnotations.openMocks(this);
-    mongoDbConfiguration = new MongoDbConfiguration(HOST, USER, PASS, DB, mockEnvironment);
+    mongoDbConfiguration =
+        new MongoDbConfiguration(HOST, USER, PASS, DB, mockEnvironment, mockRestClient);
 
     final File resource = new ClassPathResource("json/SpringCloudAtlasConfig.json").getFile();
     json = Files.readString(resource.toPath());

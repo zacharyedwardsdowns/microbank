@@ -11,10 +11,14 @@ server:
     context-path: /microbank-customer
 ---
 customer:
+  request:
+    base: /customer
+    authorize: /authorize
   mongodb:
     host: freecluster-s3rjf.mongodb.net
     user: AtlasAdmin
     db: microbank
+---
 atlas:
   mongodb:
     password: test
@@ -26,3 +30,7 @@ eureka:
 ---
 cucumber:
   tests: true
+---
+token:
+  customer:
+    signature: test-signature

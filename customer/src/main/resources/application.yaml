@@ -17,6 +17,9 @@ eureka:
       defaultZone: http://localhost:8761/eureka
 ---
 customer:
+  request:
+    base: /customer
+    authorize: /authorize
   mongodb:
     host: freecluster-s3rjf.mongodb.net
     user: AtlasAdmin

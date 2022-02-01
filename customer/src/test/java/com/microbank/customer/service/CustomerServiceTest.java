@@ -1,10 +1,12 @@
 package com.microbank.customer.service;
 
 import com.microbank.customer.exception.ExistingCustomerException;
+import com.microbank.customer.exception.FailedToRegisterCustomerException;
 import com.microbank.customer.exception.MissingRequirementsException;
 import com.microbank.customer.exception.ResourceNotFoundException;
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.repository.CustomerRepository;
+import com.microbank.customer.security.PasswordEncoder;
 import com.microbank.customer.security.Sanitizer;
 import com.microbank.customer.security.model.Token;
 import com.microbank.customer.util.Util;
@@ -15,8 +17,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.dao.DuplicateKeyException;
 
 class CustomerServiceTest {
 
@@ -38,7 +42,8 @@ class CustomerServiceTest {
 
   @BeforeEach
   void setup() throws Exception {
-    customerService = new CustomerService(mockCustomerRepository, mockValidationService);
+    customerService =
+        new CustomerService(mockCustomerRepository, mockValidationService, "signature");
     customer = Util.MAPPER.readValue(json, Customer.class);
   }
 
@@ -50,6 +55,15 @@ class CustomerServiceTest {
   }
 
   @Test()
+  void testRegisterDuplicateKeyException() {
+    Mockito.when(mockCustomerRepository.exists(Mockito.any())).thenReturn(false);
+    Mockito.when(mockCustomerRepository.insert(ArgumentMatchers.any(Customer.class)))
+        .thenThrow(DuplicateKeyException.class);
+    Assertions.assertThrows(
+        FailedToRegisterCustomerException.class, () -> customerService.register(customer));
+  }
+
+  @Test()
   void testRegisterExistingCustomerException() {
     Mockito.when(mockCustomerRepository.exists(Mockito.any())).thenReturn(true);
     Assertions.assertThrows(
@@ -58,7 +72,6 @@ class CustomerServiceTest {
 
   @Test
   void testGetCustomerByCustomerId() throws Exception {
-
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.of(customer));
     final Customer result = customerService.getCustomerByCustomerId(customer.getCustomerId());
     Assertions.assertEquals(customer, result);
@@ -74,7 +87,6 @@ class CustomerServiceTest {
 
   @Test
   void testDeleteCustomerByCustomerId() throws Exception {
-
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.of(customer));
     final Customer result = customerService.deleteCustomerByCustomerId(customer.getCustomerId());
     Mockito.verify(mockCustomerRepository, Mockito.times(1)).delete(customer);
@@ -91,19 +103,20 @@ class CustomerServiceTest {
 
   @Test
   void verifyPasswordMatches() throws Exception {
-
+    final String password = customer.getPassword();
+    customer.setPassword(PasswordEncoder.generateHash(customer.getPassword()));
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.of(customer));
-    final Token response =
-        customerService.verifyPasswordMatches(customer.getUsername(), customer.getPassword());
+    final Token response = customerService.verifyPasswordMatches(customer.getUsername(), password);
     Assertions.assertNotNull(response);
   }
 
   @Test
   void verifyPasswordMatchesFalse() throws Exception {
-
+    final String password = customer.getPassword();
+    customer.setPassword(PasswordEncoder.generateHash(customer.getPassword()));
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.of(customer));
     final Token response =
-        customerService.verifyPasswordMatches(customer.getUsername(), customer.getPassword() + "1");
+        customerService.verifyPasswordMatches(customer.getUsername(), password + "1");
     Assertions.assertNull(response);
   }
 
@@ -114,7 +127,14 @@ class CustomerServiceTest {
   }
 
   @Test()
-  void verifyPasswordMatchesMissingRequirementsException() {
+  void verifyPasswordMatchesUsernameMissingRequirementsException() {
+    Assertions.assertThrows(
+        MissingRequirementsException.class,
+        () -> customerService.verifyPasswordMatches(null, customer.getPassword()));
+  }
+
+  @Test()
+  void verifyPasswordMatchesPasswordMissingRequirementsException() {
     Assertions.assertThrows(
         MissingRequirementsException.class,
         () -> customerService.verifyPasswordMatches(customer.getUsername(), null));

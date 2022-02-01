@@ -38,8 +38,9 @@ public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
       @Value("${customer.mongodb.user}") final String user,
       @Value("${atlas.mongodb.password}") final String pass,
       @Value("${customer.mongodb.db}") final String db,
-      @Nullable final Environment environment) {
-    this.pass = getPassword(environment, pass, new RestClient());
+      @Nullable final Environment environment,
+      final RestClient restClient) {
+    this.pass = getPassword(environment, pass, restClient);
     this.host = host;
     this.user = user;
     this.db = db;

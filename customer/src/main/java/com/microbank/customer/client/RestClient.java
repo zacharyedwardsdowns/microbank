@@ -14,9 +14,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 /** Component used to send http request to other services. */
+@Component
 public class RestClient {
   private static final Logger LOG = LoggerFactory.getLogger(RestClient.class);
 
@@ -37,7 +39,29 @@ public class RestClient {
       final String payload,
       final Class<T> clazz)
       throws RestClientException {
-    return sendRequest(endpoint, httpMethod, payload, clazz, null);
+    return sendRequest(endpoint, httpMethod, payload, clazz, null, null);
+  }
+
+  /**
+   * Sends and http request to the given endpoint and returns a ResponseEntity of type clazz..
+   *
+   * @param endpoint The endpoint to send an http request to.
+   * @param httpMethod The method of the request.
+   * @param payload The body (if any) of the request.
+   * @param clazz The class of the response.
+   * @param httpHeaders Http request headers to send.
+   * @param <T> Allows the response type to be generic.
+   * @return A generic ResponseEntity.
+   * @throws RestClientException If a request exception occurs.
+   */
+  public <T> ResponseEntity<T> sendRequest(
+      final String endpoint,
+      final HttpMethod httpMethod,
+      final String payload,
+      final Class<T> clazz,
+      final HttpHeaders httpHeaders)
+      throws RestClientException {
+    return sendRequest(endpoint, httpMethod, payload, clazz, httpHeaders, null);
   }
 
   /**
@@ -47,6 +71,7 @@ public class RestClient {
    * @param httpMethod The method of the request.
    * @param payload The body (if any) of the request.
    * @param clazz The class of the response.
+   * @param httpHeaders Http request headers to send.
    * @param restTemplate Allows for mocking the RestTemplate.
    * @param <T> Allows the response type to be generic.
    * @return A generic ResponseEntity.
@@ -57,6 +82,7 @@ public class RestClient {
       final HttpMethod httpMethod,
       final String payload,
       final Class<T> clazz,
+      HttpHeaders httpHeaders,
       RestTemplate restTemplate)
       throws RestClientException {
 
@@ -71,7 +97,7 @@ public class RestClient {
         restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClient));
       }
 
-      final HttpHeaders httpHeaders = new HttpHeaders();
+      if (httpHeaders == null) httpHeaders = new HttpHeaders();
       httpHeaders.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
       httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 

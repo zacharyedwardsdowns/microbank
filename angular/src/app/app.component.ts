@@ -1,5 +1,7 @@
 import { Component, HostBinding, OnInit, AfterViewInit } from '@angular/core';
 import { ThemingService } from 'src/app/service/theming.service';
+import * as ifvisible from 'ifvisible';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +16,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.themingService.theme.subscribe((theme: string) => {
       this.cssClass = theme;
     });
+
+    ifvisible.setIdleDuration(environment.idleTime);
   }
 
   ngAfterViewInit(): void {

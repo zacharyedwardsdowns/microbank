@@ -9,13 +9,16 @@ import com.microbank.customer.exception.ResourceNotFoundException;
 import com.microbank.customer.exception.ValidationException;
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.repository.CustomerRepository;
+import com.microbank.customer.security.PasswordEncoder;
 import com.microbank.customer.security.model.Token;
 import com.microbank.customer.util.Util;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -30,18 +33,23 @@ public class CustomerService {
   private final CustomerRepository customerRepository;
   private final ValidationService validationService;
   private static final int ATTEMPTS = 3;
+  private final String signature;
 
   /**
    * Injects the necessary dependencies.
    *
    * @param customerRepository A MongoRepository for customers.
    * @param validationService Validates customer information before contacting the database.
+   * @param signature The signature for creating a customer JWT token.
    */
   @Autowired
   public CustomerService(
-      final CustomerRepository customerRepository, final ValidationService validationService) {
+      final CustomerRepository customerRepository,
+      final ValidationService validationService,
+      @Value("${token.customer.signature}") final String signature) {
     this.customerRepository = customerRepository;
     this.validationService = validationService;
+    this.signature = signature;
   }
 
   /**
@@ -61,12 +69,13 @@ public class CustomerService {
     searchCustomer.setUsername(customer.getUsername());
     final Example<Customer> query = Example.of(searchCustomer, Util.defaultMatcher());
 
-    if (this.customerRepository.exists(query)) {
+    if (customerRepository.exists(query)) {
       throw new ExistingCustomerException(
           "A customer already exists with the username " + customer.getUsername() + "!");
     } else {
       customer.setJoinedOn(Util.currentTime());
       customer.setLastUpdatedOn(customer.getJoinedOn());
+      customer.setPassword(PasswordEncoder.generateHash(customer.getPassword()));
       Customer registeredCustomer = null;
 
       for (int i = 0; i < ATTEMPTS; i++) {
@@ -102,7 +111,7 @@ public class CustomerService {
     searchCustomer.setCustomerId(customerId);
     final Example<Customer> query = Example.of(searchCustomer, Util.defaultMatcher());
 
-    final Optional<Customer> customer = this.customerRepository.findOne(query);
+    final Optional<Customer> customer = customerRepository.findOne(query);
 
     if (customer.isPresent()) {
       LOG.debug("Successfully retrieved customer by customerId!");
@@ -123,7 +132,7 @@ public class CustomerService {
   public Customer deleteCustomerByCustomerId(final String customerId)
       throws ResourceNotFoundException {
     final Customer deleteCustomer = getCustomerByCustomerId(customerId);
-    this.customerRepository.delete(deleteCustomer);
+    customerRepository.delete(deleteCustomer);
     LOG.debug("Successfully deleted customer by customerId!");
     return deleteCustomer;
   }
@@ -134,16 +143,19 @@ public class CustomerService {
    * @param username The username of the user to check for a password match against.
    * @param password The password to check matches.
    * @return True if the password matches and false otherwise.
-   * @throws MissingRequirementsException The password parameter is null.
+   * @throws MissingRequirementsException The username or password parameter is null.
    */
   public Token verifyPasswordMatches(final String username, final String password)
       throws MissingRequirementsException {
     if (Util.nullOrEmpty(password)) {
-      throw new MissingRequirementsException("Must provide a password to check if it matches!");
+      throw new MissingRequirementsException("Must provide a password to authorize!");
+    }
+    if (Util.nullOrEmpty(username)) {
+      throw new MissingRequirementsException("Must provide a username to authorize!");
     }
     try {
       final Customer customer = getCustomerByUsername(username);
-      if (customer.getPassword().equals(password)) {
+      if (PasswordEncoder.matchesHash(password, customer.getPassword())) {
         return generateJwtToken(customer);
       } else {
         return null;
@@ -165,7 +177,7 @@ public class CustomerService {
     searchCustomer.setUsername(username);
     final Example<Customer> query = Example.of(searchCustomer, Util.defaultMatcher());
 
-    final Optional<Customer> customer = this.customerRepository.findOne(query);
+    final Optional<Customer> customer = customerRepository.findOne(query);
 
     if (customer.isPresent()) {
       return customer.get();
@@ -175,7 +187,7 @@ public class CustomerService {
   }
 
   /**
-   * Generates a new JWT token for an authenticated user.
+   * Generates a new JWT token for an authorized user.
    *
    * @param customer the customer to generate a token for.
    * @return A JWT token containing relevant information.
@@ -184,6 +196,8 @@ public class CustomerService {
     return new Token(
         JWT.create()
             .withClaim("customerId", customer.getCustomerId())
-            .sign(Algorithm.HMAC256("token")));
+            .withExpiresAt(Date.from(Util.currentTimePlusSeconds(900)))
+            .withIssuedAt(Date.from(Util.currentTime()))
+            .sign(Algorithm.HMAC256(signature)));
   }
 }

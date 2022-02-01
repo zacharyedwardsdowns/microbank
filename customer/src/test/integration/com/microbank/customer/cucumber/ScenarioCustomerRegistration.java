@@ -1,6 +1,5 @@
 package com.microbank.customer.cucumber;
 
-import com.microbank.customer.client.RestClient;
 import com.microbank.customer.exception.RestClientException;
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.util.Util;
@@ -13,8 +12,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
 public class ScenarioCustomerRegistration extends CucumberBaseStep {
-
-  private static final RestClient REST_CLIENT = new RestClient();
   private String customerPayload;
 
   @Given("a user's registration information")
@@ -27,7 +24,7 @@ public class ScenarioCustomerRegistration extends CucumberBaseStep {
   @When("they hit the customer registration endpoint")
   public void registerACustomer() throws RestClientException {
     customerResponseEntity =
-        REST_CLIENT.sendRequest(
+        restClient.sendRequest(
             getRegisterEndpoint(), HttpMethod.POST, customerPayload, Customer.class);
   }
 

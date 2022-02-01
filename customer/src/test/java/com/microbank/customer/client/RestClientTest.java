@@ -13,10 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 class RestClientTest {
@@ -50,7 +47,8 @@ class RestClientTest {
         .thenReturn(response);
 
     Assertions.assertEquals(
-        response, restClient.sendRequest(ENDPOINT, HTTP_METHOD, json, CLAZZ, mockRestTemplate));
+        response,
+        restClient.sendRequest(ENDPOINT, HTTP_METHOD, json, CLAZZ, null, mockRestTemplate));
   }
 
   @Test()
@@ -65,6 +63,8 @@ class RestClientTest {
 
     Assertions.assertThrows(
         RestClientException.class,
-        () -> restClient.sendRequest(ENDPOINT, HTTP_METHOD, json, CLAZZ, mockRestTemplate));
+        () ->
+            restClient.sendRequest(
+                ENDPOINT, HTTP_METHOD, json, CLAZZ, new HttpHeaders(), mockRestTemplate));
   }
 }

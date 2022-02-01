@@ -27,15 +27,20 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 class CustomerControllerTest {
 
-  private static String VERIFY_PASSWORD_MATCHES_ENDPOINT = "/password/match";
+  private static final String AUTHORIZE_PATH = "/authorize";
   private static final Token TOKEN = new Token("token");
-  private static final String REGISTER_ENDPOINT = "/customer";
   private static final String BAD_JSON = "{\"Bad\":\"Json\"}";
-  private static String CUSTOMER_ENDPOINT = "/customer/";
+  private static final String REQUEST_BASE = "/customer";
+  private static final String AUTHORIZE_ENDPOINT;
   private CustomerService mockCustomerService;
+  private static String CUSTOMER_ENDPOINT;
   private static Customer customer;
   private static String json;
   private MockMvc mockMvc;
+
+  static {
+    AUTHORIZE_ENDPOINT = REQUEST_BASE + AUTHORIZE_PATH;
+  }
 
   @BeforeAll
   static void setupClass() throws Exception {
@@ -44,9 +49,7 @@ class CustomerControllerTest {
     json = Sanitizer.sanitizeJson(json);
     customer = Util.MAPPER.readValue(json, Customer.class);
 
-    CUSTOMER_ENDPOINT += customer.getCustomerId();
-    VERIFY_PASSWORD_MATCHES_ENDPOINT =
-        "/customer/" + customer.getUsername() + VERIFY_PASSWORD_MATCHES_ENDPOINT;
+    CUSTOMER_ENDPOINT = REQUEST_BASE + "/" + customer.getCustomerId();
   }
 
   @BeforeEach
@@ -54,6 +57,8 @@ class CustomerControllerTest {
     mockCustomerService = Mockito.mock(CustomerService.class);
     mockMvc =
         MockMvcBuilders.standaloneSetup(new CustomerController(mockCustomerService))
+            .addPlaceholderValue("customer.request.base", "/customer")
+            .addPlaceholderValue("customer.request.authorize", "/authorize")
             .setControllerAdvice(new ControllerExceptionHandler())
             .build();
   }
@@ -65,7 +70,7 @@ class CustomerControllerTest {
     final String response =
         mockMvc
             .perform(
-                MockMvcRequestBuilders.post(REGISTER_ENDPOINT)
+                MockMvcRequestBuilders.post(REQUEST_BASE)
                     .content(json)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
@@ -83,7 +88,7 @@ class CustomerControllerTest {
     final String response =
         mockMvc
             .perform(
-                MockMvcRequestBuilders.post(REGISTER_ENDPOINT)
+                MockMvcRequestBuilders.post(REQUEST_BASE)
                     .content(BAD_JSON)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
@@ -102,7 +107,7 @@ class CustomerControllerTest {
     final String response =
         mockMvc
             .perform(
-                MockMvcRequestBuilders.post(REGISTER_ENDPOINT)
+                MockMvcRequestBuilders.post(REQUEST_BASE)
                     .content(json)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
@@ -185,7 +190,7 @@ class CustomerControllerTest {
   }
 
   @Test
-  void verifyPasswordMatches() throws Exception {
+  void authorize() throws Exception {
     Mockito.when(
             mockCustomerService.verifyPasswordMatches(
                 customer.getUsername(), customer.getPassword()))
@@ -194,8 +199,10 @@ class CustomerControllerTest {
     final String response =
         mockMvc
             .perform(
-                MockMvcRequestBuilders.get(VERIFY_PASSWORD_MATCHES_ENDPOINT)
-                    .header("password", customer.getPassword()))
+                MockMvcRequestBuilders.post(AUTHORIZE_ENDPOINT)
+                    .content(json)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andReturn()
             .getResponse()
@@ -206,7 +213,7 @@ class CustomerControllerTest {
   }
 
   @Test
-  void verifyPasswordMatchesFalse() throws Exception {
+  void authorizeVerifyPasswordMatchesFalse() throws Exception {
     Mockito.when(
             mockCustomerService.verifyPasswordMatches(
                 customer.getUsername(), customer.getPassword()))
@@ -214,13 +221,15 @@ class CustomerControllerTest {
 
     mockMvc
         .perform(
-            MockMvcRequestBuilders.get(VERIFY_PASSWORD_MATCHES_ENDPOINT)
-                .header("password", customer.getPassword()))
+            MockMvcRequestBuilders.post(AUTHORIZE_ENDPOINT)
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isUnauthorized());
   }
 
   @Test
-  void verifyPasswordMatchesMissingRequirementsException() throws Exception {
+  void authorizeMissingRequirementsException() throws Exception {
     Mockito.when(
             mockCustomerService.verifyPasswordMatches(
                 customer.getUsername(), customer.getPassword()))
@@ -229,8 +238,10 @@ class CustomerControllerTest {
     final String response =
         mockMvc
             .perform(
-                MockMvcRequestBuilders.get(VERIFY_PASSWORD_MATCHES_ENDPOINT)
-                    .header("password", customer.getPassword()))
+                MockMvcRequestBuilders.post(AUTHORIZE_ENDPOINT)
+                    .content(json)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isBadRequest())
             .andReturn()
             .getResponse()

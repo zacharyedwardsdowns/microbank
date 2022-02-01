@@ -33,6 +33,16 @@ public final class Util {
   }
 
   /**
+   * Returns current time added with the given seconds in UTC as an Instant.
+   *
+   * @param seconds Amount of seconds to add to the current time.
+   * @return The current time plus the given seconds.
+   */
+  public static Instant currentTimePlusSeconds(final long seconds) {
+    return Instant.now().plusSeconds(seconds);
+  }
+
+  /**
    * Checks if the given string is null, empty, or "null".
    *
    * @param string The string to null/empty check.

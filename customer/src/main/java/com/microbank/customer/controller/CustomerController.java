@@ -1,6 +1,5 @@
 package com.microbank.customer.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.microbank.customer.exception.ExistingCustomerException;
 import com.microbank.customer.exception.FailedToRegisterCustomerException;
 import com.microbank.customer.exception.InvalidJsonException;
@@ -11,23 +10,15 @@ import com.microbank.customer.model.Customer;
 import com.microbank.customer.security.Sanitizer;
 import com.microbank.customer.security.model.Token;
 import com.microbank.customer.service.CustomerService;
-import com.microbank.customer.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /** Provides endpoints for verifying login, registering customers, and querying customer data. */
 @RestController
+@RequestMapping("${customer.request.base}")
 public class CustomerController {
-  private static final String INVALID_JSON =
-      "Failed to create an instance of Customer with the given json!";
   private final CustomerService customerService;
 
   /**
@@ -50,17 +41,11 @@ public class CustomerController {
    * @throws ExistingCustomerException A customer already exists with the given username.
    * @throws FailedToRegisterCustomerException Failed to register the customer.
    */
-  @PostMapping("/customer")
+  @PostMapping
   public ResponseEntity<Customer> register(@RequestBody String customerJson)
       throws ValidationException, ExistingCustomerException, InvalidJsonException,
           FailedToRegisterCustomerException {
-    customerJson = Sanitizer.sanitizeJson(customerJson);
-    final Customer customer;
-    try {
-      customer = Util.MAPPER.readValue(customerJson, Customer.class);
-    } catch (final JsonProcessingException e) {
-      throw new InvalidJsonException(INVALID_JSON, e);
-    }
+    final Customer customer = Sanitizer.sanitizeAndMap(customerJson, Customer.class);
     return new ResponseEntity<>(customerService.register(customer), HttpStatus.CREATED);
   }
 
@@ -71,7 +56,7 @@ public class CustomerController {
    * @return The customer information for the given customerId.
    * @throws ResourceNotFoundException No customer exists for the given customerId.
    */
-  @GetMapping("/customer/{customerId}")
+  @GetMapping("/{customerId}")
   public ResponseEntity<Customer> getCustomerByCustomerId(
       @PathVariable(name = "customerId") String customerId) throws ResourceNotFoundException {
     customerId = Sanitizer.sanitizeString(customerId);
@@ -85,7 +70,7 @@ public class CustomerController {
    * @return The customer that was deleted.
    * @throws ResourceNotFoundException No customer exists for the given customerId.
    */
-  @DeleteMapping("/customer/{customerId}")
+  @DeleteMapping("/{customerId}")
   public ResponseEntity<Customer> deleteCustomerByCustomerId(
       @PathVariable(name = "customerId") String customerId) throws ResourceNotFoundException {
     customerId = Sanitizer.sanitizeString(customerId);
@@ -94,24 +79,24 @@ public class CustomerController {
   }
 
   /**
-   * Verifies if the given password matches the password of the given user.
+   * Authorizes the given user with an access token.
    *
-   * @param username The username of the user to check for a password match against.
-   * @param password The password to check matches.
-   * @return Response code 204 if the password matches and 401 otherwise.
-   * @throws MissingRequirementsException The password request header is null.
+   * @param customerJson Must contain a username and password.
+   * @return An access token if given the correct credentials.
+   * @throws InvalidJsonException Failure to read the given json into Customer.
+   * @throws MissingRequirementsException Not given a username or password.
    */
-  @GetMapping("/customer/{username}/password/match")
-  public ResponseEntity<Token> verifyPasswordMatches(
-      @PathVariable(name = "username") String username, @RequestHeader("password") String password)
-      throws MissingRequirementsException {
-    username = Sanitizer.sanitizeString(username);
-    password = Sanitizer.sanitizeString(password);
+  @PostMapping("${customer.request.authorize}")
+  public ResponseEntity<Token> authorize(@RequestBody String customerJson)
+      throws MissingRequirementsException, InvalidJsonException {
+    final Customer customer = Sanitizer.sanitizeAndMap(customerJson, Customer.class);
+    final String username = Sanitizer.sanitizeString(customer.getUsername());
+    final String password = Sanitizer.sanitizeString(customer.getPassword());
 
     final Token token = customerService.verifyPasswordMatches(username, password);
 
-    if (token == null || token.getBearerToken() == null) {
-      return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    if (token == null || token.getAccessToken() == null) {
+      return new ResponseEntity<>(new Token(), HttpStatus.UNAUTHORIZED);
     } else {
       return new ResponseEntity<>(token, HttpStatus.OK);
     }

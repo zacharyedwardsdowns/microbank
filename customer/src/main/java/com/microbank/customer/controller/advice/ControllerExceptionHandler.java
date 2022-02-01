@@ -31,7 +31,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
    * @return An ExceptionResponse with useful information.
    */
   @ExceptionHandler(value = ExistingCustomerException.class)
-  protected ResponseEntity<ExceptionResponse> conflictException(
+  protected ResponseEntity<ExceptionResponse> conflict(
       final Exception e, final HttpServletRequest request) {
     final ExceptionResponse exceptionResponse =
         createDefaultExceptionResponse(e, request, HttpStatus.CONFLICT);
@@ -47,7 +47,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
    * @return An ExceptionResponse with useful information.
    */
   @ExceptionHandler(value = ResourceNotFoundException.class)
-  protected ResponseEntity<ExceptionResponse> notFoundException(
+  protected ResponseEntity<ExceptionResponse> notFound(
       final Exception e, final HttpServletRequest request) {
     final ExceptionResponse exceptionResponse =
         createDefaultExceptionResponse(e, request, HttpStatus.NOT_FOUND);
@@ -68,7 +68,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         InvalidJsonException.class,
         MissingRequirementsException.class
       })
-  protected ResponseEntity<ExceptionResponse> badRequestException(
+  protected ResponseEntity<ExceptionResponse> badRequest(
       final Exception e, final HttpServletRequest request) {
     final ExceptionResponse exceptionResponse =
         createDefaultExceptionResponse(e, request, HttpStatus.BAD_REQUEST);
@@ -91,7 +91,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         DataAccessException.class,
         FailedToRegisterCustomerException.class
       })
-  protected ResponseEntity<ExceptionResponse> internalServerErrorException(
+  protected ResponseEntity<ExceptionResponse> internalServerError(
       final Exception e, final HttpServletRequest request) {
     final ExceptionResponse exceptionResponse =
         createDefaultExceptionResponse(e, request, HttpStatus.INTERNAL_SERVER_ERROR);
