@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 /** Provides endpoints for verifying login, registering customers, and querying customer data. */
 @RestController
-@RequestMapping("${customer.request.base}")
 public class CustomerController {
   private final CustomerService customerService;
 

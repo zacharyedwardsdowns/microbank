@@ -11,10 +11,6 @@ public class ScenarioDeleteCustomerInformation extends CucumberBaseStep {
   public void deleteCustomerInformation() throws RestClientException {
     customerResponseEntity =
         restClient.sendRequest(
-            getCustomerInformationEndpoint() + customerId,
-            HttpMethod.DELETE,
-            null,
-            Customer.class,
-            accessToken());
+            customerUri() + customerId, HttpMethod.DELETE, null, Customer.class, accessToken());
   }
 }

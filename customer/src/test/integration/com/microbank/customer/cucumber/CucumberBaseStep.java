@@ -21,27 +21,25 @@ public class CucumberBaseStep {
   protected static String customerId;
   protected static Customer customer;
 
-  private static final String getOrDelete;
-  private static final String register;
+  private static final String authUri;
   private static final String baseUri;
 
   static {
     try {
       final MappingNode properties = TestUtil.getYamlProperties("application.yaml");
-      baseUri = TestUtil.getYamlProperty(properties, "integration.base.uri");
-      register = TestUtil.getYamlProperty(properties, "integration.registerCustomer.uri");
-      getOrDelete = TestUtil.getYamlProperty(properties, "integration.getOrDeleteCustomer.uri");
+      baseUri = TestUtil.getYamlProperty(properties, "integration.request.base");
+      authUri = TestUtil.getYamlProperty(properties, "customer.request.authorize");
     } catch (IOException e) {
       throw new InitializationException("Failed to retrieve yaml properties!", e);
     }
   }
 
-  protected String getRegisterEndpoint() {
-    return baseUri + register;
+  protected String customerUri() {
+    return baseUri + "/";
   }
 
-  protected String getCustomerInformationEndpoint() {
-    return baseUri + getOrDelete;
+  protected String authorizationUri() {
+    return baseUri + authUri;
   }
 
   protected String readFile(final String resourcePath) throws IOException {

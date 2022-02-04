@@ -7,7 +7,7 @@ spring:
         - id: customer
           uri: lb://microbank-customer-service
           predicates:
-            - Path=/customer/**
+            - Path=/microbank-customer/**
           filters:
             - StripPrefix=1
 server:

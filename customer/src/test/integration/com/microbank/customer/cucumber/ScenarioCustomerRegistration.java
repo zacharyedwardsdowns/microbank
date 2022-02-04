@@ -24,8 +24,7 @@ public class ScenarioCustomerRegistration extends CucumberBaseStep {
   @When("they hit the customer registration endpoint")
   public void registerACustomer() throws RestClientException {
     customerResponseEntity =
-        restClient.sendRequest(
-            getRegisterEndpoint(), HttpMethod.POST, customerPayload, Customer.class);
+        restClient.sendRequest(customerUri(), HttpMethod.POST, customerPayload, Customer.class);
   }
 
   @And("a status code of 201 is received")

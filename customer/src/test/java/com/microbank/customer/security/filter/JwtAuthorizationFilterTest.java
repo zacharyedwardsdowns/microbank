@@ -20,26 +20,23 @@ import org.springframework.http.HttpMethod;
 import org.yaml.snakeyaml.nodes.MappingNode;
 
 class JwtAuthorizationFilterTest {
-  private static final String CONTEXT_PATH = "/microbank-customer";
-  private static final String REQUEST_BASE = "/customer";
-  private static final String AUTH_PATH = "/authorize";
   private JwtAuthorizationFilter authorizationFilter;
   private static TokenGenerator mockTokenGenerator;
-  private static final String REGISTRATION_URI;
   private static FilterChain mockFilterChain;
   private static RSAPrivateKey privateKey;
   private static RSAPublicKey publicKey;
-  private static final String AUTH_URI;
-
-  static {
-    AUTH_URI = CONTEXT_PATH + REQUEST_BASE + AUTH_PATH;
-    REGISTRATION_URI = CONTEXT_PATH + REQUEST_BASE;
-  }
+  private static String registrationUri;
+  private static String getCustomerUri;
+  private static String requestBase;
+  private static String contextPath;
+  private static String authPath;
+  private static String authUri;
 
   @BeforeAll
   static void setupClass() throws Exception {
     mockFilterChain = Mockito.mock(FilterChain.class);
     mockTokenGenerator = Mockito.mock(TokenGenerator.class);
+
     final MappingNode properties = TestUtil.getYamlProperties("application.yaml");
     privateKey =
         TokenGenerator.base64ToPrivateKey(
@@ -48,17 +45,24 @@ class JwtAuthorizationFilterTest {
         TokenGenerator.base64ToPublicKey(
             TestUtil.getYamlProperty(properties, "token.customer.key.access.public"));
     Mockito.when(mockTokenGenerator.getAccessPublic()).thenReturn(publicKey);
+
+    contextPath = TestUtil.getYamlProperty(properties, "server.servlet.context-path");
+    authPath = TestUtil.getYamlProperty(properties, "customer.request.authorize");
+    requestBase = TestUtil.getYamlProperty(properties, "customer.request.base");
+    registrationUri = contextPath + requestBase;
+    getCustomerUri = contextPath + "/id";
+    authUri = contextPath + authPath;
   }
 
   @BeforeEach
   void setup() {
     authorizationFilter =
-        new JwtAuthorizationFilter(AUTH_PATH, CONTEXT_PATH, REQUEST_BASE, mockTokenGenerator);
+        new JwtAuthorizationFilter(authPath, contextPath, requestBase, mockTokenGenerator);
   }
 
   @Test
   void doFilterInternalAuthUri() throws Exception {
-    final ServletRequest request = new ServletRequest(AUTH_URI);
+    final ServletRequest request = new ServletRequest(authUri);
     final ServletResponse response = new ServletResponse();
     authorizationFilter.doFilterInternal(request, response, mockFilterChain);
     Mockito.verify(mockFilterChain, Mockito.atMostOnce()).doFilter(request, response);
@@ -66,7 +70,7 @@ class JwtAuthorizationFilterTest {
 
   @Test
   void doFilterInternalRegistrationUri() throws Exception {
-    final ServletRequest request = new ServletRequest(REGISTRATION_URI);
+    final ServletRequest request = new ServletRequest(registrationUri);
     final ServletResponse response = new ServletResponse();
     request.setMethod(HttpMethod.POST);
     authorizationFilter.doFilterInternal(request, response, mockFilterChain);
@@ -75,7 +79,7 @@ class JwtAuthorizationFilterTest {
 
   @Test
   void doFilterInternalNullAuthorization() throws Exception {
-    final ServletRequest request = new ServletRequest(CONTEXT_PATH);
+    final ServletRequest request = new ServletRequest(getCustomerUri);
     final ServletResponse response = new ServletResponse();
     final HttpHeaders headers = new HttpHeaders();
     headers.set(HttpHeaders.AUTHORIZATION, null);
@@ -86,12 +90,12 @@ class JwtAuthorizationFilterTest {
 
   @Test
   void doFilterInternalBadToken() throws Exception {
-    final ServletRequest request = new ServletRequest(CONTEXT_PATH);
+    final ServletRequest request = new ServletRequest(getCustomerUri);
     final ServletResponse response = new ServletResponse();
     final HttpHeaders headers = new HttpHeaders();
     headers.set(
         HttpHeaders.AUTHORIZATION,
-        JWT.create().withSubject(CONTEXT_PATH).sign(Algorithm.HMAC256(CONTEXT_PATH)));
+        JWT.create().withSubject("").sign(Algorithm.HMAC256("signature")));
     request.setHeaders(headers);
     authorizationFilter.doFilterInternal(request, response, mockFilterChain);
     Mockito.verify(mockFilterChain, Mockito.never()).doFilter(request, response);
@@ -99,13 +103,13 @@ class JwtAuthorizationFilterTest {
 
   @Test
   void doFilterInternalExpiredToken() throws Exception {
-    final ServletRequest request = new ServletRequest(REGISTRATION_URI);
+    final ServletRequest request = new ServletRequest(registrationUri);
     final ServletResponse response = new ServletResponse();
     final HttpHeaders headers = new HttpHeaders();
     headers.set(
         HttpHeaders.AUTHORIZATION,
         JWT.create()
-            .withSubject(CONTEXT_PATH)
+            .withSubject("")
             .withExpiresAt(Date.from(Util.currentTime().minusSeconds(60)))
             .sign(Algorithm.RSA256(publicKey, privateKey)));
     request.setHeaders(headers);
@@ -116,13 +120,13 @@ class JwtAuthorizationFilterTest {
 
   @Test
   void doFilterInternalSuccess() throws Exception {
-    final ServletRequest request = new ServletRequest(CONTEXT_PATH);
+    final ServletRequest request = new ServletRequest(getCustomerUri);
     final ServletResponse response = new ServletResponse();
     final HttpHeaders headers = new HttpHeaders();
     headers.set(
         HttpHeaders.AUTHORIZATION,
         JWT.create()
-            .withSubject(CONTEXT_PATH)
+            .withSubject("")
             .withExpiresAt(Date.from(Util.currentTime().plusSeconds(60)))
             .sign(Algorithm.RSA256(publicKey, privateKey)));
     request.setHeaders(headers);

@@ -7,10 +7,10 @@ spring:
 server:
   port: 6010
   servlet:
-    context-path: /microbank-customer
+    context-path: /customer
 customer:
   request:
-    base: /customer
+    base: /
     authorize: /authorize
   mongodb:
     host: freecluster-s3rjf.mongodb.net
@@ -26,12 +26,8 @@ eureka:
 cucumber:
   tests: true
 integration:
-  base:
-    uri: http://localhost:6010/microbank-customer
-  registerCustomer:
-    uri: /customer
-  getOrDeleteCustomer:
-    uri: /customer/
+  request:
+    base: http://localhost:6010/customer
 token:
   customer:
     issuer: com.microbank.customer.integration

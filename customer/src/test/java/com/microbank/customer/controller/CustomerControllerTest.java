@@ -24,22 +24,18 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.yaml.snakeyaml.nodes.MappingNode;
 
 class CustomerControllerTest {
   private static final Tokens TOKENS = new Tokens("ID", "access", "refresh");
-  private static final String AUTHORIZE_PATH = "/authorize";
   private static final String BAD_JSON = "{\"Bad\":\"Json\"}";
-  private static final String REQUEST_BASE = "/customer";
-  private static final String AUTHORIZE_ENDPOINT;
   private CustomerService mockCustomerService;
-  private static String CUSTOMER_ENDPOINT;
+  private static String authorizeUri;
+  private static String customerUri;
+  private static String requestBase;
   private static Customer customer;
   private static String json;
   private MockMvc mockMvc;
-
-  static {
-    AUTHORIZE_ENDPOINT = REQUEST_BASE + AUTHORIZE_PATH;
-  }
 
   @BeforeAll
   static void setupClass() throws Exception {
@@ -48,7 +44,10 @@ class CustomerControllerTest {
     json = Sanitizer.sanitizeJson(json);
     customer = Util.MAPPER.readValue(json, Customer.class);
 
-    CUSTOMER_ENDPOINT = REQUEST_BASE + "/" + customer.getCustomerId();
+    final MappingNode properties = TestUtil.getYamlProperties("application.yaml");
+    authorizeUri = TestUtil.getYamlProperty(properties, "customer.request.authorize");
+    requestBase = TestUtil.getYamlProperty(properties, "customer.request.base");
+    customerUri = requestBase + customer.getCustomerId();
   }
 
   @BeforeEach
@@ -56,8 +55,7 @@ class CustomerControllerTest {
     mockCustomerService = Mockito.mock(CustomerService.class);
     mockMvc =
         MockMvcBuilders.standaloneSetup(new CustomerController(mockCustomerService))
-            .addPlaceholderValue("customer.request.base", "/customer")
-            .addPlaceholderValue("customer.request.authorize", "/authorize")
+            .addPlaceholderValue("customer.request.authorize", authorizeUri)
             .setControllerAdvice(new ControllerExceptionHandler())
             .build();
   }
@@ -69,7 +67,7 @@ class CustomerControllerTest {
     final String response =
         mockMvc
             .perform(
-                MockMvcRequestBuilders.post(REQUEST_BASE)
+                MockMvcRequestBuilders.post(requestBase)
                     .content(json)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
@@ -87,7 +85,7 @@ class CustomerControllerTest {
     final String response =
         mockMvc
             .perform(
-                MockMvcRequestBuilders.post(REQUEST_BASE)
+                MockMvcRequestBuilders.post(requestBase)
                     .content(BAD_JSON)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
@@ -106,7 +104,7 @@ class CustomerControllerTest {
     final String response =
         mockMvc
             .perform(
-                MockMvcRequestBuilders.post(REQUEST_BASE)
+                MockMvcRequestBuilders.post(requestBase)
                     .content(json)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
@@ -125,8 +123,7 @@ class CustomerControllerTest {
 
     final String response =
         mockMvc
-            .perform(
-                MockMvcRequestBuilders.get(CUSTOMER_ENDPOINT).accept(MediaType.APPLICATION_JSON))
+            .perform(MockMvcRequestBuilders.get(customerUri).accept(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andReturn()
             .getResponse()
@@ -143,8 +140,7 @@ class CustomerControllerTest {
 
     final String response =
         mockMvc
-            .perform(
-                MockMvcRequestBuilders.get(CUSTOMER_ENDPOINT).accept(MediaType.APPLICATION_JSON))
+            .perform(MockMvcRequestBuilders.get(customerUri).accept(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isNotFound())
             .andReturn()
             .getResponse()
@@ -160,8 +156,7 @@ class CustomerControllerTest {
 
     final String response =
         mockMvc
-            .perform(
-                MockMvcRequestBuilders.delete(CUSTOMER_ENDPOINT).accept(MediaType.APPLICATION_JSON))
+            .perform(MockMvcRequestBuilders.delete(customerUri).accept(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andReturn()
             .getResponse()
@@ -178,8 +173,7 @@ class CustomerControllerTest {
 
     final String response =
         mockMvc
-            .perform(
-                MockMvcRequestBuilders.delete(CUSTOMER_ENDPOINT).accept(MediaType.APPLICATION_JSON))
+            .perform(MockMvcRequestBuilders.delete(customerUri).accept(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isNotFound())
             .andReturn()
             .getResponse()
@@ -198,7 +192,7 @@ class CustomerControllerTest {
     final String response =
         mockMvc
             .perform(
-                MockMvcRequestBuilders.post(AUTHORIZE_ENDPOINT)
+                MockMvcRequestBuilders.post(authorizeUri)
                     .content(json)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
@@ -220,7 +214,7 @@ class CustomerControllerTest {
 
     mockMvc
         .perform(
-            MockMvcRequestBuilders.post(AUTHORIZE_ENDPOINT)
+            MockMvcRequestBuilders.post(authorizeUri)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -236,7 +230,7 @@ class CustomerControllerTest {
 
     mockMvc
         .perform(
-            MockMvcRequestBuilders.post(AUTHORIZE_ENDPOINT)
+            MockMvcRequestBuilders.post(authorizeUri)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -253,7 +247,7 @@ class CustomerControllerTest {
     final String response =
         mockMvc
             .perform(
-                MockMvcRequestBuilders.post(AUTHORIZE_ENDPOINT)
+                MockMvcRequestBuilders.post(authorizeUri)
                     .content(json)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))

@@ -28,11 +28,7 @@ public class ScenarioAuthorization extends CucumberBaseStep {
   public void registerACustomer() throws RestClientException {
     tokens =
         restClient
-            .sendRequest(
-                "http://localhost:6010/microbank-customer/customer/authorize",
-                HttpMethod.POST,
-                customerPayload,
-                Tokens.class)
+            .sendRequest(authorizationUri(), HttpMethod.POST, customerPayload, Tokens.class)
             .getBody();
   }
 

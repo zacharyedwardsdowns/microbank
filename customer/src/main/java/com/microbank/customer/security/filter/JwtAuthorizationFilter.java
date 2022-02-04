@@ -44,7 +44,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
       @Value("${customer.request.base}") final String requestBase,
       final TokenGenerator tokenGenerator) {
     algorithm = Algorithm.RSA256(tokenGenerator.getAccessPublic(), null);
-    authorizationUri = contextPath + requestBase + authorizationPath;
+    authorizationUri = contextPath + authorizationPath;
     registrationUri = contextPath + requestBase;
   }
 
