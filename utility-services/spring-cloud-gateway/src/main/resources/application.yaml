@@ -10,10 +10,8 @@ spring:
             - Path=/customer/**
           filters:
             - StripPrefix=1
----
 server:
   port: 8765
----
 eureka:
   client:
     registerWithEureka: true

@@ -7,7 +7,7 @@ import com.microbank.customer.exception.MissingRequirementsException;
 import com.microbank.customer.exception.ResourceNotFoundException;
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.security.Sanitizer;
-import com.microbank.customer.security.model.Token;
+import com.microbank.customer.security.model.Tokens;
 import com.microbank.customer.service.CustomerService;
 import com.microbank.customer.util.TestUtil;
 import com.microbank.customer.util.Util;
@@ -26,9 +26,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 class CustomerControllerTest {
-
+  private static final Tokens TOKENS = new Tokens("ID", "access", "refresh");
   private static final String AUTHORIZE_PATH = "/authorize";
-  private static final Token TOKEN = new Token("token");
   private static final String BAD_JSON = "{\"Bad\":\"Json\"}";
   private static final String REQUEST_BASE = "/customer";
   private static final String AUTHORIZE_ENDPOINT;
@@ -194,7 +193,7 @@ class CustomerControllerTest {
     Mockito.when(
             mockCustomerService.verifyPasswordMatches(
                 customer.getUsername(), customer.getPassword()))
-        .thenReturn(TOKEN);
+        .thenReturn(TOKENS);
 
     final String response =
         mockMvc
@@ -208,12 +207,28 @@ class CustomerControllerTest {
             .getResponse()
             .getContentAsString();
 
-    final Token result = Util.MAPPER.readValue(response, Token.class);
-    Assertions.assertEquals(TOKEN, result);
+    final Tokens result = Util.MAPPER.readValue(response, Tokens.class);
+    Assertions.assertEquals(TOKENS, result);
   }
 
   @Test
   void authorizeVerifyPasswordMatchesFalse() throws Exception {
+    Mockito.when(
+            mockCustomerService.verifyPasswordMatches(
+                customer.getUsername(), customer.getPassword()))
+        .thenReturn(null);
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.post(AUTHORIZE_ENDPOINT)
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+  }
+
+  @Test
+  void authorizeTokensNull() throws Exception {
     Mockito.when(
             mockCustomerService.verifyPasswordMatches(
                 customer.getUsername(), customer.getPassword()))

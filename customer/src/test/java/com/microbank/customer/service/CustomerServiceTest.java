@@ -8,7 +8,8 @@ import com.microbank.customer.model.Customer;
 import com.microbank.customer.repository.CustomerRepository;
 import com.microbank.customer.security.PasswordEncoder;
 import com.microbank.customer.security.Sanitizer;
-import com.microbank.customer.security.model.Token;
+import com.microbank.customer.security.TokenGenerator;
+import com.microbank.customer.security.model.Tokens;
 import com.microbank.customer.util.Util;
 import java.io.File;
 import java.nio.file.Files;
@@ -26,6 +27,7 @@ class CustomerServiceTest {
 
   private static CustomerRepository mockCustomerRepository;
   private static ValidationService mockValidationService;
+  private static TokenGenerator mockTokenGenerator;
   private CustomerService customerService;
   private static String json;
   private Customer customer;
@@ -34,6 +36,7 @@ class CustomerServiceTest {
   static void setupClass() throws Exception {
     mockCustomerRepository = Mockito.mock(CustomerRepository.class);
     mockValidationService = Mockito.mock(ValidationService.class);
+    mockTokenGenerator = Mockito.mock(TokenGenerator.class);
 
     final File resource = new ClassPathResource("json/Customer.json").getFile();
     json = Files.readString(resource.toPath());
@@ -43,7 +46,7 @@ class CustomerServiceTest {
   @BeforeEach
   void setup() throws Exception {
     customerService =
-        new CustomerService(mockCustomerRepository, mockValidationService, "signature");
+        new CustomerService(mockCustomerRepository, mockValidationService, mockTokenGenerator);
     customer = Util.MAPPER.readValue(json, Customer.class);
   }
 
@@ -106,7 +109,8 @@ class CustomerServiceTest {
     final String password = customer.getPassword();
     customer.setPassword(PasswordEncoder.generateHash(customer.getPassword()));
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.of(customer));
-    final Token response = customerService.verifyPasswordMatches(customer.getUsername(), password);
+    Mockito.when(mockTokenGenerator.generateTokens(Mockito.any())).thenReturn(new Tokens());
+    final Tokens response = customerService.verifyPasswordMatches(customer.getUsername(), password);
     Assertions.assertNotNull(response);
   }
 
@@ -115,7 +119,7 @@ class CustomerServiceTest {
     final String password = customer.getPassword();
     customer.setPassword(PasswordEncoder.generateHash(customer.getPassword()));
     Mockito.when(mockCustomerRepository.findOne(Mockito.any())).thenReturn(Optional.of(customer));
-    final Token response =
+    final Tokens response =
         customerService.verifyPasswordMatches(customer.getUsername(), password + "1");
     Assertions.assertNull(response);
   }

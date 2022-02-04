@@ -1,7 +1,7 @@
 cd "$(dirname "$0")" || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
 
 # Used to keep the sensitive configs out of the repository.
-. ../../../microbank-config/configServerEnv.sh
+. ../../../microbank-config/scripts/configServerEnv.sh
 
 has_param() {
   local term="$1"

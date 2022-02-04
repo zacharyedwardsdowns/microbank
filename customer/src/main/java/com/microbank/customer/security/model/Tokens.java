@@ -15,8 +15,14 @@ import lombok.ToString;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class Token {
+public class Tokens {
+
+  @JsonProperty("IdToken")
+  private String idToken;
 
   @JsonProperty("AccessToken")
   private String accessToken;
+
+  @JsonProperty("RefreshToken")
+  private String refreshToken;
 }

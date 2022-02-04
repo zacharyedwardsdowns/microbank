@@ -1,10 +1,7 @@
 package com.microbank.customer.exception;
 
-import java.io.Serial;
-
 /** Thrown upon failure to instantiate MongoDbConfiguration. */
 public class MongoInstantiationException extends RuntimeException {
-  @Serial private static final long serialVersionUID = 1L;
 
   /** Throws an exception. */
   public MongoInstantiationException() {

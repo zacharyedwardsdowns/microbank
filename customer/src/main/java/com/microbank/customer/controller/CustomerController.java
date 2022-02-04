@@ -8,8 +8,9 @@ import com.microbank.customer.exception.ResourceNotFoundException;
 import com.microbank.customer.exception.ValidationException;
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.security.Sanitizer;
-import com.microbank.customer.security.model.Token;
+import com.microbank.customer.security.model.Tokens;
 import com.microbank.customer.service.CustomerService;
+import com.microbank.customer.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -87,18 +88,18 @@ public class CustomerController {
    * @throws MissingRequirementsException Not given a username or password.
    */
   @PostMapping("${customer.request.authorize}")
-  public ResponseEntity<Token> authorize(@RequestBody String customerJson)
+  public ResponseEntity<Tokens> authorize(@RequestBody String customerJson)
       throws MissingRequirementsException, InvalidJsonException {
     final Customer customer = Sanitizer.sanitizeAndMap(customerJson, Customer.class);
     final String username = Sanitizer.sanitizeString(customer.getUsername());
     final String password = Sanitizer.sanitizeString(customer.getPassword());
 
-    final Token token = customerService.verifyPasswordMatches(username, password);
+    final Tokens tokens = customerService.verifyPasswordMatches(username, password);
 
-    if (token == null || token.getAccessToken() == null) {
-      return new ResponseEntity<>(new Token(), HttpStatus.UNAUTHORIZED);
+    if (Util.tokensNotNull(tokens)) {
+      return new ResponseEntity<>(tokens, HttpStatus.OK);
     } else {
-      return new ResponseEntity<>(token, HttpStatus.OK);
+      return new ResponseEntity<>(new Tokens(), HttpStatus.UNAUTHORIZED);
     }
   }
 }

@@ -1,10 +1,7 @@
 package com.microbank.customer.exception;
 
-import java.io.Serial;
-
 /** Thrown when a customer is not found. */
 public class ResourceNotFoundException extends Exception {
-  @Serial private static final long serialVersionUID = 1L;
 
   /** Throws an exception. */
   public ResourceNotFoundException() {

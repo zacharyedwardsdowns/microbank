@@ -2,6 +2,7 @@ package com.microbank.customer.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.microbank.customer.security.model.Tokens;
 import java.time.Instant;
 import org.springframework.data.domain.ExampleMatcher;
 
@@ -33,16 +34,6 @@ public final class Util {
   }
 
   /**
-   * Returns current time added with the given seconds in UTC as an Instant.
-   *
-   * @param seconds Amount of seconds to add to the current time.
-   * @return The current time plus the given seconds.
-   */
-  public static Instant currentTimePlusSeconds(final long seconds) {
-    return Instant.now().plusSeconds(seconds);
-  }
-
-  /**
    * Checks if the given string is null, empty, or "null".
    *
    * @param string The string to null/empty check.
@@ -50,5 +41,63 @@ public final class Util {
    */
   public static boolean nullOrEmpty(final String string) {
     return string == null || string.equals("") || string.equalsIgnoreCase("null");
+  }
+
+  /**
+   * Checks if all tokens are set.
+   *
+   * @param tokens The tokens to check.
+   * @return True if all tokens are present and false if any are missing.
+   */
+  public static boolean tokensNotNull(final Tokens tokens) {
+    return !(tokens == null
+        || tokens.getIdToken() == null
+        || tokens.getAccessToken() == null
+        || tokens.getRefreshToken() == null);
+  }
+
+  /**
+   * Set null strings to empty strings.
+   *
+   * @param string String to check if null.
+   * @return Empty string if null, unchanged otherwise.
+   */
+  public static String concatNull(String string) {
+    if (string == null) {
+      return "";
+    }
+    return string;
+  }
+
+  /**
+   * Concatenate first, middle, last, and suffix names into a full name.
+   *
+   * @param firstName User's first name.
+   * @param middleName User's middle name.
+   * @param lastName User's last name.
+   * @param suffix User's suffix.
+   * @return A full name.
+   */
+  public static String getName(
+      final String firstName, final String middleName, final String lastName, final String suffix) {
+    String name = concatNull(firstName);
+    if (!nullOrEmpty(name)) {
+      if (!nullOrEmpty(middleName)) {
+        name += " " + middleName;
+      }
+    } else {
+      name = concatNull(middleName);
+    }
+    if (!nullOrEmpty(name)) {
+      if (!nullOrEmpty(lastName)) {
+        name += " " + lastName;
+      }
+    } else {
+      name = concatNull(lastName);
+    }
+    if (!nullOrEmpty(name) && !nullOrEmpty(suffix)) {
+      name += " " + suffix;
+    }
+    return name;
   }
 }

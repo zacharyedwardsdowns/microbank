@@ -1,3 +1,0 @@
-baseUri: http://localhost:6010/microbank-customer
-registerCustomer: /customer
-getOrDeleteCustomerInfo: /customer/

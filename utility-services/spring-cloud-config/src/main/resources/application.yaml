@@ -10,6 +10,5 @@ spring:
           uri: ${uri}
           username: zacharyedwardsdowns
           password: ${pass}
----
 server:
   port: 8888

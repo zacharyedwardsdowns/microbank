@@ -4,12 +4,10 @@ spring:
   cloud:
     config:
       uri: http://localhost:8888/microbank-customer-service/default
----
 server:
   port: 6010
   servlet:
     context-path: /microbank-customer
----
 customer:
   request:
     base: /customer
@@ -18,19 +16,36 @@ customer:
     host: freecluster-s3rjf.mongodb.net
     user: AtlasAdmin
     db: microbank
----
 atlas:
   mongodb:
     password: test
----
 eureka:
   client:
     registerWithEureka: false
     fetchRegistry: false
----
 cucumber:
   tests: true
----
+integration:
+  base:
+    uri: http://localhost:6010/microbank-customer
+  registerCustomer:
+    uri: /customer
+  getOrDeleteCustomer:
+    uri: /customer/
 token:
   customer:
-    signature: test-signature
+    issuer: com.microbank.customer.integration
+    audience: com.microbank.customer.integration
+    key: # FOR TESTING ONLY DO NOT USE THESE KEYS FOR ANYTHING ELSE (ONLY 1024)
+      id:
+        expire: 30
+        public: &public MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDVlro0V8O0xm6drK78wc7rZ30KHJtxWse1eKg6cDbjPUlAqKn76Qz+QLbQBxcxa7En8v83haQ18LtEv6Iq+CstSTsLl1WZZlxSK44rzS+myKFxqUlmAT1JJqnZjC4mhZABdmPLHTy02oLh+pCIA4+N798FmHKZ+AwmobIln4h4nwIDAQAB
+        private: &private MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBANWWujRXw7TGbp2srvzBzutnfQocm3Fax7V4qDpwNuM9SUCoqfvpDP5AttAHFzFrsSfy/zeFpDXwu0S/oir4Ky1JOwuXVZlmXFIrjivNL6bIoXGpSWYBPUkmqdmMLiaFkAF2Y8sdPLTaguH6kIgDj43v3wWYcpn4DCahsiWfiHifAgMBAAECgYEAlyRaD8ArVTk1/Y29Jk9fRWWuLgGgXc6Hk/sV0ISn0pYDyCWSZBi+gQz6UKsz1l0Gt+ZUg82mLiVz32pcL1v98HqsrXKixhQxG72kQlajqIa/2byfPzVlkl0DYFsoFnWYC+tIdyxZ0CAG+HOBQcr4qgk5s1CMq78/VjgcIVxbM0ECQQDz7zXwWeBq401fw7iBsD7mFqFdiyL6DeLq24Q09Z56Kk8Ot1yNFDmLtDnaI/KnC6+QboiPv3k3MSqcnq07/VCFAkEA4CdEzwkwC6Pa5PZj9IMTZF9x8ZsLZ23jXvhu36zXi/Ufa2csmsBTa6Yz7Q5FXOYkk/hYlsPXViVdfFdhpLMf0wJBAJvKqyhWPn4FreT7m1s4tPM+gNC9jBknxUU57bXlKNHdM6CyeumfgSE4ebpYOyF01SvpbE5ie4hEXnKo5PrrTgECQEQSyOvTT3sJfQ2x4jM8p2QBNHp6aqEzlyydaBaXyDIh9DPK9pnctLjplbV1cw0+e3dQoZ7PxRLNcDG129qH568CQAcWFujaknHGMYpf0XQL8Pf8ZY539xaaJN87Fx3agPnRNMxfpyBpvSfFwP2Gjugin8zA8L/htau4X7GnDWnGLz4=
+      access:
+        expire: 300
+        public: *public
+        private: *private
+      refresh:
+        expire: 30
+        public: *public
+        private: *private

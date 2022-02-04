@@ -1,7 +1,5 @@
 package com.microbank.customer.service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.microbank.customer.exception.ExistingCustomerException;
 import com.microbank.customer.exception.FailedToRegisterCustomerException;
 import com.microbank.customer.exception.MissingRequirementsException;
@@ -10,15 +8,14 @@ import com.microbank.customer.exception.ValidationException;
 import com.microbank.customer.model.Customer;
 import com.microbank.customer.repository.CustomerRepository;
 import com.microbank.customer.security.PasswordEncoder;
-import com.microbank.customer.security.model.Token;
+import com.microbank.customer.security.TokenGenerator;
+import com.microbank.customer.security.model.Tokens;
 import com.microbank.customer.util.Util;
-import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -32,24 +29,24 @@ public class CustomerService {
   private static final Logger LOG = LoggerFactory.getLogger(CustomerService.class);
   private final CustomerRepository customerRepository;
   private final ValidationService validationService;
+  private final TokenGenerator tokenGenerator;
   private static final int ATTEMPTS = 3;
-  private final String signature;
 
   /**
    * Injects the necessary dependencies.
    *
    * @param customerRepository A MongoRepository for customers.
    * @param validationService Validates customer information before contacting the database.
-   * @param signature The signature for creating a customer JWT token.
+   * @param tokenGenerator Generates tokens for authorization endpoint.
    */
   @Autowired
   public CustomerService(
       final CustomerRepository customerRepository,
       final ValidationService validationService,
-      @Value("${token.customer.signature}") final String signature) {
+      final TokenGenerator tokenGenerator) {
     this.customerRepository = customerRepository;
     this.validationService = validationService;
-    this.signature = signature;
+    this.tokenGenerator = tokenGenerator;
   }
 
   /**
@@ -145,7 +142,7 @@ public class CustomerService {
    * @return True if the password matches and false otherwise.
    * @throws MissingRequirementsException The username or password parameter is null.
    */
-  public Token verifyPasswordMatches(final String username, final String password)
+  public Tokens verifyPasswordMatches(final String username, final String password)
       throws MissingRequirementsException {
     if (Util.nullOrEmpty(password)) {
       throw new MissingRequirementsException("Must provide a password to authorize!");
@@ -189,15 +186,10 @@ public class CustomerService {
   /**
    * Generates a new JWT token for an authorized user.
    *
-   * @param customer the customer to generate a token for.
+   * @param customer the customer to generate tokens for.
    * @return A JWT token containing relevant information.
    */
-  private Token generateJwtToken(final Customer customer) {
-    return new Token(
-        JWT.create()
-            .withClaim("customerId", customer.getCustomerId())
-            .withExpiresAt(Date.from(Util.currentTimePlusSeconds(900)))
-            .withIssuedAt(Date.from(Util.currentTime()))
-            .sign(Algorithm.HMAC256(signature)));
+  private Tokens generateJwtToken(final Customer customer) {
+    return tokenGenerator.generateTokens(customer);
   }
 }

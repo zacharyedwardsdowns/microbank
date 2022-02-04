@@ -7,11 +7,16 @@ import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.*;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 
 @SuppressWarnings("deprecation")
 public class ServletRequest implements HttpServletRequest {
   private final String requestUri;
+  private HttpHeaders headers;
+  private HttpMethod method;
 
   public ServletRequest(final String requestUri) {
     this.requestUri = requestUri;
@@ -34,7 +39,11 @@ public class ServletRequest implements HttpServletRequest {
 
   @Override
   public String getHeader(String name) {
-    return null;
+    return headers.getFirst(name);
+  }
+
+  public void setHeaders(HttpHeaders headers) {
+    this.headers = headers;
   }
 
   @Override
@@ -54,7 +63,11 @@ public class ServletRequest implements HttpServletRequest {
 
   @Override
   public String getMethod() {
-    return null;
+    return this.method.name();
+  }
+
+  public void setMethod(HttpMethod method) {
+    this.method = method;
   }
 
   @Override

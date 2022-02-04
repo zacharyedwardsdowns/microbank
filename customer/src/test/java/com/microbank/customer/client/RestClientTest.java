@@ -48,23 +48,14 @@ class RestClientTest {
 
     Assertions.assertEquals(
         response,
-        restClient.sendRequest(ENDPOINT, HTTP_METHOD, json, CLAZZ, null, mockRestTemplate));
+        restClient.sendRequest(
+            ENDPOINT, HTTP_METHOD, json, CLAZZ, new HttpHeaders(), mockRestTemplate));
   }
 
   @Test()
   void sendRequestRestClientException() {
-    Mockito.when(
-            mockRestTemplate.exchange(
-                ArgumentMatchers.any(URI.class),
-                ArgumentMatchers.eq(HTTP_METHOD),
-                ArgumentMatchers.any(HttpEntity.class),
-                ArgumentMatchers.eq(CLAZZ)))
-        .thenThrow(org.springframework.web.client.RestClientException.class);
-
     Assertions.assertThrows(
         RestClientException.class,
-        () ->
-            restClient.sendRequest(
-                ENDPOINT, HTTP_METHOD, json, CLAZZ, new HttpHeaders(), mockRestTemplate));
+        () -> restClient.sendRequest(ENDPOINT, HTTP_METHOD, null, CLAZZ));
   }
 }

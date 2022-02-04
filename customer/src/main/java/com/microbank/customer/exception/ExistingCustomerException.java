@@ -1,10 +1,7 @@
 package com.microbank.customer.exception;
 
-import java.io.Serial;
-
 /** Thrown when a customer already exists. */
 public class ExistingCustomerException extends Exception {
-  @Serial private static final long serialVersionUID = 1L;
 
   /** Throws an exception. */
   public ExistingCustomerException() {

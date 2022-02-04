@@ -1,10 +1,7 @@
 package com.microbank.customer.exception;
 
-import java.io.Serial;
-
 /** Thrown when not given enough information to fulfill the request. */
 public class MissingRequirementsException extends Exception {
-  @Serial private static final long serialVersionUID = 1L;
 
   /** Throws an exception. */
   public MissingRequirementsException() {

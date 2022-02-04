@@ -1,11 +1,9 @@
 package com.microbank.customer.exception;
 
-import java.io.Serial;
 import javax.servlet.ServletException;
 
 /** Thrown when a customer already exists. */
 public class AuthorizationException extends ServletException {
-  @Serial private static final long serialVersionUID = 1L;
 
   /** Throws an exception. */
   public AuthorizationException() {

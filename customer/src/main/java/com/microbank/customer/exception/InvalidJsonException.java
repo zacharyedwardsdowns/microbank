@@ -1,10 +1,7 @@
 package com.microbank.customer.exception;
 
-import java.io.Serial;
-
 /** Thrown upon failure to transform a user given json into a class */
 public class InvalidJsonException extends Exception {
-  @Serial private static final long serialVersionUID = 1L;
 
   /** Throws an exception. */
   public InvalidJsonException() {

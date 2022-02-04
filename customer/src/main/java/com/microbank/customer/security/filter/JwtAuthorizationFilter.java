@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.microbank.customer.security.TokenGenerator;
 import com.microbank.customer.util.Util;
 import java.io.IOException;
 import java.util.Date;
@@ -34,17 +35,17 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
    *
    * @param authorizationPath The request path for the authorization endpoint.
    * @param contextPath The context path of the application.
-   * @param signature The signature for verifying a customer JWT token.
    * @param requestBase The request path of the CustomerController.
+   * @param tokenGenerator Contains the access key public token.
    */
   public JwtAuthorizationFilter(
       @Value("${customer.request.authorize}") final String authorizationPath,
       @Value("${server.servlet.context-path}") final String contextPath,
-      @Value("${token.customer.signature}") final String signature,
-      @Value("${customer.request.base}") final String requestBase) {
+      @Value("${customer.request.base}") final String requestBase,
+      final TokenGenerator tokenGenerator) {
+    algorithm = Algorithm.RSA256(tokenGenerator.getAccessPublic(), null);
     authorizationUri = contextPath + requestBase + authorizationPath;
     registrationUri = contextPath + requestBase;
-    algorithm = Algorithm.HMAC256(signature);
   }
 
   /**

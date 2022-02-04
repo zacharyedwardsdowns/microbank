@@ -1,10 +1,10 @@
 package com.microbank.customer.exception;
 
-/** Thrown when an http exception occurs during integration testing */
-public class RestClientException extends Exception {
+/** Thrown upon failure to initialize a class */
+public class InitializationException extends RuntimeException {
 
   /** Throws an exception. */
-  public RestClientException() {
+  public InitializationException() {
     super();
   }
 
@@ -13,7 +13,7 @@ public class RestClientException extends Exception {
    *
    * @param message The exception message.
    */
-  public RestClientException(final String message) {
+  public InitializationException(final String message) {
     super(message);
   }
 
@@ -23,7 +23,7 @@ public class RestClientException extends Exception {
    * @param message The exception message.
    * @param throwable The cause of the exception.
    */
-  public RestClientException(final String message, final Throwable throwable) {
+  public InitializationException(final String message, final Throwable throwable) {
     super(message, throwable);
   }
 }
