@@ -1,1 +1,1 @@
-docker push registry.gitlab.com/zacharyedwardsdowns/micro-bank/spring-cloud-gateway
+docker push zacharyed/microbank-spring-cloud-gateway

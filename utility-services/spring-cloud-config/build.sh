@@ -16,7 +16,7 @@ has_param() {
 
 if has_param '--multi' "$@"; then
   echo ""
-    docker build --build-arg URI="${URI}" --build-arg PASS="${PASS}" -t registry.gitlab.com/zacharyedwardsdowns/micro-bank/spring-cloud-config:latest -f Dockerfile.multi .
+    docker build --build-arg URI="${URI}" --build-arg PASS="${PASS}" -t zacharyed/microbank-spring-cloud-config -f Dockerfile.multi .
     # shellcheck disable=SC2046
     docker rmi $(docker images -f "dangling=true" -q) &>/dev/null
 else
@@ -24,7 +24,7 @@ else
 
   if [[ ("$gradle_exit_code" == 0) ]]; then
     echo ""
-    docker build --build-arg URI="${URI}" --build-arg PASS="${PASS}" -t registry.gitlab.com/zacharyedwardsdowns/micro-bank/spring-cloud-config:latest .
+    docker build --build-arg URI="${URI}" --build-arg PASS="${PASS}" -t zacharyed/microbank-spring-cloud-config .
     # shellcheck disable=SC2046
     docker rmi $(docker images -f "dangling=true" -q) &>/dev/null
   fi

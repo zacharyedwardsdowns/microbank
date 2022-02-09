@@ -1,1 +1,1 @@
-docker pull registry.gitlab.com/zacharyedwardsdowns/micro-bank/angular
+docker pull zacharyed/microbank-angular

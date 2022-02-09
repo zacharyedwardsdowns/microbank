@@ -1,1 +1,1 @@
-docker push registry.gitlab.com/zacharyedwardsdowns/micro-bank/angular
+docker push zacharyed/microbank-angular

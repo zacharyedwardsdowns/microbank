@@ -1,1 +1,1 @@
-docker run -d -p "8888:8888" --name "microbank-spring-cloud-config" --network "microbank-network" registry.gitlab.com/zacharyedwardsdowns/micro-bank/spring-cloud-config
+docker run -d -p "8888:8888" --name "microbank-spring-cloud-config" --network "microbank-network" zacharyed/microbank-spring-cloud-config

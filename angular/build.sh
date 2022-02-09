@@ -13,7 +13,7 @@ has_param() {
 
 if has_param '--multi' "$@"; then
   echo ""
-  docker build -t registry.gitlab.com/zacharyedwardsdowns/micro-bank/angular:latest -f Dockerfile.multi .
+  docker build -t zacharyed/microbank-angular -f Dockerfile.multi .
   # shellcheck disable=SC2046
   docker rmi $(docker images -f "dangling=true" -q) &> /dev/null
 else
@@ -21,7 +21,7 @@ else
 
   if [[ ( "$ng_exit_code" == 0 ) ]]; then
     echo ""
-    docker build -t registry.gitlab.com/zacharyedwardsdowns/micro-bank/angular:latest .
+    docker build -t zacharyed/microbank-angular .
     # shellcheck disable=SC2046
     docker rmi $(docker images -f "dangling=true" -q) &> /dev/null
   fi

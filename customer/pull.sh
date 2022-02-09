@@ -1,1 +1,1 @@
-docker pull registry.gitlab.com/zacharyedwardsdowns/micro-bank/customer
+docker pull zacharyed/microbank-customer

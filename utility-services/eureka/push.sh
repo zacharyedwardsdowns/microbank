@@ -1,1 +1,1 @@
-docker push registry.gitlab.com/zacharyedwardsdowns/micro-bank/eureka
+docker push zacharyed/microbank-eureka

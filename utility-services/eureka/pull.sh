@@ -1,1 +1,1 @@
-docker pull registry.gitlab.com/zacharyedwardsdowns/micro-bank/eureka
+docker pull zacharyed/microbank-eureka

@@ -1,1 +1,1 @@
-docker push registry.gitlab.com/zacharyedwardsdowns/micro-bank/spring-cloud-config
+docker push zacharyed/microbank-spring-cloud-config

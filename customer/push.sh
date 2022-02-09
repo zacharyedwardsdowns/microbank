@@ -1,1 +1,1 @@
-docker push registry.gitlab.com/zacharyedwardsdowns/micro-bank/customer
+docker push zacharyed/microbank-customer

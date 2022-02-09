@@ -1,1 +1,1 @@
-docker pull registry.gitlab.com/zacharyedwardsdowns/micro-bank/spring-cloud-config
+docker pull zacharyed/microbank-spring-cloud-config

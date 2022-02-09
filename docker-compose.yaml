@@ -3,24 +3,24 @@
 version: "3.9"
 services:
   microbank-angular:
-    image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/angular:latest
+    image: zacharyed/microbank-angular
     ports:
       - "443:443"
       - "80:80"
   microbank-customer:
-    image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/customer:latest
+    image: zacharyed/microbank-customer
     restart: on-failure
     ports:
       - "6010:6010"
   microbank-spring-cloud-config:
-    image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/spring-cloud-config:latest
+    image: zacharyed/microbank-spring-cloud-config
     ports:
       - "8888:8888"
   microbank-eureka:
-    image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/eureka:latest
+    image: zacharyed/microbank-eureka
     ports:
       - "8761:8761"
   microbank-spring-cloud-gateway:
-    image: registry.gitlab.com/zacharyedwardsdowns/micro-bank/spring-cloud-gateway:latest
+    image: zacharyed/microbank-spring-cloud-gateway
     ports:
       - "8765:8765"
