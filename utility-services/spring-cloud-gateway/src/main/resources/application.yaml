@@ -18,3 +18,12 @@ eureka:
     fetchRegistry: true
     serviceUrl:
       defaultZone: http://localhost:8761/eureka
+---
+spring:
+  config:
+    active:
+      on-profile: docker
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://microbank-eureka:8761/eureka

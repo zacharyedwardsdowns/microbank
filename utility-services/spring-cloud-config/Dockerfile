@@ -10,4 +10,4 @@ ENV PASS=${PASS}
 ARG workingDirectory
 WORKDIR ${workingDirectory}
 COPY ./build/libs/*.jar ${workingDirectory}
-CMD ["sh", "-c", "java -jar -Duri=$URI -Dpass=$PASS ./spring-cloud-config*.jar"]
+ENTRYPOINT ["sh", "-c", "java -jar -Duri=$URI -Dpass=$PASS spring-cloud-config.jar"]

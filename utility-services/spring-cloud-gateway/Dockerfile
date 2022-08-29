@@ -6,4 +6,4 @@ FROM openjdk:17-oracle
 ARG workingDirectory
 WORKDIR ${workingDirectory}
 COPY ./build/libs/*.jar ${workingDirectory}
-CMD java -jar -Deureka.client.serviceurl.defaultzone=http://microbank-eureka:8761/eureka ./spring-cloud-gateway*.jar
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=docker", "spring-cloud-gateway.jar"]

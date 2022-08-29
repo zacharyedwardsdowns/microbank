@@ -1,11 +1,11 @@
 buildscript {
     ext {
-        assertjVersion = '3.22.0'
-        lombokVersion = '1.18.22'
-        cucumberVersion = '7.2.3'
-        springBootVersion = '2.6.6'
+        assertjVersion = '3.23.1'
+        lombokVersion = '1.18.24'
+        cucumberVersion = '7.6.0'
+        springBootVersion = '2.7.3'
         springCloudVersion = '3.1.1'
-        jUnitPlatformVersion = '1.8.2'
+        jUnitPlatformVersion = '1.9.0'
     }
 }
 
@@ -33,9 +33,9 @@ repositories {
 dependencies {
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-    implementation 'org.jsoup:jsoup:1.14.3'
+    implementation 'org.jsoup:jsoup:1.15.2'
     implementation 'org.yaml:snakeyaml:1.30'
-    implementation 'com.auth0:java-jwt:3.19.1'
+    implementation 'com.auth0:java-jwt:4.0.0'
     implementation 'com.google.code.gson:gson:2.9.0'
     implementation 'com.mikesamuel:json-sanitizer:1.2.3'
     implementation "org.projectlombok:lombok:${lombokVersion}"
@@ -75,6 +75,7 @@ java {
 
 bootJar {
     manifest {
+        archiveFileName = "customer.jar"
         attributes 'Start-Class': 'com.microbank.customer.CustomerMicro'
     }
 }

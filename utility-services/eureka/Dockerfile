@@ -6,4 +6,4 @@ FROM openjdk:17-oracle
 ARG workingDirectory
 WORKDIR ${workingDirectory}
 COPY ./build/libs/*.jar ${workingDirectory}
-CMD java -jar ./eureka*.jar
+ENTRYPOINT ["java", "-jar", "eureka.jar"]
