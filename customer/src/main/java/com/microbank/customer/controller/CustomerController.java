@@ -17,7 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /** Provides endpoints for verifying login, registering customers, and querying customer data. */
-@RestController
+@RestController()
+@RequestMapping("/customer")
 public class CustomerController {
   private final CustomerService customerService;
 

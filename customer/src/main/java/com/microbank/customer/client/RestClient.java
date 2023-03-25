@@ -2,20 +2,16 @@ package com.microbank.customer.client;
 
 import com.microbank.customer.exception.RestClientException;
 import com.microbank.customer.security.Sanitizer;
-import java.io.IOException;
 import java.net.URI;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import java.net.URISyntaxException;
+import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 /** Component used to send http request to other services. */
 @Component
@@ -30,15 +26,16 @@ public class RestClient {
    * @param payload The body (if any) of the request.
    * @param clazz The class of the response.
    * @param <T> Allows the response type to be generic.
-   * @return A generic ResponseEntity.
+   * @return A generic Mono.
    * @throws RestClientException If a request exception occurs.
+   * @throws URISyntaxException If the given endpoint is syntactically invalid.
    */
   public <T> ResponseEntity<T> sendRequest(
       final String endpoint,
       final HttpMethod httpMethod,
       final String payload,
       final Class<T> clazz)
-      throws RestClientException {
+      throws RestClientException, URISyntaxException {
     return sendRequest(endpoint, httpMethod, payload, clazz, null, null);
   }
 
@@ -49,19 +46,20 @@ public class RestClient {
    * @param httpMethod The method of the request.
    * @param payload The body (if any) of the request.
    * @param clazz The class of the response.
-   * @param httpHeaders Http request headers to send.
+   * @param headers Http request headers to send.
    * @param <T> Allows the response type to be generic.
-   * @return A generic ResponseEntity.
+   * @return A generic Mono.
    * @throws RestClientException If a request exception occurs.
+   * @throws URISyntaxException If the given endpoint is syntactically invalid.
    */
   public <T> ResponseEntity<T> sendRequest(
       final String endpoint,
       final HttpMethod httpMethod,
       final String payload,
       final Class<T> clazz,
-      final HttpHeaders httpHeaders)
-      throws RestClientException {
-    return sendRequest(endpoint, httpMethod, payload, clazz, httpHeaders, null);
+      final MultiValueMap<String, String> headers)
+      throws RestClientException, URISyntaxException {
+    return sendRequest(endpoint, httpMethod, payload, clazz, headers, null);
   }
 
   /**
@@ -71,56 +69,60 @@ public class RestClient {
    * @param httpMethod The method of the request.
    * @param payload The body (if any) of the request.
    * @param clazz The class of the response.
-   * @param httpHeaders Http request headers to send.
-   * @param restTemplate Allows for mocking the RestTemplate.
+   * @param headers Http request headers to send.
+   * @param webClient Allows for mocking the WebClient.
    * @param <T> Allows the response type to be generic.
-   * @return A generic ResponseEntity.
+   * @return A generic Mono.
    * @throws RestClientException If a request exception occurs.
+   * @throws URISyntaxException If the given endpoint is syntactically invalid.
    */
   public <T> ResponseEntity<T> sendRequest(
       final String endpoint,
       final HttpMethod httpMethod,
       final String payload,
       final Class<T> clazz,
-      HttpHeaders httpHeaders,
-      RestTemplate restTemplate)
-      throws RestClientException {
+      MultiValueMap<String, String> headers,
+      WebClient webClient)
+      throws RestClientException, URISyntaxException {
 
-    final ResponseEntity<T> responseEntity;
-    CloseableHttpClient httpClient = null;
+    final URI uri = new URI(endpoint);
 
-    try {
-      final URI uri = new URI(endpoint);
-      httpClient = HttpClients.createDefault();
-
-      if (restTemplate == null) {
-        restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClient));
-      }
-
-      if (httpHeaders == null) httpHeaders = new HttpHeaders();
-      httpHeaders.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
-      httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-
-      String sanitizedPayload = null;
-      if (payload != null) {
-        sanitizedPayload = Sanitizer.sanitizeJson(payload);
-      }
-
-      final HttpEntity<String> httpEntity = new HttpEntity<>(sanitizedPayload, httpHeaders);
-      responseEntity = restTemplate.exchange(uri, httpMethod, httpEntity, clazz);
-
-    } catch (final Exception e) {
-      throw new RestClientException("RestClient failed due to exception: ", e);
-    } finally {
-      if (httpClient != null) {
-        try {
-          httpClient.close();
-        } catch (final IOException e) {
-          LOG.error("Failed to close the CloseableHttpClient!", e);
-        }
-      }
+    if (webClient == null) {
+      webClient = WebClient.create();
     }
 
-    return responseEntity;
+    if (headers == null) headers = new HttpHeaders();
+    headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+    headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+    final MultiValueMap<String, String> finalHeaders = headers;
+    final Consumer<HttpHeaders> httpHeaders = map -> map.addAll(finalHeaders);
+
+    String sanitizedPayload = null;
+    if (payload != null) {
+      sanitizedPayload = Sanitizer.sanitizeJson(payload);
+    }
+
+    final WebClient.ResponseSpec response;
+    if (sanitizedPayload == null) {
+      response = webClient.method(httpMethod).uri(uri).headers(httpHeaders).retrieve();
+    } else {
+      response =
+          webClient
+              .method(httpMethod)
+              .uri(uri)
+              .headers(httpHeaders)
+              .bodyValue(sanitizedPayload)
+              .retrieve();
+    }
+
+    return response
+        .onStatus(
+            HttpStatusCode::isError,
+            errorResponse -> {
+              LOG.warn("WebClient request failed with error response: {}", errorResponse);
+              return Mono.error(new RestClientException(errorResponse.statusCode()));
+            })
+        .toEntity(clazz)
+        .block();
   }
 }

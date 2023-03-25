@@ -1,14 +1,14 @@
 package com.microbank.customer.model;
 
+import jakarta.servlet.*;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.*;
 import java.io.BufferedReader;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
-import javax.servlet.*;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 
@@ -152,11 +152,6 @@ public class ServletRequest implements HttpServletRequest {
 
   @Override
   public boolean isRequestedSessionIdFromURL() {
-    return false;
-  }
-
-  @Override
-  public boolean isRequestedSessionIdFromUrl() {
     return false;
   }
 
@@ -306,11 +301,6 @@ public class ServletRequest implements HttpServletRequest {
   }
 
   @Override
-  public String getRealPath(String path) {
-    return null;
-  }
-
-  @Override
   public int getRemotePort() {
     return 0;
   }
@@ -342,7 +332,7 @@ public class ServletRequest implements HttpServletRequest {
 
   @Override
   public AsyncContext startAsync(
-      javax.servlet.ServletRequest servletRequest, ServletResponse servletResponse)
+      jakarta.servlet.ServletRequest servletRequest, ServletResponse servletResponse)
       throws IllegalStateException {
     return null;
   }
@@ -364,6 +354,21 @@ public class ServletRequest implements HttpServletRequest {
 
   @Override
   public DispatcherType getDispatcherType() {
+    return null;
+  }
+
+  @Override
+  public String getRequestId() {
+    return null;
+  }
+
+  @Override
+  public String getProtocolRequestId() {
+    return null;
+  }
+
+  @Override
+  public ServletConnection getServletConnection() {
     return null;
   }
 }

@@ -2,7 +2,7 @@
 ARG workingDirectory=/microbank/eureka
 
 # Run the eureka server.
-FROM openjdk:17-oracle
+FROM eclipse-temurin:17-jre
 ARG workingDirectory
 WORKDIR ${workingDirectory}
 COPY ./build/libs/*.jar ${workingDirectory}

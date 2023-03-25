@@ -7,10 +7,10 @@ import com.microbank.customer.model.ServletResponse;
 import com.microbank.customer.security.TokenGenerator;
 import com.microbank.customer.util.TestUtil;
 import com.microbank.customer.util.Util;
+import jakarta.servlet.FilterChain;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Date;
-import javax.servlet.FilterChain;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,6 @@ class JwtAuthorizationFilterTest {
   private static String registrationUri;
   private static String getCustomerUri;
   private static String requestBase;
-  private static String contextPath;
   private static String authPath;
   private static String authUri;
 
@@ -37,7 +36,7 @@ class JwtAuthorizationFilterTest {
     mockFilterChain = Mockito.mock(FilterChain.class);
     mockTokenGenerator = Mockito.mock(TokenGenerator.class);
 
-    final MappingNode properties = TestUtil.getYamlProperties("application.yaml");
+    final MappingNode properties = TestUtil.getYamlProperties("application.yml");
     privateKey =
         TokenGenerator.base64ToPrivateKey(
             TestUtil.getYamlProperty(properties, "token.customer.key.access.private"));
@@ -46,18 +45,16 @@ class JwtAuthorizationFilterTest {
             TestUtil.getYamlProperty(properties, "token.customer.key.access.public"));
     Mockito.when(mockTokenGenerator.getAccessPublic()).thenReturn(publicKey);
 
-    contextPath = TestUtil.getYamlProperty(properties, "server.servlet.context-path");
     authPath = TestUtil.getYamlProperty(properties, "customer.request.authorize");
     requestBase = TestUtil.getYamlProperty(properties, "customer.request.base");
-    registrationUri = contextPath + requestBase;
-    getCustomerUri = contextPath + "/id";
-    authUri = contextPath + authPath;
+    getCustomerUri = requestBase + "/id";
+    authUri = requestBase + authPath;
+    registrationUri = requestBase;
   }
 
   @BeforeEach
   void setup() {
-    authorizationFilter =
-        new JwtAuthorizationFilter(authPath, contextPath, requestBase, mockTokenGenerator);
+    authorizationFilter = new JwtAuthorizationFilter(authPath, requestBase, mockTokenGenerator);
   }
 
   @Test

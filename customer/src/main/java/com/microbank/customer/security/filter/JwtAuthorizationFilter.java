@@ -6,12 +6,12 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.microbank.customer.security.TokenGenerator;
 import com.microbank.customer.util.Util;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,18 +34,16 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
    * Injects the necessary dependencies.
    *
    * @param authorizationPath The request path for the authorization endpoint.
-   * @param contextPath The context path of the application.
    * @param requestBase The request path of the CustomerController.
    * @param tokenGenerator Contains the access key public token.
    */
   public JwtAuthorizationFilter(
       @Value("${customer.request.authorize}") final String authorizationPath,
-      @Value("${server.servlet.context-path}") final String contextPath,
       @Value("${customer.request.base}") final String requestBase,
       final TokenGenerator tokenGenerator) {
     algorithm = Algorithm.RSA256(tokenGenerator.getAccessPublic(), null);
-    authorizationUri = contextPath + authorizationPath;
-    registrationUri = contextPath + requestBase;
+    authorizationUri = requestBase + authorizationPath;
+    registrationUri = requestBase;
   }
 
   /**

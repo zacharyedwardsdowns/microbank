@@ -4,8 +4,8 @@ import com.microbank.customer.exception.*;
 import com.microbank.customer.exception.model.ExceptionCause;
 import com.microbank.customer.exception.model.ExceptionResponse;
 import com.microbank.customer.util.Util;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +15,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -77,6 +78,22 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   /**
+   * Handles the response for exceptions returning HttpStatus.BAD_REQUEST.
+   *
+   * @param e The exception being handled.
+   * @param request The http request containing the uri.
+   * @return An ExceptionResponse with useful information.
+   */
+  @ExceptionHandler(HttpClientErrorException.class)
+  protected ResponseEntity<ExceptionResponse> httpClientErrorException(
+      final HttpClientErrorException e, final HttpServletRequest request) {
+    final ExceptionResponse exceptionResponse =
+        createDefaultExceptionResponse(e, request, HttpStatus.valueOf(e.getStatusCode().value()));
+    return new ResponseEntity<>(
+        exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
+  }
+
+  /**
    * Handles the response for exceptions returning HttpStatus.INTERNAL_SERVER_ERROR.
    *
    * @param e The exception being handled.
@@ -99,8 +116,17 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         exceptionResponse, HttpStatus.valueOf(exceptionResponse.getStatus()));
   }
 
+  /**
+   * Handles the response for exceptions not covered by other exception handlers.
+   *
+   * @param e The exception being handled.
+   * @param body Unused
+   * @param headers Unused
+   * @param status The HttpStatus of the given exception..
+   * @param request The http request containing the uri.
+   * @return An ExceptionResponse with useful information.
+   */
   @NonNull
-  @Override
   @ExceptionHandler(Exception.class)
   protected ResponseEntity<Object> handleExceptionInternal(
       @NonNull final Exception e,

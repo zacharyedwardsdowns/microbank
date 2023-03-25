@@ -1,29 +1,27 @@
 package com.microbank.customer.exception;
 
+import org.springframework.http.HttpStatusCode;
+import org.springframework.web.client.HttpClientErrorException;
+
 /** Thrown when an http exception occurs during integration testing */
-public class RestClientException extends Exception {
+public class RestClientException extends HttpClientErrorException {
 
-  /** Throws an exception. */
-  public RestClientException() {
-    super();
+  /**
+   * Throws an exception containing an HttpStatusCode.
+   *
+   * @param code The HttpStatusCode.
+   */
+  public RestClientException(final HttpStatusCode code) {
+    super(code);
   }
 
   /**
-   * Throws an exception containing a message.
+   * Throws an exception containing an HttpStatusCode and a message.
    *
+   * @param code The HttpStatusCode.
    * @param message The exception message.
    */
-  public RestClientException(final String message) {
-    super(message);
-  }
-
-  /**
-   * Throws an exception containing a message and the throwable that caused it.
-   *
-   * @param message The exception message.
-   * @param throwable The cause of the exception.
-   */
-  public RestClientException(final String message, final Throwable throwable) {
-    super(message, throwable);
+  public RestClientException(final HttpStatusCode code, final String message) {
+    super(code, message);
   }
 }

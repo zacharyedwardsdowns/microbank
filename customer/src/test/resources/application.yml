@@ -6,11 +6,9 @@ spring:
       uri: http://localhost:8888/microbank-customer-service/default
 server:
   port: 6010
-  servlet:
-    context-path: /customer
 customer:
   request:
-    base: /
+    base: /customer
     authorize: /authorize
   mongodb:
     host: freecluster-s3rjf.mongodb.net

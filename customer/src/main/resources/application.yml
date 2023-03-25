@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: microbank-customer-service
+server:
+  port: 6010
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+customer:
+  request:
+    base: /customer
+    authorize: /authorize
+  mongodb:
+    host: freecluster-s3rjf.mongodb.net
+    user: AtlasAdmin
+    db: microbank
+---
+spring:
+  config:
+    import: configserver:http://microbank-spring-cloud-config:8888
+    activate:
+      on-profile: docker
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://microbank-eureka:8761/eureka
+---
+# Annoying fix for spring.profiles.active not taking the right properties after version upgrade.#
+# Was only an issue when started in a docker container. What even???
+spring:
+  config:
+    import: configserver:http://localhost:8888
+    activate:
+      on-profile: default
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka

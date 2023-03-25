@@ -2,7 +2,7 @@
 ARG workingDirectory=/microbank/spring-cloud-config
 
 # Run the config server.
-FROM openjdk:17-oracle
+FROM eclipse-temurin:17-jre
 ARG PASS
 ARG URI
 ENV URI=${URI}

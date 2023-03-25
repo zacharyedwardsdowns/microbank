@@ -13,7 +13,7 @@ COPY . .
 RUN gradle -q build -Dbuild=docker
 
 # Run the customer service.
-FROM openjdk:17-oracle
+FROM eclipse-temurin:17-jre
 ARG workingDirectory
 WORKDIR ${workingDirectory}
 COPY --from=build ${workingDirectory}/build/libs/*.jar ${workingDirectory}

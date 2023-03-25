@@ -8,6 +8,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.http.HttpMethod;
 
@@ -25,7 +26,7 @@ public class ScenarioAuthorization extends CucumberBaseStep {
   }
 
   @When("a user calls the authorize endpoint")
-  public void registerACustomer() throws RestClientException {
+  public void registerACustomer() throws RestClientException, URISyntaxException {
     tokens =
         restClient
             .sendRequest(authorizationUri(), HttpMethod.POST, customerPayload, Tokens.class)

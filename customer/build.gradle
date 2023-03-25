@@ -1,11 +1,10 @@
 buildscript {
     ext {
-        assertjVersion = '3.23.1'
-        lombokVersion = '1.18.24'
-        cucumberVersion = '7.6.0'
-        springBootVersion = '2.7.3'
-        springCloudVersion = '3.1.1'
-        jUnitPlatformVersion = '1.9.0'
+        assertjVersion = '3.24.2'
+        lombokVersion = '1.18.26'
+        cucumberVersion = '7.11.1'
+        springBootVersion = '3.0.5'
+        jUnitPlatformVersion = '1.9.2'
     }
 }
 
@@ -33,17 +32,17 @@ repositories {
 dependencies {
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-    implementation 'org.jsoup:jsoup:1.15.2'
-    implementation 'org.yaml:snakeyaml:1.30'
-    implementation 'com.auth0:java-jwt:4.0.0'
-    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'org.jsoup:jsoup:1.15.4'
+    implementation 'org.yaml:snakeyaml:2.0'
+    implementation 'com.auth0:java-jwt:4.3.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.mikesamuel:json-sanitizer:1.2.3'
     implementation "org.projectlombok:lombok:${lombokVersion}"
-    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux:3.0.4'
+    implementation 'org.springframework.cloud:spring-cloud-config-client:4.0.1'
     implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
-    implementation "org.springframework.cloud:spring-cloud-config-client:${springCloudVersion}"
     implementation "org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}"
-    implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${springCloudVersion}"
+    implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.0.0"
 
     runtimeOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
     testRuntimeOnly "org.junit.platform:junit-platform-console:${jUnitPlatformVersion}"
@@ -80,12 +79,12 @@ bootJar {
     }
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
 // Fail if Javadoc warnings are present.
-tasks.withType(Javadoc) {
+tasks.withType(Javadoc).configureEach {
     options.addStringOption('Xwerror', '-quiet')
 }
 

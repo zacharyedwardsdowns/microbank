@@ -1,6 +1,6 @@
 package com.microbank.customer.exception;
 
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 
 /** Thrown when a customer already exists. */
 public class AuthorizationException extends ServletException {

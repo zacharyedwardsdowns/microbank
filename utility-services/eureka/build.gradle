@@ -1,7 +1,7 @@
 buildscript {
     ext {
-        springBootVersion = '2.7.3'
-        springCloudVersion = '3.1.1'
+        springBootVersion = '3.0.4'
+        springCloudVersion = '4.0.0'
     }
 }
 
@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'javax.servlet:javax.servlet-api:4.0.1'
     implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${springCloudVersion}"
     implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-server:${springCloudVersion}"
@@ -50,7 +50,7 @@ bootJar {
     }
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 

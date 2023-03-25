@@ -15,31 +15,40 @@ import org.springframework.http.ResponseEntity;
 import org.yaml.snakeyaml.nodes.MappingNode;
 
 public class CucumberBaseStep {
+  private static final String SLASH = "/";
+  private static final String AUTH_URI;
+  private static final String BASE_URI;
+
   protected static ResponseEntity<Customer> customerResponseEntity;
   @Autowired protected RestClient restClient;
   protected static String accessToken;
   protected static String customerId;
   protected static Customer customer;
 
-  private static final String authUri;
-  private static final String baseUri;
-
   static {
     try {
-      final MappingNode properties = TestUtil.getYamlProperties("application.yaml");
-      baseUri = TestUtil.getYamlProperty(properties, "integration.request.base");
-      authUri = TestUtil.getYamlProperty(properties, "customer.request.authorize");
+      final MappingNode properties = TestUtil.getYamlProperties("application.yml");
+      BASE_URI = TestUtil.getYamlProperty(properties, "integration.request.base");
+      AUTH_URI = TestUtil.getYamlProperty(properties, "customer.request.authorize");
     } catch (IOException e) {
       throw new InitializationException("Failed to retrieve yaml properties!", e);
     }
   }
 
   protected String customerUri() {
-    return baseUri + "/";
+    return BASE_URI;
   }
 
   protected String authorizationUri() {
-    return baseUri + authUri;
+    return BASE_URI + AUTH_URI;
+  }
+
+  protected String customerInfoUri() {
+    return BASE_URI + SLASH + customerId;
+  }
+
+  protected String deleteCustomerUri() {
+    return BASE_URI + SLASH + customerId;
   }
 
   protected String readFile(final String resourcePath) throws IOException {

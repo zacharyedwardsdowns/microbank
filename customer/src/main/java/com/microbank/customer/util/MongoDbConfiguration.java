@@ -9,6 +9,7 @@ import com.microbank.customer.exception.MongoInstantiationException;
 import com.microbank.customer.exception.RestClientException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import java.net.URISyntaxException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -92,7 +93,7 @@ public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
                       null,
                       String.class)
                   .getBody();
-        } catch (final RestClientException e) {
+        } catch (final RestClientException | URISyntaxException e) {
           throw new MongoInstantiationException(EXCEPTION, e);
         }
         if (response == null) {

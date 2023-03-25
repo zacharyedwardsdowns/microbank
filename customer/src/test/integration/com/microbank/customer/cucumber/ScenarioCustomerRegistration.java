@@ -7,6 +7,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class ScenarioCustomerRegistration extends CucumberBaseStep {
   }
 
   @When("they hit the customer registration endpoint")
-  public void registerACustomer() throws RestClientException {
+  public void registerACustomer() throws RestClientException, URISyntaxException {
     customerResponseEntity =
         restClient.sendRequest(customerUri(), HttpMethod.POST, customerPayload, Customer.class);
   }

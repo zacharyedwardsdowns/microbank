@@ -18,7 +18,7 @@ class TokenGeneratorTest {
 
   @BeforeAll
   static void setupClass() throws Exception {
-    final MappingNode properties = TestUtil.getYamlProperties("application.yaml");
+    final MappingNode properties = TestUtil.getYamlProperties("application.yml");
     privateKey = TestUtil.getYamlProperty(properties, "token.customer.key.access.private");
     publicKey = TestUtil.getYamlProperty(properties, "token.customer.key.access.public");
   }

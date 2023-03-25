@@ -1,7 +1,7 @@
 buildscript {
     ext {
-        springBootVersion = '2.7.3'
-        springCloudVersion = '3.1.1'
+        springBootVersion = '3.0.4'
+        springCloudVersion = '4.0.1'
     }
 }
 
@@ -48,7 +48,7 @@ bootJar {
     }
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 

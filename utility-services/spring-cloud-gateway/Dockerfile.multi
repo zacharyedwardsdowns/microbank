@@ -13,7 +13,7 @@ COPY . .
 RUN gradle -q build
 
 # Run the spring-cloud-gateway server.
-FROM openjdk:17-oracle
+FROM eclipse-temurin:17-jre
 ARG workingDirectory
 WORKDIR ${workingDirectory}
 COPY --from=build ${workingDirectory}/build/libs/*.jar ${workingDirectory}

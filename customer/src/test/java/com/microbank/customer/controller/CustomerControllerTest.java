@@ -30,6 +30,7 @@ class CustomerControllerTest {
   private static final Tokens TOKENS = new Tokens("ID", "access", "refresh");
   private static final String BAD_JSON = "{\"Bad\":\"Json\"}";
   private CustomerService mockCustomerService;
+  private static String authorizePlaceholder;
   private static String authorizeUri;
   private static String customerUri;
   private static String requestBase;
@@ -44,10 +45,11 @@ class CustomerControllerTest {
     json = Sanitizer.sanitizeJson(json);
     customer = Util.MAPPER.readValue(json, Customer.class);
 
-    final MappingNode properties = TestUtil.getYamlProperties("application.yaml");
-    authorizeUri = TestUtil.getYamlProperty(properties, "customer.request.authorize");
+    final MappingNode properties = TestUtil.getYamlProperties("application.yml");
+    authorizePlaceholder = TestUtil.getYamlProperty(properties, "customer.request.authorize");
     requestBase = TestUtil.getYamlProperty(properties, "customer.request.base");
-    customerUri = requestBase + customer.getCustomerId();
+    customerUri = requestBase + "/" + customer.getCustomerId();
+    authorizeUri = requestBase + authorizePlaceholder;
   }
 
   @BeforeEach
@@ -55,7 +57,7 @@ class CustomerControllerTest {
     mockCustomerService = Mockito.mock(CustomerService.class);
     mockMvc =
         MockMvcBuilders.standaloneSetup(new CustomerController(mockCustomerService))
-            .addPlaceholderValue("customer.request.authorize", authorizeUri)
+            .addPlaceholderValue("customer.request.authorize", authorizePlaceholder)
             .setControllerAdvice(new ControllerExceptionHandler())
             .build();
   }

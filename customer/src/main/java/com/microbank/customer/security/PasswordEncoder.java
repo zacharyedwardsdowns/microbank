@@ -4,7 +4,8 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 
 /** Contains methods for hashing and matching passwords */
 public final class PasswordEncoder {
-  private static final Pbkdf2PasswordEncoder pbkdf2Encoder = new Pbkdf2PasswordEncoder();
+  private static final Pbkdf2PasswordEncoder pbkdf2Encoder =
+      Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8();
 
   /** Prevents instantiation. */
   private PasswordEncoder() {}
