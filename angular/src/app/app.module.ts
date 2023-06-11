@@ -9,7 +9,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatInputModule } from '@angular/material/input';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LandingPageComponent } from './component/landing-page/landing-page.component';
@@ -39,7 +38,6 @@ import { ModalComponent } from './component/modal/modal.component';
     MatIconModule,
     MatTabsModule,
     MatDialogModule,
-    FlexLayoutModule,
     MatInputModule,
     MatToolbarModule,
   ],
