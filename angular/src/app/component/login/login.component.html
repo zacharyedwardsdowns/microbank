@@ -1,30 +1,29 @@
 <body>
-  <header fxLayout="row" fxLayoutAlign="center end">
+  <header>
     <h1>Login</h1>
-    <span fxFlex></span>
     <button (click)="close()" id="close-button" mat-icon-button>
-      <mat-icon [inline]="true" fxLayoutAlign="center center">highlight_off</mat-icon>
+      <mat-icon [inline]="true">highlight_off</mat-icon>
     </button>
   </header>
-  <main cdkFocusRegionstar fxLayoutAlign="center center" fxLayout="column">
+  <main>
     <div id="account-icon">
-      <mat-icon [inline]="true" fxLayout="row">account_circle</mat-icon>
+      <mat-icon [inline]="true">account_circle</mat-icon>
     </div>
-    <mat-form-field class="form" appearance="outline" fxLayout="row">
+    <mat-form-field class="form" appearance="outline">
       <mat-label>Username</mat-label>
       <input matInput type="text">
       <button class="form-icon" id="user-icon" mat-icon-button matSuffix disabled>
         <mat-icon>perm_identity</mat-icon>
       </button>
     </mat-form-field>
-    <mat-form-field class="form" appearance="outline" fxLayout="row">
+    <mat-form-field class="form" appearance="outline">
       <mat-label>Password</mat-label>
       <input matInput [type]="hide ? 'password' : 'text'">
       <button class="form-icon" id="hide-password-icon" mat-icon-button matSuffix (click)="hide = !hide">
         <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
       </button>
     </mat-form-field>
-    <div fxLayout="row">
+    <div id="login-modal-buttons">
       <button class="modal-button" id="register-button" (click)="registrationPage()" mat-raised-button>Register</button>
       <button class="modal-button" id="sign-in-button" mat-raised-button>Sign In</button>
     </div>
