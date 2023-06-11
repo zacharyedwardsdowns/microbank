@@ -137,10 +137,10 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/cdk@^13.3.3":
-  version "13.3.3"
-  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-13.3.3.tgz#f98d9d67744bf7fa7ee5a8aeb756c6546b88793e"
-  integrity sha512-dzd31mta2VwffxbeO4CelMqb7WswLnkC/r2QZXySnc0CTmj44HqXkqdZuEvVgxaKRVpxsYeuBuhhhy8U00YMOw==
+"@angular/cdk@^14.2.7":
+  version "14.2.7"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-14.2.7.tgz#65eb6fbbeed6120fad4e3913aa66f8b74c853ac3"
+  integrity sha512-/tEsYaUbDSnfEmKVvAMramIptmhI67O+9STjOV0i+74XR2NospeK0fkbywIANu1n3w6AHGMotvRWJrjmbCElFg==
   dependencies:
     tslib "^2.3.0"
   optionalDependencies:
@@ -219,13 +219,6 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/flex-layout@^13.0.0-beta.37":
-  version "13.0.0-beta.37"
-  resolved "https://registry.yarnpkg.com/@angular/flex-layout/-/flex-layout-13.0.0-beta.37.tgz#1aa01be9018b0d8ca9d6f9a34f6fa2b2c9b61763"
-  integrity sha512-UNE4KQoKNj6YsUc7Yc6wGVkmAIVACgT/oUh7fTiaZ4y+uWVWG5IDCPqO2D210JZIWmzL90ASiY/NDzVVtVK7Dw==
-  dependencies:
-    tslib "^2.3.0"
-
 "@angular/forms@^14.3.0":
   version "14.3.0"
   resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-14.3.0.tgz#f8659269c9ddef557f04fb782942f5983c5e4556"
@@ -238,10 +231,10 @@
   resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-14.3.0.tgz#cc370072103b312d4057ab2554a1d8b25e076ad9"
   integrity sha512-Sij3OQzj1UGs1O8H9PxVAY/o27+oqZwQRnib66rsWvtbIBTjHp4FV3dTs5iVcr62GGv4V4Mff/2I82NP10GPQg==
 
-"@angular/material@^13.3.3":
-  version "13.3.3"
-  resolved "https://registry.yarnpkg.com/@angular/material/-/material-13.3.3.tgz#efeb63f01529ecbee7dd41f4eb34aaf28b778588"
-  integrity sha512-PkZ7VW3/7tqdBHSOOmq7com7Ir147OEe1+kfgF/G3y8WUutI9jY2cHKARXGWB+5WgcqKr7ol43u239UGkPfFHg==
+"@angular/material@^14.2.7":
+  version "14.2.7"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-14.2.7.tgz#678c657197268eba6814c757152f8d178ff08866"
+  integrity sha512-WXHh8pEStpgkXZJmYOg2cI8BSHkV82ET4XTJCNPdveumaCn1UYnaNzsXD13kw5z+zmy8CufhFEzdXTrv/yt7KQ==
   dependencies:
     tslib "^2.3.0"
 
