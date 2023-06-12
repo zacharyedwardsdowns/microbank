@@ -22,6 +22,7 @@
     "@angular/platform-browser": "^16.0.5",
     "@angular/platform-browser-dynamic": "^16.0.5",
     "@angular/router": "^16.0.5",
+    "cypress": "^12.14.0",
     "ifvisible": "^1.1.0",
     "rxjs": "^7.5.2",
     "tslib": "^2.0.0",
