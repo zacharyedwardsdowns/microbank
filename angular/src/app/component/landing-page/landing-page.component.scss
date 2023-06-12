@@ -10,7 +10,7 @@
 }
 
 .toolbar-button {
-  background-color: var(--accent-darker);
+  background-color: var(--accent-darker) !important;
   display: inline-block;
   margin-right: 1.5rem;
   width: 6rem;
@@ -18,11 +18,6 @@
 
 #register {
   margin-right: 2rem;
-}
-
-#tab-group {
-  background-color: var(--primary-default);
-  display: flex;
 }
 
 #toolbar {

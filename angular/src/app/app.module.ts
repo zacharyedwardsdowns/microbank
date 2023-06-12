@@ -1,3 +1,4 @@
+import {A11yModule} from '@angular/cdk/a11y';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -29,6 +30,7 @@ import { ModalComponent } from './component/modal/modal.component';
     ModalComponent,
   ],
   imports: [
+    A11yModule,
     FormsModule,
     BrowserModule,
     MatButtonModule,

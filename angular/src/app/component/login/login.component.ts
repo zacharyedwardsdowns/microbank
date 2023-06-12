@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalService } from 'src/app/service/modal.service';
 import { RegistrationService } from 'src/app/service/registration.service';
@@ -8,7 +8,8 @@ import { RegistrationService } from 'src/app/service/registration.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
+  private count = 0;
   public hide = true;
 
   constructor(
@@ -16,8 +17,6 @@ export class LoginComponent implements OnInit {
     private modelService: ModalService,
     private registrationService: RegistrationService
   ) {}
-
-  ngOnInit(): void {}
 
   close() {
     this.modelService.closeModal();

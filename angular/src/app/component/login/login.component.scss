@@ -1,50 +1,58 @@
 body {
-  background: var(--primary-default);
-  border-radius: 1rem;
+  background: var(--accent-darker) !important;
   display: grid;
   align-items: center;
-  grid-template-rows: 10% 90%;
+  grid-template-rows: 15% 85%;
 }
 
 header {
-  width: 100%;
-  height: 13%;
   display: grid;
+  align-items: center;
   grid-template-columns: 80% 20%;
 }
 
 main {
-  height: 85%;
   display: grid;
   justify-content: center;
   grid-template-rows: 40% 20% 20% 20%;
 }
 
 h1 {
+  color: var(--contrast-color) !important;
   font-weight: bolder;
   font-size: 2.3rem;
-  color: var(--contrast-color);
-  margin-bottom: 2.5%;
-  margin-left: 1.2rem;
+  margin-left: 1.5rem;
 }
 
-#login-modal-buttons {
-  display: grid;
-  justify-items: center;
-  grid-template-columns: auto auto;
+#close-button:focus #close-button:hover {
+  border: none;
+  background: none;
+}
+
+#close-button:hover {
+  color: var(--accent-lighter) !important;
+}
+
+button,
+input[type='button'] {
+  outline: none;
+}
+
+button:focus-visible,
+input[type='button']:focus-visible {
+  outline: 0.1rem solid !important;
+  outline-color: white !important;
 }
 
 #close-button {
-  color: var(--contrast-color);
+  color: var(--contrast-color) !important;
   border: none;
   background: none;
-  font-size: 2.8rem;
-  padding-right: 2.5rem;
-  padding-bottom: 0.7rem;
+  font-size: 3rem;
+  margin-right: 0.8rem;
   display: grid;
   justify-self: end;
-  align-content: center;
-  justify-content: center;
+  place-items: center;
 }
 
 .modal-button {
@@ -52,51 +60,59 @@ h1 {
   height: 3rem;
 }
 
+#login-modal-buttons {
+  display: grid;
+  padding-bottom: 2rem;
+  justify-items: center;
+  grid-template-columns: auto auto;
+}
+
 #sign-in-button {
-  background-color: var(--contrast-color);
+  background-color: var(--contrast-color) !important;
   margin-left: 0.5rem;
+  color: black;
 }
 
 #register-button {
-  margin-right: 0.5rem;
-  background-color: var(--primary-default);
+  background-color: var(--accent-darker) !important;
   border-color: var(--contrast-color) !important;
-  color: var(--contrast-color);
+  color: var(--contrast-color) !important;
   border: 0.2rem solid;
+}
+
+.form-icon:hover {
+  background-color: transparent !important;
 }
 
 .form-icon {
   background-color: transparent;
-  color: var(--contrast-color);
+  color: var(--contrast-color) !important;
   margin: 0rem;
 }
 
 #hide-password-icon {
-  height: 100%;
+  margin-right: 0.3rem;
 }
 
 #user-icon {
-  height: 100%;
+  margin-right: 0.3rem;
   pointer-events: none;
 }
 
 #account-icon {
-  color: var(--contrast-color);
+  color: var(--contrast-color) !important;
   line-height: initial;
-  font-size: 5rem;
+  font-size: 7rem;
   display: grid;
+  padding-bottom: 1rem;
   justify-content: center;
-  align-content: center;
+  align-content: start;
 }
 
 .form {
-  color: var(--contrast-color);
+  color: var(--contrast-color) !important;
 }
 
 mat-form-field {
   transition: none;
-}
-
-.mat-icon-button {
-  line-height: 1;
 }

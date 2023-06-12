@@ -31,6 +31,7 @@ export class ModalComponent {
       this.component = LoginComponent;
       this.template = {
         panelClass: 'modal-dialog-container',
+        backdropClass: 'loginBackdrop',
       } as ModalTemplate;
     }
 
