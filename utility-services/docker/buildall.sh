@@ -1,5 +1,5 @@
 # Build docker images for all MicroBank utility services.
-cd "$(dirname "$0")" || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
+cd "$(dirname "$0")" || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
 
 has_param() {
   local term="$1"
@@ -13,17 +13,17 @@ has_param() {
 }
 
 if has_param '--multi' "$@"; then
-  echo -e "\nDocker: Building Spring Cloud Config Service"
+  printf "\nDocker: Building Spring Cloud Config Service\n"
   sh ../spring-cloud-config/build.sh --multi
-  echo -e "\nDocker: Building Eureka Service"
+  printf "\nDocker: Building Eureka Service\n"
   sh ../eureka/build.sh --multi
-  echo -e "\nDocker: Building Spring Cloud Gateway Service"
+  printf "\nDocker: Building Spring Cloud Gateway Service\n"
   sh ../spring-cloud-gateway/build.sh --multi
 else
-  echo -e "\nDocker: Building Spring Cloud Config Service"
+  printf "\nDocker: Building Spring Cloud Config Service\n"
   sh ../spring-cloud-config/build.sh
-  echo -e "\nDocker: Building Eureka Service"
+  printf "\nDocker: Building Eureka Service\n"
   sh ../eureka/build.sh
-  echo -e "\nDocker: Building Spring Cloud Gateway Service"
+  printf "\nDocker: Building Spring Cloud Gateway Service\n"
   sh ../spring-cloud-gateway/build.sh
 fi

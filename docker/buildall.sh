@@ -1,5 +1,5 @@
 # Build docker images for all MicroBank services.
-cd "$(dirname "$0")" || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
+cd "$(dirname "$0")" || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
 
 has_param() {
   local term="$1"
@@ -14,14 +14,14 @@ has_param() {
 
 if has_param '--multi' "$@"; then
   sh ../utility-services/docker/buildall.sh --multi
-  echo -e "\nDocker: Building Angular Service"
+  printf "\nDocker: Building Angular Service\n"
   sh ../angular/build.sh --multi
-  echo -e "\nDocker: Building Customer Service"
+  printf "\nDocker: Building Customer Service\n"
   sh ../customer/build.sh --multi
 else
   sh ../utility-services/docker/buildall.sh
-  echo -e "\nDocker: Building Angular Service"
+  printf "\nDocker: Building Angular Service\n"
   sh ../angular/build.sh
-  echo -e "\nDocker: Building Customer Service"
+  printf "\nDocker: Building Customer Service\n"
   sh ../customer/build.sh
 fi

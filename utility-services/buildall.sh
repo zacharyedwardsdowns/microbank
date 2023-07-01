@@ -1,14 +1,14 @@
 # Build all MicroBank utility services.
-cd "$(dirname "$0")" || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
+cd "$(dirname "$0")" || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
 
-echo -e "\nBuilding Spring Cloud Config Service"
-cd spring-cloud-config || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
+printf "\nBuilding Spring Cloud Config Service\n"
+cd spring-cloud-config || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
 gradle --console=plain clean build
 
-echo -e "\nBuilding Eureka Service"
-cd ../eureka || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
+printf "\nBuilding Eureka Service\n"
+cd ../eureka || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
 gradle --console=plain clean build
 
-echo -e "\nBuilding Spring Cloud Gateway Service"
-cd ../spring-cloud-gateway || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
+printf "\nBuilding Spring Cloud Gateway Service\n"
+cd ../spring-cloud-gateway || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
 gradle --console=plain clean build

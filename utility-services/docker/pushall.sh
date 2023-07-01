@@ -1,9 +1,9 @@
 # Push docker images for all MicroBank services.
-cd "$(dirname "$0")" || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
+cd "$(dirname "$0")" || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
 
-echo -e "\nDocker: Pushing Spring Cloud Config Service"
+printf "\nDocker: Pushing Spring Cloud Config Service\n"
 sh ../spring-cloud-config/push.sh
-echo -e "\nDocker: Pushing Eureka Service"
+printf "\nDocker: Pushing Eureka Service\n"
 sh ../eureka/push.sh
-echo -e "\nDocker: Pushing Spring Cloud Gateway Service"
+printf "\nDocker: Pushing Spring Cloud Gateway Service\n"
 sh ../spring-cloud-gateway/push.sh

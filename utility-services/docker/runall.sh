@@ -1,5 +1,5 @@
 # Run docker files for all MicroBank services.
-cd "$(dirname "$0")" || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
+cd "$(dirname "$0")" || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
 
 # Check if a network exists, if not create one.
 networkSubnet="172.35.6.0/16"
@@ -17,20 +17,20 @@ done
 
 if [ "$networkFound" = "false" ]
 then
-  echo -e "\nCreating the microbank-network..."
+  printf "\nCreating the microbank-network...\n"
   docker network create microbank-network --subnet "$networkSubnet"
 fi
 
 
 
 # Begin running services.
-echo -e "\nStarting spring-cloud-config..."
+printf "\nStarting spring-cloud-config...\n"
 sh ../spring-cloud-config/run.sh
 
-echo -e "\nStarting eureka..."
+printf "\nStarting eureka...\n"
 sh ../eureka/run.sh "$eurekaIp"
 
-echo -e "\nStarting spring-cloud-gateway..."
+printf "\nStarting spring-cloud-gateway...\n"
 sh ../spring-cloud-gateway/run.sh
 
-echo -e "\nAll utility containers started.\n"
+printf "\nAll utility containers started.\n\n"

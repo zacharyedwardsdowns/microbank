@@ -7,11 +7,11 @@
 #   --add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
 #   --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED
 
-cd "$(dirname "$0")" || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
+cd "$(dirname "$0")" || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
 
-cd utility-services || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
+cd utility-services || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
 sh format.sh
 
-echo -e "\nFormatting Customer Service"
-cd ../customer || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
+printf "\nFormatting Customer Service\n"
+cd ../customer || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
 gradle --console=plain spotlessJavaApply

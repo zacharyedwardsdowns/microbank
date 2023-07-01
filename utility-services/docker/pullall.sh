@@ -1,9 +1,9 @@
 # Pull docker images for all MicroBank services.
-cd "$(dirname "$0")" || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
+cd "$(dirname "$0")" || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
 
-echo -e "\nDocker: Pulling Spring Cloud Config Service"
+printf "\nDocker: Pulling Spring Cloud Config Service\n"
 sh ../spring-cloud-config/pull.sh
-echo -e "\nDocker: Pulling Eureka Service"
+printf "\nDocker: Pulling Eureka Service\n"
 sh ../eureka/pull.sh
-echo -e "\nDocker: Pulling Spring Cloud Gateway Service"
+printf "\nDocker: Pulling Spring Cloud Gateway Service\n"
 sh ../spring-cloud-gateway/pull.sh

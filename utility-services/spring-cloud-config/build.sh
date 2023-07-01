@@ -1,4 +1,4 @@
-cd "$(dirname "$0")" || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
+cd "$(dirname "$0")" || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
 
 # Used to keep the sensitive configs out of the repository.
 . ../../../microbank-config/scripts/configServerEnv.sh
@@ -15,7 +15,7 @@ has_param() {
 }
 
 if has_param '--multi' "$@"; then
-  echo ""
+  printf "\n"
     docker build --build-arg URI="${URI}" --build-arg PASS="${PASS}" -t zacharyed/microbank-spring-cloud-config -f Dockerfile.multi .
     # shellcheck disable=SC2046
     docker rmi $(docker images -f "dangling=true" -q) &>/dev/null
@@ -23,7 +23,7 @@ else
   gradle --console=plain clean build; gradle_exit_code="$?"
 
   if [[ ("$gradle_exit_code" == 0) ]]; then
-    echo ""
+    printf "\n"
     docker build --build-arg URI="${URI}" --build-arg PASS="${PASS}" -t zacharyed/microbank-spring-cloud-config .
     # shellcheck disable=SC2046
     docker rmi $(docker images -f "dangling=true" -q) &>/dev/null

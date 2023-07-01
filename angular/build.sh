@@ -1,4 +1,4 @@
-cd "$(dirname "$0")" || (echo -e "\nFailed to change directory at [$0: $LINENO]"; exit 1)
+cd "$(dirname "$0")" || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
 
 has_param() {
   local term="$1"
@@ -12,7 +12,7 @@ has_param() {
 }
 
 if has_param '--multi' "$@"; then
-  echo ""
+  printf "\n"
   docker build -t zacharyed/microbank-angular -f Dockerfile.multi .
   # shellcheck disable=SC2046
   docker rmi $(docker images -f "dangling=true" -q) &> /dev/null
@@ -20,7 +20,7 @@ else
   ng build; ng_exit_code="$?"
 
   if [[ ( "$ng_exit_code" == 0 ) ]]; then
-    echo ""
+    printf "\n"
     docker build -t zacharyed/microbank-angular .
     # shellcheck disable=SC2046
     docker rmi $(docker images -f "dangling=true" -q) &> /dev/null
