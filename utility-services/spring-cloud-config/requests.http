@@ -1,0 +1,6 @@
+###########################################################################################
+# Spring CLoud Config                                                                     #
+###########################################################################################
+# @name Customer Config
+GET http://localhost:8888/microbank-customer-service/default
+Accept: application/json

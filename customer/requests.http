@@ -1,0 +1,80 @@
+###########################################################################################
+# Customer Service                                                                        #
+###########################################################################################
+# @name Register Customer
+POST {{customer-host}}/customer
+Content-Type: application/json
+Accept: application/json
+
+{
+  "Username": "{{username}}",
+  "Password": "{{password}}",
+  "FirstName": "Zachary",
+  "MiddleName": "Daniel",
+  "LastName": "Edwards Downs",
+  "Suffix": null,
+  "Gender": "Male",
+  "Address": "2927 10th St NE",
+  "City": "Washington",
+  "State": "DC",
+  "PostalCode": "20017",
+  "DateOfBirth": "1997-08-18",
+  "SocialSecurityNumber": "123456789"
+}
+
+> {%
+  let customerId = response.body.CustomerId;
+
+  if (customerId) {
+    client.global.set("customerId", customerId);
+  }
+%}
+
+###########################################################################################
+# @name Get Customer
+GET {{customer-host}}/customer/{{customerId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+> {%
+  // TODO: you can add here Response handler
+%}
+
+###########################################################################################
+# @name Delete Customer
+DELETE {{customer-host}}/customer/{{customerId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+> {%
+  // TODO: you can add here Response handler
+%}
+
+###########################################################################################
+# @name Authorize
+POST {{customer-host}}/customer/authorize
+Content-Type: application/json
+
+{
+    "Username": "{{username}}",
+    "Password": "{{password}}"
+}
+
+> {%
+  // TODO: migrate to HTTP Client Response handler API
+  let refreshToken = response.body.RefreshToken;
+  let accessToken = response.body.AccessToken;
+  let idToken = response.body.IdToken;
+
+  if (idToken) {
+    client.global.set("idToken", idToken);
+  }
+
+  if (accessToken) {
+    client.global.set("accessToken", accessToken);
+  }
+
+  if (refreshToken) {
+    client.global.set("refreshToken", refreshToken);
+  }
+%}
