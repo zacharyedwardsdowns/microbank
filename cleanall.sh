@@ -1,3 +1,4 @@
+#!/bin/bash
 # Clean build directories for all MicroBank services.
 cd "$(dirname "$0")" || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
 
@@ -13,4 +14,4 @@ printf "\n- DIST DIRECTORY REMOVED -\n"
 
 printf "\nCleaning Customer Service\n"
 cd ../customer || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
-gradle --console=plain clean
+gradle clean

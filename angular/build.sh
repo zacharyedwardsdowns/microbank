@@ -1,3 +1,4 @@
+#!/bin/bash
 cd "$(dirname "$0")" || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
 
 has_param() {
@@ -19,7 +20,7 @@ if has_param '--multi' "$@"; then
 else
   ng build; ng_exit_code="$?"
 
-  if [[ ( "$ng_exit_code" == 0 ) ]]; then
+  if [ "$ng_exit_code" -eq 0 ]; then
     printf "\n"
     docker build -t zacharyed/microbank-angular .
     # shellcheck disable=SC2046

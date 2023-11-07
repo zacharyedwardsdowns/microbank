@@ -1,3 +1,4 @@
+#!/bin/bash
 cd "$(dirname "$0")" || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
 
 has_param() {
@@ -17,9 +18,9 @@ if has_param '--multi' "$@"; then
     # shellcheck disable=SC2046
     docker rmi $(docker images -f "dangling=true" -q) &>/dev/null
 else
-  gradle --console=plain clean build -Dbuild=docker; gradle_exit_code="$?"
+  gradle clean build -Dbuild=docker; gradle_exit_code="$?"
 
-  if [[ ("$gradle_exit_code" == 0) ]]; then
+  if [ "$gradle_exit_code" -eq 0 ]; then
     printf "\n"
     docker build -t zacharyed/microbank-customer .
     # shellcheck disable=SC2046

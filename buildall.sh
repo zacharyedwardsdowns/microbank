@@ -1,3 +1,4 @@
+#!/bin/bash
 # Build all MicroBank utility services.
 cd "$(dirname "$0")" || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
 
@@ -10,4 +11,4 @@ ng build
 
 printf "\nBuilding Customer Service\n"
 cd ../customer || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
-gradle --console=plain clean build
+gradle clean build

@@ -1,3 +1,4 @@
+#!/bin/bash
 # Stop and remove running containers for all MicroBank services.
 
 printf "\nStopping containers...\n\n"

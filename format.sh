@@ -1,3 +1,4 @@
+#!/bin/bash
 # Format all microbank java files using google java format.
 #
 # Put in gradle.properties to allow formatting with Java 17
@@ -14,4 +15,4 @@ sh format.sh
 
 printf "\nFormatting Customer Service\n"
 cd ../customer || (printf "\nFailed to change directory at [$0: $LINENO]\n"; exit 1)
-gradle --console=plain spotlessJavaApply
+gradle spotlessJavaApply
