@@ -23,31 +23,7 @@ Accept: application/json
 }
 
 > {%
-  let customerId = response.body.CustomerId;
-
-  if (customerId) {
-    client.global.set("customerId", customerId);
-  }
-%}
-
-###########################################################################################
-# @name Get Customer
-GET {{customer-host}}/customer/{{customerId}}
-Authorization: Bearer {{accessToken}}
-Content-Type: application/json
-
-> {%
-  // TODO: you can add here Response handler
-%}
-
-###########################################################################################
-# @name Delete Customer
-DELETE {{customer-host}}/customer/{{customerId}}
-Authorization: Bearer {{accessToken}}
-Content-Type: application/json
-
-> {%
-  // TODO: you can add here Response handler
+    client.global.set("customerId", response.body.CustomerId);
 %}
 
 ###########################################################################################
@@ -61,20 +37,31 @@ Content-Type: application/json
 }
 
 > {%
-  // TODO: migrate to HTTP Client Response handler API
-  let refreshToken = response.body.RefreshToken;
-  let accessToken = response.body.AccessToken;
-  let idToken = response.body.IdToken;
+    client.global.set("idToken", response.body.IdToken);
+    client.global.set("accessToken", response.body.AccessToken);
+    client.global.set("refreshToken", response.body.RefreshToken);
+%}
 
-  if (idToken) {
-    client.global.set("idToken", idToken);
-  }
+###########################################################################################
+# @name Get Customer
+GET {{customer-host}}/customer/{{customerId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
 
-  if (accessToken) {
-    client.global.set("accessToken", accessToken);
-  }
+> {%
+    client.test("Get Customer response status is 200", () => {
+        client.assert(response.status === 200, "Response status !== 200");
+    })
+%}
 
-  if (refreshToken) {
-    client.global.set("refreshToken", refreshToken);
-  }
+###########################################################################################
+# @name Delete Customer
+DELETE {{customer-host}}/customer/{{customerId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+> {%
+    client.test("Delete Customer response status is 200", () => {
+        client.assert(response.status === 200, "Response status !== 200");
+    })
 %}
